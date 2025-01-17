@@ -92,20 +92,20 @@ Follow the instructions in the [DA16K QuickStart Guide](https://github.com/avnet
 
 ## 10. Run the Applicaton
 * Power off the board by unplugging the USB cables.
-* Connect the DA16k PMOD module to the board's STMOD+ Connector via the male-to-female jumper wires.
+* Connect the DA16k PMOD module to the board's STMod+ Connector via the male-to-female jumper wires. (See the [STMod+ Technical note](https://www.st.com/resource/en/technical_note/tn1238-stmod-interface-specification-stmicroelectronics.pdf) and the [Digilent Pmod™ Interface Specification](https://digilent.com/reference/_media/reference/pmod/pmod-interface-specification-1_2_0.pdf) for more information on pinouts).
 
-| PMOD Connector pin # |   Signal    |             
-|:--------------------:|:-----------:| 
-|          2           | to HOST_TXD | 
-|          3           | to HOST_RXD | 
-|          16          |     GND     |
-|          6           |   or 5V)    |
+| PMOD pin # | STMOD+ pin # |             
+|:----------:|:------------:| 
+|   2 (RX)   | 2 (UARTy_TX) | 
+|   3 (TX)   | 3 (UARTy_RX) | 
+|  5 (GND)   |   16 (GND)   |
+|  6 (+5v)   |   6 (+5v)    |
 
 * Connect the USB cables to the board.
 * Launch the host camera application. (ex. N6CamViwer or ffplay)
 
 > [!NOTE]
-> The video steams needs to be playing for the inferencing to be enabled.
+> The video stream needs to be playing for the inferencing to be enabled.
 
 ## 11. Dashboard Setup and Usage
 * Download the [Dashboard Template](TBD)
@@ -113,4 +113,5 @@ Follow the instructions in the [DA16K QuickStart Guide](https://github.com/avnet
 ## Resources
 * [Purchase an STM32N6570-DK Development Kit]
 * [STM32N6570-DK Product Overview](https://www.st.com/en/evaluation-tools/stm32n6570-dk.html)
+* [Other /IOTCONNECT enabled ST Devices](https://www.avnet.com/iotconnect/st)
 * 

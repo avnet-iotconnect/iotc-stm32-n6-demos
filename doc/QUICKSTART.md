@@ -1,12 +1,13 @@
 ## 1. Introduction
-This document outlines the steps of setting up the STM32N6570-DK with Avnet's IOTCONNECT.  The solution leverages ST's object detection models to 
-provide object coordinates information to IOTCONNECT platform.
+This document outlines the steps of setting up the STM32N6570-DK with Avnet's /IOTCONNECT platform.  The QuickStart demonstrates ST's edge AI object detection model to 
+provide object coordinates information to /IOTCONNECT.
 
 ## 2. Prerequisites
-This guide has been tested with the following environment, but should work with other operating systems.
+This guide has been tested with the following environment:
 * PC with Windows 10/11
-* Two USB-A to USB Type-C data cables
+* 2x USB Type-C data cables
 * A serial terminal application such as [Tera Term](https://sourceforge.net/projects/tera-term/) (Recommended) or a browser-based version such as [Google Chrome Labs Serial Terminal](https://googlechromelabs.github.io/serial-terminal/)
+* A [MyST]() account to download software
 * [STM32CubeProgrammer](https://www.st.com/en/development-tools/stm32cubeprog.html) software
 
 ## 3. Hardware Setup

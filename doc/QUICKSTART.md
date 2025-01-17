@@ -14,11 +14,12 @@ This guide has been tested with the following environment, but should work with 
 * Connect two USB-A to USB type-C cables to the board from PC.
 
 ## 4. Flash the Firmware
+* Download and unzip the pre-compiled [firmware](https://downloads.iotconnect.io/partners/st/demos/uvc/n6uvc-binary.zip).
 * Switch the BOOT1 switch to the right position.
 * Launch the STM32CubeProgrammer.
 * Program `ai_fsbl.hex` (to be done once) (First stage boot loader).
 * Program `network_data.hex` (parameters of the networks; to be changed only when the network is changed).
-* Program `uvc.hex` (firmware application). (Add 0x70100000 in the 'Start Address' when programming)
+* Program `uvc_signed.bin` (firmware application). (Add 0x70100000 in the 'Start Address' when programming)
 * Switch the BOOT1 switch to the left position.
 
 

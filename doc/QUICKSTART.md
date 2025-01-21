@@ -2,6 +2,8 @@
 This document outlines the steps of setting up the STM32N6570-DK with Avnet's /IOTCONNECT platform.  The QuickStart demonstrates ST's edge AI computer vision model (based on the [n6-ai-h264-uvc](https://www.st.com/en/development-tools/stm32n6-ai.html#get-software) example) and 
 provides object detection information to /IOTCONNECT for visualization. 
 
+<img src="https://github.com/avnet-iotconnect/iotc-stm32-n6-demos/blob/main/media/n6.jpg" width="300">
+
 ## 2. Prerequisites
 This guide has been written and tested with the hardware and software listed below, but may work with other environments with some modifications.
 

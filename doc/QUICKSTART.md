@@ -24,6 +24,11 @@ This guide has been written and tested with the hardware and software listed bel
 * Change the Power Select Header (JMP2) from the 1-2 position to the 3-4 position to allow power delivery from both USB-C ports.
 * Connect two USB type-C cables from each side of the board to the PC.
 
+<details>
+  <summary>Click me</summary>
+  <img src="../media/stm32n6_board_overview.jpg" width="600">
+</details>
+
 ## 4. Programming the board
 ### 4.1 Prepare the Board
 * Move the **BOOT1** switch to the right position to enter the "Development Boot" mode.

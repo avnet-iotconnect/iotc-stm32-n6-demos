@@ -127,5 +127,5 @@ You will now be in the dashboard edit mode. You can add/remove widgets or just c
 * [Purchase the STM32N6570-DK](TBD)
 * [STM32N6570-DK Product Overview](https://www.st.com/en/evaluation-tools/stm32n6570-dk.html)
 * [Other /IOTCONNECT enabled ST Devices](https://www.avnet.com/iotconnect/st)
-* [IoTConnect Overview](https://www.iotconnect.io/)
-* [IoTConnect Knowledgebase](https://help.iotconnect.io/)
+* [/IOTCONNECT Overview](https://www.iotconnect.io/)
+* [/IOTCONNECT Knowledgebase](https://help.iotconnect.io/)

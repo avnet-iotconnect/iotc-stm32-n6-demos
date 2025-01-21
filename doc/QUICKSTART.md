@@ -137,6 +137,11 @@ You will now be in the dashboard edit mode. You can add/remove widgets or just c
 * The "Person Distance" will use to the ratio of the bounding boxes to the overall image size to approximate the distance (this is not calibrated and just shown as a proof of concept).
 * The Model Confidence is displayed as a gauge chart in the middle of the screen.
 
+<details>
+  <summary>Demo Dashboard</summary>
+  <img src="../media/dashboard.jpg" width="1000">
+</details>
+
 ## Resources
 * [Webinar Slides](TBD)
 * [Purchase the STM32N6570-DK](https://www.avnet.com/shop/us/products/stmicroelectronics/stm32n6570-dk-3074457345660283716)

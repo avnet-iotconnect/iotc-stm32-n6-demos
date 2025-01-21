@@ -63,7 +63,7 @@ An /IOTCONNECT account with AWS backend is required.  If you need to create an a
 [/IOTCONNECT Free Trial (AWS Version)](https://subscription.iotconnect.io/subscribe?cloud=aws)
 
 > [!NOTE]
-> Be sure to check any SPAM folder for the temporary password after registering.
+> Be sure to check your SPAM folder for the temporary password after registering if you don't see it after a couple minutes.
 
 See the /IOTCONNECT [Subscription Information](https://github.com/avnet-iotconnect/avnet-iotconnect.github.io/blob/main/documentation/iotconnect/subscription/subscription.md) for more details on the trial including message limits.
 

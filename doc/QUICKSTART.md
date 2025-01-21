@@ -20,21 +20,20 @@ This guide has been written and tested with the hardware and software listed bel
 * A multimedia player that supports the video stream from the N6 camera module. A player that has all the necessary codecs, and works out-of-the-box is [POT Player](https://potplayer.daum.net/).
 
 ## 3. STM32N6 Hardware Setup
-* Connect the camera via the white ribbon cable to the board (the blue stripe should be facing up on both ends).
-* Change the Power Select Header (JMP2) from the 1-2 position to the 3-4 position to allow power delivery from both USB-C ports.
-* Connect two USB type-C cables from each side of the board to the PC.
-
 <details>
-  <summary>Click me</summary>
-  <img src="../media/stm32n6_board_overview.jpg" width="600">
+  <summary>Board Components Reference</summary>
+  <img src="../media/stm32n6_board_overview.jpg" width="1000">
 </details>
 
-## 4. Programming the board
-### 4.1 Prepare the Board
+* Connect the camera via the white ribbon cable to the board (the blue stripe should be facing up on both ends).
+* Change the Power Input Select Header (JMP2) from the 1-2 position to the 3-4 position to allow power delivery from both USB-C ports.
+* Connect two USB type-C cables from each side of the board to the PC.
 * Move the **BOOT1** switch to the right position to enter the "Development Boot" mode.
 * Press the **RESET** button.
 
-### 4.2 Setup the Programmer
+## 4. Programming the board
+
+### 4.1 Setup the Programmer
 * Launch the **STM32CubeProgrammer**.
 * In the left menu, click the `External loaders` ("EL" icon).
 * Use the search box to find `STM32N6570-DK` and select the check box to the left.
@@ -42,17 +41,17 @@ This guide has been written and tested with the hardware and software listed bel
 * Just below, change the ST-LINK configuration "mode" to `Hot Plug`
 * Click `Connect`
 
-### 4.3 Program the Binaries
+### 4.2 Program the Binaries
 * In the left menu, click the `Erasing & programming` to program the (3) binaries.
-#### 4.3.1 Program Bootloader
+#### 4.2.1 Program Bootloader
 The **Bootloader** initializes the hardware, validates the firmware the enforces secure boot.
 * Click `Browse` and navigate to and select `ai_fsbl.hex` previously extracted.
 * Click `Start Programming` and wait until complete.
-#### 4.3.2 Program the AI Model
+#### 4.2.2 Program the AI Model
 The **AI Model** contains optimized model data for Neural-ART accelerator.
 * Click `Browse` and navigate to and select `network_data.hex` previously extracted.
 * Click `Start Programming` and wait until complete.
-#### 4.3.3 Program the Application
+#### 4.2.3 Program the Application
 The **Application** implements the core functionalities of the demo such as the AI inference and camera processing.  This is a custom signed image of the UVC application.
 * Click `Browse` and navigate to and select `uvc_signed.bin` previously extracted.
 * In the `Start Address` field, enter the following address:

@@ -15,9 +15,9 @@ This guide has been written and tested with the hardware and software listed bel
 
 ### Software
 * A serial terminal application such as [Tera Term](https://sourceforge.net/projects/tera-term/) (Recommended) or a browser-based version such as [Google Chrome Labs Serial Terminal](https://googlechromelabs.github.io/serial-terminal/)
-* [STM32CubeProgrammer](https://www.st.com/en/development-tools/stm32cubeprog.html) (A free [MyST](https://my.st.com/cas/login) account is required to download)
+* Download and Install the latest [STM32CubeProgrammer](https://www.st.com/en/development-tools/stm32cubeprog.html) (A free [MyST](https://my.st.com/cas/login) account is required to download)
 * Download and unzip the pre-compiled firmware [n6uvc-binary.zip](https://downloads.iotconnect.io/partners/st/demos/uvc/n6uvc-binary.zip) to a location near the root of your drive.
-* A multimedia player that supports the video stream from the N6 camera module. A player that has all the necessary codecs, and works out-of-the-box is [POT Player](https://potplayer.daum.net/).
+* A multimedia player that supports the video stream from the N6 camera module. A player that has all the necessary codecs, and works out-of-the-box is [POT Player](https://potplayer.daum.net/). Other multimedia players may work as well.
 
 ## 3. STM32N6 Hardware Setup
 <details>
@@ -110,11 +110,12 @@ Follow the instructions in the [DA16K QuickStart Guide](https://github.com/avnet
 
 <details>
   <summary>STMod+ Header Reference</summary>
-  <img src="../media/stmod_header.jpg" width="200">
+  <img src="../media/stmod_header.jpg" width="300">
 </details>
 
 * Reconnect the USB cables to the board.
 * Launch the camera application (e.g. [POT Player](https://potplayer.daum.net/)) on the PC to begin streaming the video.
+* If using the POT player, click `Open` then select `Open Webcam\Other Device`.
 
 > [!NOTE]
 > The video stream needs to be playing for the inferencing to be enabled.
@@ -122,9 +123,9 @@ Follow the instructions in the [DA16K QuickStart Guide](https://github.com/avnet
 The multimedia player should now be displaying bounding boxes around objected detected in the field of view of the camera module.
 
 ## 11. Verify Data stream and Import a Dashboard
+
 * Switch back to the /IOTCONNECT browser window and verify the device status is displaying as `Connected`
 * Download the demo [Dashboard Template](STM32N6_UVC_Demo_dashboard.json?raw=1) (**must** Right-Click, Save As)
-
 * **Download** the template then select `Create Dashboard` from the top of the page
 * **Select** the `Import Dashboard` option and select `n6uvc` for **template** and `MySTN6` for **device** 
 * **Enter** a name (such as `MyN6 Demo Dashboard`) and complete the import

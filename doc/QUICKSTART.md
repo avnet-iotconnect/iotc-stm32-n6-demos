@@ -108,6 +108,11 @@ Follow the instructions in the [DA16K QuickStart Guide](https://github.com/avnet
 |  5 (GND)   |   16 (GND)   |
 |  6 (+5v)   |   6 (+5v)    |
 
+<details>
+  <summary>STMod+ Header Reference</summary>
+  <img src="../media/stmod_header.jpg" width="200">
+</details>
+
 * Reconnect the USB cables to the board.
 * Launch the camera application (e.g. [POT Player](https://potplayer.daum.net/)) on the PC to begin streaming the video.
 
@@ -125,7 +130,7 @@ The multimedia player should now be displaying bounding boxes around objected de
 * **Enter** a name (such as `MyN6 Demo Dashboard`) and complete the import
 
 You will now be in the dashboard edit mode. You can add/remove widgets or just click `Save` in the upper-right corner to exit the edit mode.
-## 12. Using the Demo
+## 12. Demo Overview
 * 
 
 ## Resources

@@ -2,12 +2,13 @@
 This document outlines the steps of setting up the STM32N6570-DK with Avnet's /IOTCONNECT platform.  The QuickStart demonstrates ST's edge AI computer vision model (based on the [n6-ai-h264-uvc](https://www.st.com/en/development-tools/stm32n6-ai.html#get-software) example) and 
 provides object detection information to /IOTCONNECT for visualization. 
 
-<img src="https://github.com/avnet-iotconnect/iotc-stm32-n6-demos/blob/main/media/n6.jpg" width="300">
+<img src="../media/n6.jpg" width="300">
 
 ## 2. Prerequisites
 This guide has been written and tested with the hardware and software listed below, but may work with other environments with some modifications.
 
 ### Hardware
+* [STM32N6570-DK Discovery Kit](https://www.avnet.com/shop/us/products/stmicroelectronics/stm32n6570-dk-3074457345660283716)
 * PC with Windows 10/11
 * 2x USB Type-C data cables
 * 4x Male to Female header jumpers [Buy from Newark](https://www.newark.com/multicomp-pro/mp006283/jumper-wire-kit-male-to-female/dp/15AJ6557)
@@ -132,11 +133,13 @@ The multimedia player should now be displaying bounding boxes around objected de
 
 You will now be in the dashboard edit mode. You can add/remove widgets or just click `Save` in the upper-right corner to exit the edit mode.
 ## 12. Demo Overview
-* 
+* As people are detected in the field of view of the camera module, the current count will be displayed on the left side.
+* The "Person Distance" will use to the ratio of the bounding boxes to the overall image size to approximate the distance (this is not calibrated and just shown as a proof of concept).
+* The Model Confidence is displayed as a gauge chart in the middle of the screen.
 
 ## Resources
 * [Webinar Slides](TBD)
-* [Purchase the STM32N6570-DK](TBD)
+* [Purchase the STM32N6570-DK](https://www.avnet.com/shop/us/products/stmicroelectronics/stm32n6570-dk-3074457345660283716)
 * [STM32N6570-DK Product Overview](https://www.st.com/en/evaluation-tools/stm32n6570-dk.html)
 * [Other /IOTCONNECT enabled ST Devices](https://www.avnet.com/iotconnect/st)
 * [/IOTCONNECT Overview](https://www.iotconnect.io/)

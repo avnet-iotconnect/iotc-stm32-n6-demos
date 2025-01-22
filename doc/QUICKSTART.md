@@ -1,3 +1,19 @@
+## Index
+1. [Introduction](#1-introduction)
+2. [Prerequisites](#2-prerequisites)
+3. [STM32N6 Hardware Setup](#3-stm32n6-hardware-setup)
+4. [Programming the board](#4-programming-the-board)
+5. [Cloud Account Setup](#5-cloud-account-setup)
+6. [Create a Device Template in /IOTCONNECT](#6-create-a-device-template-in-iotconnect)
+7. [Create a Device /IOTCONNECT](#7-create-a-device-iotconnect)
+8. [Obtain /IOTCONNECT Connection Info](#8-obtain-iotconnect-connection-info)
+9. [Flash/Configure the DA16k PMOD module](#9-flashconfigure-the-da16k-pmod-module)
+10. [Run the Applicaton](#10-run-the-applicaton)
+11. [Verify Data stream and Import a Dashboard](#11-verify-data-stream-and-import-a-dashboard)
+12. [Demo Overview](#12-demo-overview)
+* [Resources](#resources)
+* [Revision Info](#revision-info)
+
 ## 1. Introduction
 This document outlines the steps of setting up the STM32N6570-DK with Avnet's /IOTCONNECT platform.  The QuickStart demonstrates ST's edge AI computer vision model (based on the [n6-ai-h264-uvc](https://www.st.com/en/development-tools/stm32n6-ai.html#get-software) example) and 
 provides object detection information to /IOTCONNECT for visualization. 

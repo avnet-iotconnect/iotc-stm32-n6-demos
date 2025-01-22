@@ -17,11 +17,10 @@
 ## 1. Introduction
 This document outlines the steps of setting up the [STM32N6570-DK](https://www.st.com/en/evaluation-tools/stm32n6570-dk.html) with Avnet's /IOTCONNECT platform.  The QuickStart demonstrates ST's edge AI computer vision model (based on the [n6-ai-h264-uvc](https://www.st.com/en/development-tools/stm32n6-ai.html#get-software) example) and 
 provides object detection information to /IOTCONNECT for visualization. 
-
 <table>
   <tr>
-    <td style="width: 30%;"><img src="../media/n6.jpg"alt="STM32N6 Discovery Kit" width="480"></td>
-    <td style="width: 70%;">The STM32N6 Discovery Kit is a development platform designed to help engineers and developers build and prototype applications using the STM32N6 microcontroller series. It features a high-performance MCU with enhanced connectivity options, making it ideal for a variety of IoT and industrial applications. The kit includes a range of peripherals, such as sensors, displays, and communication modules, to facilitate rapid development and testing. The /IOTCONNECT platform offers seamless integration with IoT devices, providing advanced capabilities for remote monitoring, management, and analytics. It enables users to streamline device connectivity and data collection, enhancing the efficiency and scalability of IoT projects.</td>
+    <td><img src="../media/n6.jpg"alt="STM32N6 Discovery Kit" width="6000"></td>
+    <td>The STM32N6 Discovery Kit is a development platform designed to help engineers and developers build and prototype applications using the STM32N6 microcontroller series. It features a high-performance MCU with enhanced connectivity options, making it ideal for a variety of IoT and industrial applications. The kit includes a range of peripherals, such as sensors, displays, and communication modules, to facilitate rapid development and testing. The /IOTCONNECT platform offers seamless integration with IoT devices, providing advanced capabilities for remote monitoring, management, and analytics. It enables users to streamline device connectivity and data collection, enhancing the efficiency and scalability of IoT projects.</td>
   </tr>
 </table>
 

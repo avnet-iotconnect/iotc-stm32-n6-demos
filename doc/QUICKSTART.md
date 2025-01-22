@@ -1,4 +1,4 @@
-## Index
+## STMicroelectronics STM32N6 QuickStart
 1. [Introduction](#1-introduction)
 2. [Prerequisites](#2-prerequisites)
 3. [STM32N6 Hardware Setup](#3-stm32n6-hardware-setup)

@@ -141,7 +141,7 @@ Follow the instructions in the [DA16K QuickStart Guide](https://github.com/avnet
 > [!NOTE]
 > The video stream needs to be playing for the inferencing to be enabled.
 
-The multimedia player should now be displaying bounding boxes around objected detected in the field of view of the camera module.
+The multimedia player should now be displaying bounding boxes around any object detected in the field of view of the camera module.
 
 ## 11. Verify Data stream and Import a Dashboard
 

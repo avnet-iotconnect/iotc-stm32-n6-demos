@@ -149,3 +149,8 @@ You will now be in the dashboard edit mode. You can add/remove widgets or just c
 * [Other /IOTCONNECT enabled ST Devices](https://www.avnet.com/iotconnect/st)
 * [/IOTCONNECT Overview](https://www.iotconnect.io/)
 * [/IOTCONNECT Knowledgebase](https://help.iotconnect.io/)
+
+## Revision Info
+![GitHub last commit](https://img.shields.io/github/last-commit/avnet-/IOTCONNECT/iotc-stm32-n6-demos?label=Last%20Commit)
+- View the complete [Commit History](https://github.com/avnet-iotconnect/iotc-stm32-n6-demos/commits/main) for this repository.
+- View changes to this document: [QUICKSTART.md History](https://img.shields.io/github/last-commit/avnet-/IOTCONNECT/iotc-stm32-n6-demos?label=Last%20Commit).

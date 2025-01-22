@@ -15,13 +15,13 @@
 * [Revision Info](#revision-info)
 
 ## 1. Introduction
-This document outlines the steps of setting up the STM32N6570-DK with Avnet's /IOTCONNECT platform.  The QuickStart demonstrates ST's edge AI computer vision model (based on the [n6-ai-h264-uvc](https://www.st.com/en/development-tools/stm32n6-ai.html#get-software) example) and 
+This document outlines the steps of setting up the [STM32N6570-DK](https://www.st.com/en/evaluation-tools/stm32n6570-dk.html) with Avnet's /IOTCONNECT platform.  The QuickStart demonstrates ST's edge AI computer vision model (based on the [n6-ai-h264-uvc](https://www.st.com/en/development-tools/stm32n6-ai.html#get-software) example) and 
 provides object detection information to /IOTCONNECT for visualization. 
 
 <table>
   <tr>
-    <td style="width: 500px;"><img src="../media/n6.jpg" width="500"></td>
-    <td>The STM32N6 Discovery Kit is a development platform designed to help engineers and developers build and prototype applications using the STM32N6 microcontroller series. It features a high-performance MCU with enhanced connectivity options, making it ideal for a variety of IoT and industrial applications. The kit includes a range of peripherals, such as sensors, displays, and communication modules, to facilitate rapid development and testing. The /IOTCONNECT platform offers seamless integration with IoT devices, providing advanced capabilities for remote monitoring, management, and analytics. It enables users to streamline device connectivity and data collection, enhancing the efficiency and scalability of IoT projects.</td>
+    <td style="width: 30%;"><img src="../media/n6.jpg"alt="STM32N6 Discovery Kit" width="480"></td>
+    <td style="width: 70%;">The STM32N6 Discovery Kit is a development platform designed to help engineers and developers build and prototype applications using the STM32N6 microcontroller series. It features a high-performance MCU with enhanced connectivity options, making it ideal for a variety of IoT and industrial applications. The kit includes a range of peripherals, such as sensors, displays, and communication modules, to facilitate rapid development and testing. The /IOTCONNECT platform offers seamless integration with IoT devices, providing advanced capabilities for remote monitoring, management, and analytics. It enables users to streamline device connectivity and data collection, enhancing the efficiency and scalability of IoT projects.</td>
   </tr>
 </table>
 
@@ -29,7 +29,7 @@ provides object detection information to /IOTCONNECT for visualization.
 This guide has been written and tested with the hardware and software listed below, but may work with other environments with some modifications.
 
 ### Hardware
-* [STM32N6570-DK Discovery Kit](https://www.avnet.com/shop/us/products/stmicroelectronics/stm32n6570-dk-3074457345660283716)
+* STM32N6570-DK Discovery Kit - [Purchase](https://www.avnet.com/shop/us/products/stmicroelectronics/stm32n6570-dk-3074457345660283716) | [Kit Manual](https://www.st.com/resource/en/user_manual/um3300-discovery-kit-with-stm32n657x0-mcu-stmicroelectronics.pdf) | [Device Specifications](https://www.st.com/resource/en/data_brief/stm32n6570-dk.pdf)
 * PC with Windows 10/11
 * 2x USB Type-C data cables
 * 4x Male to Female header jumpers [Buy from Newark](https://www.newark.com/multicomp-pro/mp006283/jumper-wire-kit-male-to-female/dp/15AJ6557)

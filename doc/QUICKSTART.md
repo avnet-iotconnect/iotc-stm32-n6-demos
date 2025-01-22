@@ -173,4 +173,4 @@ You will now be in the dashboard edit mode. You can add/remove widgets or just c
 
 ## Revision Info
 - View change to this repository: [Commit History](https://github.com/avnet-iotconnect/iotc-stm32-n6-demos/commits/main)
-- View changes to this document: [QUICKSTART.md](https://github.com/avnet-/IOTCONNECT/iotc-stm32-n6-demos/commits/main/doc/QUICKSTART.md)
+- View changes to this document: [QUICKSTART.md](https://github.com/avnet-iotconnect/iotc-stm32-n6-demos/commits/main/doc/QUICKSTART.md)

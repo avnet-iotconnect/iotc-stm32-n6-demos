@@ -141,7 +141,7 @@ Follow the instructions in the [DA16K QuickStart Guide](https://github.com/avnet
 > [!NOTE]
 > The video stream needs to be playing for the inferencing to be enabled.
 
-The multimedia player should now be displaying bounding boxes around objected detected in the field of view of the camera module.
+The multimedia player should now be displaying bounding boxes around any object detected in the field of view of the camera module.
 
 ## 11. Verify Data stream and Import a Dashboard
 
@@ -163,12 +163,13 @@ You will now be in the dashboard edit mode. You can add/remove widgets or just c
 </details>
 
 ## Resources
-* [Webinar Slides](TBD)
+* [Webinar Slides](https://downloads.iotconnect.io/partners/st/demos/uvc/docs/Avnet%20Webinar%20-%20Vision-based%20Edge%20AI%20PoCs%20leveraging%20the%20STM32N6%20MCU.pdf)
 * [Purchase the STM32N6570-DK](https://www.avnet.com/shop/us/products/stmicroelectronics/stm32n6570-dk-3074457345660283716)
 * [STM32N6570-DK Product Overview](https://www.st.com/en/evaluation-tools/stm32n6570-dk.html)
 * [Other /IOTCONNECT enabled ST Devices](https://www.avnet.com/iotconnect/st)
 * [/IOTCONNECT Overview](https://www.iotconnect.io/)
 * [/IOTCONNECT Knowledgebase](https://help.iotconnect.io/)
+* [Reference Design Library on Avnet Design Hub](https://www.avnet.com/wps/portal/us/solutions/product-and-solutions-design/design-hub/design-results?dhsearch=STM32N6)
 
 ## Revision Info
 ![GitHub last commit](https://img.shields.io/github/last-commit/avnet-iotconnect/iotc-stm32-n6-demos?label=Last%20Commit)

@@ -1,9 +1,11 @@
 # Developer Guide for STM32N6 AI Projects and IoTConnect
 
 ## Overview
+Using the Applications Examples from the STM32N6 AI Ecosystem website, 
+This guide will help you set up, build, and run AI-based demos on the STM32N6 microcontroller using STM32CubeIDE. The available projects include:  
 
-This guide will help you set up, build, and run AI-based demos on the STM32N6 microcontroller using STM32CubeIDE. The available projects include:
-
+- 
+- 
 - **Image Classification**
 - **Object Detection**
 - **Instance Segmentation**
@@ -161,25 +163,24 @@ For each project, replace the necessary files from the cloned IoTConnect repo:
 **For AI Projects (`image_classification`, `object_detection`, etc.):**
 - Replace `main.c` with:
   ```
-  iotc-freertos-da16k-atcmd-lib/Projects/<project_name>/STM32N6/Src/main.c
+  ???
   ```
 - Add `da16k_uart.c` to:
   ```
-  <project_root>/STM32CubeIDE/Application/Src/
+  ??? c/
   ```
 
 **For UVC Object Detection:**
 - Replace `main.c` with:
   ```
-  iotc-freertos-da16k-atcmd-lib/Projects/object_detection/STM32N6/Src/main.c
+    ???
   ```
 - Add `da16k_uart.c` and `app.c` to:
   ```
   <project_root>/STM32CubeIDE/Application/Src/
   ```
 
-This completes the IoTConnect integration setup. Proceed to **Step 5** for flashing and testing the application! 🚀
-
+This completes the IoTConnect integration setup. Proceed to **Step 5** for flashing and testing the application!
 
 
 ---

@@ -14,6 +14,26 @@
  * If no LICENSE file comes with this software, it is provided AS-IS.
  *
  ******************************************************************************
+ inference_ms
+ number of objects:  Objects
+ Bounding Box Information
+     x_center, y_center: The center of the detected object.
+    width, height: The width and height of the bounding box.
+    pMask: A segmentation mask with probability values.
+    class_index: The detected object's class.
+ Confidence
+    pMask
+        This indicates confidence per-pixel for segmentation.
+        Could be average   d per object or reported as a probability per bounding box.
+    YOLOv8 Object Detection Thresholds
+ Preprocessed Image Resolution
+
+ Aspect Ratio Handling
+
+ Camera Frame Processing Time
+ System Load Information
+
+ Neural Network Deployment Info
  */
 #include "cmw_camera.h"
 #include "stm32n6570_discovery_bus.h"
@@ -23,6 +43,7 @@
 #include "stm32_lcd.h"
 #include "app_fuseprogramming.h"
 #include "stm32_lcd_ex.h"
+#include "app_postprocess.h"
 #include "ll_aton_runtime.h"
 #include "app_cam.h"
 #include "main.h"
@@ -30,16 +51,93 @@
 #include "stm32n6xx_hal_rif.h"
 #include "app_config.h"
 #include "crop_img.h"
+
+// iotc-start
 #include "stlogo.h"
-#include "arm_math.h"
 #include "da16k_comm.h"
 #include "da16k_uart.h" // For UART
 #include "stm32n6xx_hal_uart.h" // STM32 HAL UART header
+#include <stdbool.h>
+
+#define MAX_TRACKED_OBJECTS 10
+#define IOU_THRESHOLD 0.5f  // Intersection-over-Union threshold for matching
+
+typedef struct
+{
+    int id;                // Persistent ID (1-10)
+    int class_index;       // Object class
+    float confidence;      // Confidence score
+    uint32_t x, y, w, h;   // Bounding box
+    bool active;           // Is this slot currently tracking an object?
+} TrackedObject;
+
+static TrackedObject tracked_objects[MAX_TRACKED_OBJECTS] = {0}; // Initialize all IDs to 0
+
+static int assign_id_to_object(int class_index, float confidence, uint32_t x, uint32_t y, uint32_t w, uint32_t h)
+{
+    // Try to find an existing match (IoU-based matching)
+    for (int i = 0; i < MAX_TRACKED_OBJECTS; i++)
+    {
+        if (tracked_objects[i].active)
+        {
+            float iou = calculate_iou(tracked_objects[i], x, y, w, h);
+            if (iou > IOU_THRESHOLD) // If it's a known object, update its info
+            {
+                tracked_objects[i].class_index = class_index;
+                tracked_objects[i].confidence = confidence;
+                tracked_objects[i].x = x;
+                tracked_objects[i].y = y;
+                tracked_objects[i].w = w;
+                tracked_objects[i].h = h;
+                return tracked_objects[i].id;
+            }
+        }
+    }
+
+    // If no existing match, assign a new ID if space is available
+    for (int i = 0; i < MAX_TRACKED_OBJECTS; i++)
+    {
+        if (!tracked_objects[i].active)  // Find an empty slot
+        {
+            tracked_objects[i].id = i + 1; // IDs 1-10
+            tracked_objects[i].class_index = class_index;
+            tracked_objects[i].confidence = confidence;
+            tracked_objects[i].x = x;
+            tracked_objects[i].y = y;
+            tracked_objects[i].w = w;
+            tracked_objects[i].h = h;
+            tracked_objects[i].active = true;
+            return tracked_objects[i].id;
+        }
+    }
+
+    // If no available slot, return -1 (ignore object)
+    return -1;
+}
+
+/**
+ * @brief Calculates the Intersection-over-Union (IoU) between two bounding boxes.
+ */
+static float calculate_iou(TrackedObject existing, uint32_t x, uint32_t y, uint32_t w, uint32_t h)
+{
+    uint32_t xA = MAX(existing.x, x);
+    uint32_t yA = MAX(existing.y, y);
+    uint32_t xB = MIN(existing.x + existing.w, x + w);
+    uint32_t yB = MIN(existing.y + existing.h, y + h);
+
+    uint32_t interArea = MAX(0, xB - xA) * MAX(0, yB - yA);
+    uint32_t boxAArea = existing.w * existing.h;
+    uint32_t boxBArea = w * h;
+
+    return (float) interArea / (boxAArea + boxBArea - interArea);
+}
+
 
 #define TX_BUFFER_SIZE 512
 UART_HandleTypeDef huart2;
 extern da16k_err_t da16k_at_send_formatted_raw_no_crlf(const char *format, ...);
 int confidence_threshold = 55; // Default confidence threshold (70%)
+// iotc-stop
 
 CLASSES_TABLE;
 
@@ -87,12 +185,16 @@ const uint32_t colors[NUMBER_COLORS] = {
     UTIL_LCD_COLOR_ORANGE
 };
 
+#if POSTPROCESS_TYPE == POSTPROCESS_ISEG_YOLO_V8_UI
+yolov8_seg_pp_static_param_t pp_params;
+#else
+    #error "PostProcessing type not supported"
+#endif
+
 volatile int32_t cameraFrameReceived;
 uint8_t *nn_in;
 BSP_LCD_LayerConfig_t LayerConfig = {0};
-void *pp_input;
-char const *nn_top1_output_class_name;
-float nn_top1_output_class_proba;
+iseg_postprocess_out_t pp_output;
 
 #define ALIGN_TO_16(value) (((value) + 15) & ~15)
 
@@ -120,9 +222,7 @@ static int lcd_fg_buffer_rd_idx;
 static void SystemClock_Config(void);
 static void NPURam_enable(void);
 static void NPUCache_config(void);
-static void Display_NetworkOutput(uint32_t inference_ms);
-static void Network_Postprocess(void);
-static void Bubblesort(float *prob, int *classes, int size);
+static void Display_NetworkOutput(iseg_postprocess_out_t *p_postprocess, uint32_t inference_ms);
 static void LCD_init(void);
 static void Security_Config(void);
 static void set_clk_sleep_mode(void);
@@ -260,8 +360,9 @@ int main(void)
   Fuse_Programming();
 
   NPUCache_config();
-
+// iotc-start
   MX_USART2_UART_Init(); // Initialize UART
+// iotc-stop
 
   /*** External RAM and NOR Flash *********************************************/
   BSP_XSPI_RAM_Init(0);
@@ -309,7 +410,7 @@ int main(void)
   UNUSED(nn_in_len);
 
   /*** Post Processing Init ***************************************************/
-  pp_input = nn_out[0];
+  app_postprocess_init(&pp_params);
 
   /*** Camera Init ************************************************************/
 
@@ -322,7 +423,7 @@ int main(void)
 
   /*** App Loop ***************************************************************/
   while (1)
-  //iotc-start
+    //iotc-start
   {
       da16k_cmd_t current_cmd = {0};
 
@@ -380,6 +481,7 @@ int main(void)
       }
 // iotc-stop
 
+  {
     CAM_IspUpdate();
 
     if (pitch_nn != (NN_WIDTH * NN_BPP))
@@ -409,7 +511,9 @@ int main(void)
     /* run ATON inference */
     LL_ATON_RT_Main(&NN_Instance_Default);
     ts[1] = HAL_GetTick();
-    Network_Postprocess();
+
+    int32_t ret = app_postprocess_run((void **) nn_out, number_output, &pp_output, &pp_params);
+    assert(ret == 0);
 
 //iotc-start
     // Send classification results to IoTConnect
@@ -425,14 +529,13 @@ int main(void)
 	HAL_Delay(2000);
 //iotc-stop
 
-	Display_NetworkOutput(ts[1] - ts[0]);
+    Display_NetworkOutput(&pp_output, ts[1] - ts[0]);
     /* Discard nn_out region (used by pp_input and pp_outputs variables) to avoid Dcache evictions during nn inference */
     for (int i = 0; i < number_output; i++)
     {
       float32_t *tmp = nn_out[i];
       SCB_InvalidateDCache_by_Addr(tmp, nn_out_len[i]);
     }
-
   }
 }
 
@@ -495,7 +598,7 @@ static void set_clk_sleep_mode(void)
   __HAL_RCC_AXISRAM3_MEM_CLK_SLEEP_ENABLE();
   __HAL_RCC_AXISRAM4_MEM_CLK_SLEEP_ENABLE();
   __HAL_RCC_AXISRAM5_MEM_CLK_SLEEP_ENABLE();
-  __HAL_RCC_AXISRAM6_MEM_CLK_SLEEP_ENABLE(); 
+  __HAL_RCC_AXISRAM6_MEM_CLK_SLEEP_ENABLE();
 
 }
 
@@ -543,19 +646,118 @@ void IAC_IRQHandler(void)
 
 /**
 * @brief Display Neural Network output classification results as well as other performances informations
-* 
+*
+* @param p_postprocess pointer to postprocessing output
 * @param inference_ms inference time in ms
 */
-static void Display_NetworkOutput(uint32_t inference_ms)
+static void Display_NetworkOutput(iseg_postprocess_out_t *p_postprocess, uint32_t inference_ms)
 {
+  iseg_postprocess_outBuffer_t *rois = p_postprocess->pOutBuff;
+  uint32_t nb_rois = p_postprocess->nb_detect;
   int ret;
 
   ret = HAL_LTDC_SetAddress_NoReload(&hlcd_ltdc, (uint32_t) lcd_fg_buffer[lcd_fg_buffer_rd_idx], LTDC_LAYER_2);
   assert(ret == HAL_OK);
 
-  UTIL_LCD_Clear(0);
-  UTIL_LCDEx_PrintfAt(0, LINE(2), CENTER_MODE, "%s %.0f%%", nn_top1_output_class_name, nn_top1_output_class_proba * 100);
+  /* Draw post processing result */
+  UTIL_LCD_FillRect(lcd_fg_area.X0, lcd_fg_area.Y0, lcd_fg_area.XSize, lcd_fg_area.YSize, 0x00000000); /* Clear previous boxes */
+
+    int objects_to_send = (nb_rois > MAX_TRACKED_OBJECTS) ? MAX_TRACKED_OBJECTS : nb_rois;
+
+    char telemetry_buffer[TX_BUFFER_SIZE];
+    snprintf(telemetry_buffer, TX_BUFFER_SIZE, "AT+NWICMSG detection_batch,[");
+
+    for (int i = 0; i < objects_to_send; i++)
+    {
+        float confidence = rois[i].confidence * 100;
+
+        uint32_t x0 = (uint32_t)((rois[i].x_center - rois[i].width / 2) * ((float32_t)lcd_bg_area.XSize)) + lcd_bg_area.X0;
+        uint32_t y0 = (uint32_t)((rois[i].y_center - rois[i].height / 2) * ((float32_t)lcd_bg_area.YSize));
+        uint32_t width = (uint32_t)(rois[i].width * ((float32_t)lcd_bg_area.XSize));
+        uint32_t height = (uint32_t)(rois[i].height * ((float32_t)lcd_bg_area.YSize));
+
+        x0 = (x0 < lcd_bg_area.X0 + lcd_bg_area.XSize) ? x0 : (lcd_bg_area.X0 + lcd_bg_area.XSize - 1);
+        y0 = (y0 < lcd_bg_area.Y0 + lcd_bg_area.YSize) ? y0 : (lcd_bg_area.Y0 + lcd_bg_area.YSize - 1);
+        width = ((x0 + width) < lcd_bg_area.X0 + lcd_bg_area.XSize) ? width : (lcd_bg_area.X0 + lcd_bg_area.XSize - x0 - 1);
+        height = ((y0 + height) < lcd_bg_area.Y0 + lcd_bg_area.YSize) ? height : (lcd_bg_area.Y0 + lcd_bg_area.YSize - y0 - 1);
+
+        int object_id = assign_id_to_object(rois[i].class_index, confidence, x0, y0, width, height);
+        if (object_id == -1) continue; // Ignore if object couldn't be assigned an ID
+
+        UTIL_LCD_DrawRect(x0, y0, width, height, colors[i % NUMBER_COLORS]);
+        UTIL_LCDEx_PrintfAt(x0, y0, LEFT_MODE, classes_table[rois[i].class_index]);
+
+        char object_data[128];
+        snprintf(object_data, sizeof(object_data),
+                 "{\"id\":%d,\"class\":\"%s\",\"conf\":%.0f,\"x\":%d,\"y\":%d,\"w\":%d,\"h\":%d}",
+                 object_id, classes_table[rois[i].class_index], confidence, x0, y0, width, height);
+
+        strcat(telemetry_buffer, object_data);
+        if (i < objects_to_send - 1)
+            strcat(telemetry_buffer, ",");
+    }
+
+    strcat(telemetry_buffer, "],inference_time,%lu\r\n");
+    HAL_UART_Transmit(&huart2, (uint8_t *)telemetry_buffer, strlen(telemetry_buffer), HAL_MAX_DELAY);
+
+    UTIL_LCD_SetBackColor(0x40000000);
+    UTIL_LCDEx_PrintfAt(0, LINE(2), CENTER_MODE, "Objects: %u", nb_rois);
+    UTIL_LCDEx_PrintfAt(0, LINE(20), CENTER_MODE, "Inference: %ums", inference_ms);
+    UTIL_LCD_SetBackColor(0);
+
+    SCB_CleanDCache_by_Addr(lcd_fg_buffer[lcd_fg_buffer_rd_idx], LCD_FG_FRAMEBUFFER_SIZE);
+    ret = HAL_LTDC_ReloadLayer(&hlcd_ltdc, LTDC_RELOAD_VERTICAL_BLANKING, LTDC_LAYER_2);
+    assert(ret == HAL_OK);
+    lcd_fg_buffer_rd_idx = 1 - lcd_fg_buffer_rd_idx;
+
+    HAL_Delay(2000);
+}
+
+  for (int32_t i = 0; i < nb_rois; i++)
+  {
+    /* Display mask */
+    for (int x = 0; x < AI_YOLOV8_SEG_PP_MASK_SIZE; x++)
+    {
+      for (int y = 0; y < AI_YOLOV8_SEG_PP_MASK_SIZE; y++)
+      {
+        if (rois[i].pMask[y * AI_YOLOV8_SEG_PP_MASK_SIZE + x] > 0.1f)
+          UTIL_LCD_FillRect((uint32_t) lcd_bg_area.X0 + x * lcd_bg_area.XSize / AI_YOLOV8_SEG_PP_MASK_SIZE,
+                            (uint32_t) lcd_bg_area.Y0 + y * lcd_bg_area.YSize / AI_YOLOV8_SEG_PP_MASK_SIZE,
+                            (uint32_t) lcd_bg_area.XSize / AI_YOLOV8_SEG_PP_MASK_SIZE + 1,
+                            (uint32_t) lcd_bg_area.YSize / AI_YOLOV8_SEG_PP_MASK_SIZE + 1,
+                            colors[i % NUMBER_COLORS] & 0x40ffffff);
+      }
+    }
+  }
+  for (int32_t i = 0; i < nb_rois; i++)
+  {
+    /* Confidence Score */
+    float confidence = rois[i].confidence * 100; // Convert to percentage
+
+    /* Get Bounding Box Coordinates */
+    uint32_t x0 = (uint32_t)((rois[i].x_center - rois[i].width / 2) * ((float32_t)lcd_bg_area.XSize)) + lcd_bg_area.X0;
+    uint32_t y0 = (uint32_t)((rois[i].y_center - rois[i].height / 2) * ((float32_t)lcd_bg_area.YSize));
+    uint32_t width = (uint32_t)(rois[i].width * ((float32_t)lcd_bg_area.XSize));
+    uint32_t height = (uint32_t)(rois[i].height * ((float32_t)lcd_bg_area.YSize));
+
+    /* Display box */
+    uint32_t x0 = (uint32_t) ((rois[i].x_center - rois[i].width / 2) * ((float32_t) lcd_bg_area.XSize)) + lcd_bg_area.X0;
+    uint32_t y0 = (uint32_t) ((rois[i].y_center - rois[i].height / 2) * ((float32_t) lcd_bg_area.YSize));
+    uint32_t width = (uint32_t) (rois[i].width * ((float32_t) lcd_bg_area.XSize));
+    uint32_t height = (uint32_t) (rois[i].height * ((float32_t) lcd_bg_area.YSize));
+    /* Draw boxes without going outside of the image */
+    x0 = x0 < lcd_bg_area.X0 + lcd_bg_area.XSize ? x0 : lcd_bg_area.X0 + lcd_bg_area.XSize - 1;
+    y0 = y0 < lcd_bg_area.Y0 + lcd_bg_area.YSize ? y0 : lcd_bg_area.Y0 + lcd_bg_area.YSize  - 1;
+    width = ((x0 + width) < lcd_bg_area.X0 + lcd_bg_area.XSize) ? width : (lcd_bg_area.X0 + lcd_bg_area.XSize - x0 - 1);
+    height = ((y0 + height) < lcd_bg_area.Y0 + lcd_bg_area.YSize) ? height : (lcd_bg_area.Y0 + lcd_bg_area.YSize - y0 - 1);
+    UTIL_LCD_DrawRect(x0, y0, width, height, colors[i % NUMBER_COLORS]);
+    UTIL_LCDEx_PrintfAt(x0, y0, LEFT_MODE, classes_table[rois[i].class_index]);
+  }
+
+  UTIL_LCD_SetBackColor(0x40000000);
+  UTIL_LCDEx_PrintfAt(0, LINE(2), CENTER_MODE, "Objects %u", nb_rois);
   UTIL_LCDEx_PrintfAt(0, LINE(20), CENTER_MODE, "Inference: %ums", inference_ms);
+  UTIL_LCD_SetBackColor(0);
 
   Display_WelcomeScreen();
 
@@ -565,54 +767,23 @@ static void Display_NetworkOutput(uint32_t inference_ms)
   lcd_fg_buffer_rd_idx = 1 - lcd_fg_buffer_rd_idx;
 }
 
-/**
- * @brief Run post-processing operation
- */
-void Network_Postprocess(void)
+// iotc-start
+static void send_iotconnect_data(int class_index, float confidence, int x, int y, int width, int height, uint32_t inference_ms)
 {
-  int ranking[NB_CLASSES];
+    char tx_buffer[TX_BUFFER_SIZE];
 
-  /**Perform ranking**/
-  for (int i = 0; i < NB_CLASSES; i++)
-  {
-    ranking[i] = i;
-  }
+    // Convert to class name
+    const char *class_name = classes_table[class_index];
 
-  Bubblesort((float *) (pp_input), ranking, NB_CLASSES);
-//  printf("Class Name: %s, Probability: %.2f\n", nn_top1_output_class_name, nn_top1_output_class_proba);
+    // Format message for IoTConnect
+    snprintf(tx_buffer, TX_BUFFER_SIZE,
+             "AT+NWICMSG detection,class,%s,conf,%.0f,bbox_x,%d,bbox_y,%d,bbox_w,%d,bbox_h,%d,inference_time,%lu\r\n",
+             class_name, confidence, x, y, width, height, inference_ms);
 
-  nn_top1_output_class_name = classes_table[ranking[0]];
-  nn_top1_output_class_proba = *((float *) (pp_input));
+    // Send over UART
+    HAL_UART_Transmit(&huart2, (uint8_t *)tx_buffer, strlen(tx_buffer), HAL_MAX_DELAY);
 }
-
-
-/**
- * @brief Bubble sorting algorithm on probabilities
- * @param prob pointer to probabilities buffer
- * @param classes pointer to classes buffer
- * @param size numer of values
- */
-static void Bubblesort(float *prob, int *classes, int size)
-{
-  float p;
-  int c;
-
-  for (int i = 0; i < size; i++)
-  {
-    for (int ii = 0; ii < size - i - 1; ii++)
-    {
-      if (prob[ii] < prob[ii + 1])
-      {
-        p = prob[ii];
-        prob[ii] = prob[ii + 1];
-        prob[ii + 1] = p;
-        c = classes[ii];
-        classes[ii] = classes[ii + 1];
-        classes[ii + 1] = c;
-      }
-    }
-  }
-}
+//iotc - stop
 
 static void LCD_init()
 {
@@ -640,7 +811,6 @@ static void LCD_init()
   UTIL_LCD_SetLayer(LTDC_LAYER_2);
   UTIL_LCD_Clear(0x00000000);
   UTIL_LCD_SetFont(&Font20);
-  UTIL_LCD_SetBackColor(0x40000000);
   UTIL_LCD_SetTextColor(UTIL_LCD_COLOR_WHITE);
 }
 
@@ -659,9 +829,11 @@ static void Display_WelcomeScreen(void)
     UTIL_LCD_FillRGBRect(300, 100, (uint8_t *) stlogo, 200, 107);
 
     /* Display welcome message */
-    UTIL_LCDEx_PrintfAt(0, LINE(16), CENTER_MODE, "Image classification");
+    UTIL_LCD_SetBackColor(0x40000000);
+    UTIL_LCDEx_PrintfAt(0, LINE(16), CENTER_MODE, "Instance segmentation");
     UTIL_LCDEx_PrintfAt(0, LINE(17), CENTER_MODE, WELCOME_MSG_1);
     UTIL_LCDEx_PrintfAt(0, LINE(18), CENTER_MODE, WELCOME_MSG_2);
+    UTIL_LCD_SetBackColor(0);
   }
 }
 

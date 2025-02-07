@@ -1,17 +1,18 @@
 # Developer Guide for STM32N6 AI Projects and IoTConnect
 
 ## Overview
-Using the Applications Examples from the STM32N6 AI Ecosystem website, 
+Using the Applications Examples from the [STM32N6 AI Ecosystem website](https://www.st.com/en/development-tools/stm32n6-ai.html), Getting started example codes
 This guide will help you set up, build, and run AI-based demos on the STM32N6 microcontroller using STM32CubeIDE. The available projects include:  
 
-- 
-- 
-- **Image Classification**
-- **Object Detection**
-- **Instance Segmentation**
-- **Pose Estimation**
-- **Semantic Segmentation**
-- **UVC Object Detection**
+- n6-ai-getstarted (1.0.0):  Getting started code examples for various AI use cases (audio and computer vision).- 
+   - **Image Classification**
+   - **Object Detection**
+   - **Instance Segmentation**
+   - **Pose Estimation**
+   - **Semantic Segmentation**
+- n6-ai-h264-uvc (1.0.0):  Multimedia application example with AI, H264 encoding and USB UVC streaming.
+   - **UVC Object Detection**
+- n6-ai-pose-estim (1.0.0): RTOS-based application example for multi pose estimation with AI.
 
 Each project follows a similar setup process with slight variations for specific requirements. This guide will help you choose the right project and configure it with IoTConnect.
 

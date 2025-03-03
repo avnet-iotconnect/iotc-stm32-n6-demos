@@ -1,20 +1,19 @@
- /**
- ******************************************************************************
- * @file    app.c
- * @author  MDG Application Team
- *
- ******************************************************************************
- * @attention
- *
- * Copyright (c) 2024 STMicroelectronics.
- * All rights reserved.
- *
- * This software is licensed under terms that can be found in the LICENSE file
- * in the root directory of this software component.
- * If no LICENSE file comes with this software, it is provided AS-IS.
- *
- ******************************************************************************
- */
+/**
+  ******************************************************************************
+  * @file    app.c
+  * @author  MDG Application Team
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2024 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
+  */
 
 #include "app.h"
 
@@ -37,61 +36,7 @@
 #include "tx_api.h"
 #include "utils.h"
 
-//iotc start
-/* CPU Load and Neural Network Performance */
-float iot_cpu_percentage = 0.0f;
-float iot_nn_fps = 0.0f;
-float iot_nn_period_ms = 0.0f;
-
-/* Inference Execution Times */
-float iot_pd_ms = 0.0f;   // Palm Detector execution time (ms)
-float iot_hl_ms = 0.0f;   // Hand Landmark execution time (ms)
-float iot_disp_ms = 0.0f; // Display update time (ms)
-
-/* Hand Detection Variables */
-int iot_hand_valid = 0;
-int iot_pd_hand_nb = 0; // Number of hands detected
-float iot_pd_max_prob = 0.0f; // Maximum confidence of detected hands
-float iot_hand_x_center = 0.0f, iot_hand_y_center = 0.0f; 
-float iot_hand_width = 0.0f, iot_hand_height = 0.0f;
-float iot_hand_rotation = 0.0f;
-/* Hand Gesture Classification */
-char iot_classification[32] = "Unknown";
-
-
-/* Hand Landmark Variables (21 Points) */
-float iot_wrist_x = 0.0f, iot_wrist_y = 0.0f; // Palm base (wrist)
-
-/* Thumb */
-float iot_thumb_cmc_x = 0.0f, iot_thumb_cmc_y = 0.0f; // CMC Joint
-float iot_thumb_mcp_x = 0.0f, iot_thumb_mcp_y = 0.0f; // MCP Joint
-float iot_thumb_ip_x = 0.0f, iot_thumb_ip_y = 0.0f;   // IP Joint
-float iot_thumb_tip_x = 0.0f, iot_thumb_tip_y = 0.0f; // Tip
-
-/* Index Finger */
-float iot_index_mcp_x = 0.0f, iot_index_mcp_y = 0.0f;
-float iot_index_pip_x = 0.0f, iot_index_pip_y = 0.0f;
-float iot_index_dip_x = 0.0f, iot_index_dip_y = 0.0f;
-float iot_index_tip_x = 0.0f, iot_index_tip_y = 0.0f;
-
-/* Middle Finger */
-float iot_middle_mcp_x = 0.0f, iot_middle_mcp_y = 0.0f;
-float iot_middle_pip_x = 0.0f, iot_middle_pip_y = 0.0f;
-float iot_middle_dip_x = 0.0f, iot_middle_dip_y = 0.0f;
-float iot_middle_tip_x = 0.0f, iot_middle_tip_y = 0.0f;
-
-/* Ring Finger */
-float iot_ring_mcp_x = 0.0f, iot_ring_mcp_y = 0.0f;
-float iot_ring_pip_x = 0.0f, iot_ring_pip_y = 0.0f;
-float iot_ring_dip_x = 0.0f, iot_ring_dip_y = 0.0f;
-float iot_ring_tip_x = 0.0f, iot_ring_tip_y = 0.0f;
-
-/* Pinky Finger */
-float iot_pinky_mcp_x = 0.0f, iot_pinky_mcp_y = 0.0f;
-float iot_pinky_pip_x = 0.0f, iot_pinky_pip_y = 0.0f;
-float iot_pinky_dip_x = 0.0f, iot_pinky_dip_y = 0.0f;
-float iot_pinky_tip_x = 0.0f, iot_pinky_tip_y = 0.0f;
-//iotc end
+#include "da16k_comm.h"
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
@@ -261,6 +206,12 @@ static uint8_t dp_tread_stack[4096];
 static TX_THREAD isp_thread;
 static uint8_t isp_tread_stack[4096];
 static TX_SEMAPHORE isp_sem;
+
+
+//IOTCONNECT
+extern da16k_err_t da16k_at_send_formatted_raw_no_crlf(const char *format, ...);
+static float iotc_cpuload = 0.0;
+static float iotc_fps = 0.0;
 
 static int is_cache_enable()
 {
@@ -842,7 +793,6 @@ void display_hand(display_info_t *info, hand_info_t *hand)
     display_ld_hand(hand);
 }
 
-
 static void Display_NetworkOutput(display_info_t *info)
 {
   float cpu_load_one_second;
@@ -856,20 +806,6 @@ static void Display_NetworkOutput(display_info_t *info)
   /* cpu load */
   cpuload_update(&cpu_load);
   cpuload_get_info(&cpu_load, NULL, &cpu_load_one_second, NULL);
-
-	//iotc start
-    iot_cpu_percentage = cpu_load_one_second;
-	
-    /* Update Neural Network Metrics */
-    nn_fps = 1000.0 / info->nn_period_ms;
-    iot_nn_fps = nn_fps;
-    iot_nn_period_ms = info->nn_period_ms;
-    iot_pd_ms = info->pd_ms;
-    iot_hl_ms = info->hl_ms;
-    iot_pd_hand_nb = info->pd_hand_nb;
-    iot_pd_max_prob = info->pd_max_prob;
-    iot_disp_ms = info->disp_ms;
-    //iotc end
 
   /* draw metrics */
   nn_fps = 1000.0 / info->nn_period_ms;
@@ -891,74 +827,9 @@ static void Display_NetworkOutput(display_info_t *info)
     UTIL_LCDEx_PrintfAt(0, LINE(line_nb), RIGHT_MODE, "   %ums", info->disp_ms);
     line_nb += 1;
   }
- 
-  //iotc start
-    /* Store hand tracking information */
-    if (info->pd_hand_nb > 0 && info->hands[0].is_valid) {
-        iot_hand_valid = 1;
-        iot_hand_x_center = info->hands[0].roi.cx;
-        iot_hand_y_center = info->hands[0].roi.cy;
-        iot_hand_width = info->hands[0].roi.w;
-        iot_hand_height = info->hands[0].roi.h;
-        iot_hand_rotation = info->hands[0].roi.rotation;
-
-        /* Store individual hand landmarks */
-        iot_wrist_x = info->hands[0].ld_landmarks[0].x;
-        iot_wrist_y = info->hands[0].ld_landmarks[0].y;
-
-        /* Thumb */
-        iot_thumb_cmc_x = info->hands[0].ld_landmarks[1].x;
-        iot_thumb_cmc_y = info->hands[0].ld_landmarks[1].y;
-        iot_thumb_mcp_x = info->hands[0].ld_landmarks[2].x;
-        iot_thumb_mcp_y = info->hands[0].ld_landmarks[2].y;
-        iot_thumb_ip_x = info->hands[0].ld_landmarks[3].x;
-        iot_thumb_ip_y = info->hands[0].ld_landmarks[3].y;
-        iot_thumb_tip_x = info->hands[0].ld_landmarks[4].x;
-        iot_thumb_tip_y = info->hands[0].ld_landmarks[4].y;
-
-        /* Index Finger */
-        iot_index_mcp_x = info->hands[0].ld_landmarks[5].x;
-        iot_index_mcp_y = info->hands[0].ld_landmarks[5].y;
-        iot_index_pip_x = info->hands[0].ld_landmarks[6].x;
-        iot_index_pip_y = info->hands[0].ld_landmarks[6].y;
-        iot_index_dip_x = info->hands[0].ld_landmarks[7].x;
-        iot_index_dip_y = info->hands[0].ld_landmarks[7].y;
-        iot_index_tip_x = info->hands[0].ld_landmarks[8].x;
-        iot_index_tip_y = info->hands[0].ld_landmarks[8].y;
-
-        /* Middle Finger */
-        iot_middle_mcp_x = info->hands[0].ld_landmarks[9].x;
-        iot_middle_mcp_y = info->hands[0].ld_landmarks[9].y;
-        iot_middle_pip_x = info->hands[0].ld_landmarks[10].x;
-        iot_middle_pip_y = info->hands[0].ld_landmarks[10].y;
-        iot_middle_dip_x = info->hands[0].ld_landmarks[11].x;
-        iot_middle_dip_y = info->hands[0].ld_landmarks[11].y;
-        iot_middle_tip_x = info->hands[0].ld_landmarks[12].x;
-        iot_middle_tip_y = info->hands[0].ld_landmarks[12].y;
-
-        /* Ring Finger */
-        iot_ring_mcp_x = info->hands[0].ld_landmarks[13].x;
-        iot_ring_mcp_y = info->hands[0].ld_landmarks[13].y;
-        iot_ring_pip_x = info->hands[0].ld_landmarks[14].x;
-        iot_ring_pip_y = info->hands[0].ld_landmarks[14].y;
-        iot_ring_dip_x = info->hands[0].ld_landmarks[15].x;
-        iot_ring_dip_y = info->hands[0].ld_landmarks[15].y;
-        iot_ring_tip_x = info->hands[0].ld_landmarks[16].x;
-        iot_ring_tip_y = info->hands[0].ld_landmarks[16].y;
-
-        /* Pinky Finger */
-        iot_pinky_mcp_x = info->hands[0].ld_landmarks[17].x;
-        iot_pinky_mcp_y = info->hands[0].ld_landmarks[17].y;
-        iot_pinky_pip_x = info->hands[0].ld_landmarks[18].x;
-        iot_pinky_pip_y = info->hands[0].ld_landmarks[18].y;
-        iot_pinky_dip_x = info->hands[0].ld_landmarks[19].x;
-        iot_pinky_dip_y = info->hands[0].ld_landmarks[19].y;
-        iot_pinky_tip_x = info->hands[0].ld_landmarks[20].x;
-        iot_pinky_tip_y = info->hands[0].ld_landmarks[20].y;
-    } else {
-        iot_hand_valid = 0;
-    }
-//iotc end
+  //IOTCONNECT
+  iotc_cpuload = cpu_load_one_second;
+  iotc_fps = nn_fps;
 
   /* display palm detector output */
   for (i = 0; i < info->pd_hand_nb; i++) {
@@ -1285,63 +1156,10 @@ static void nn_thread_fct(ULONG arg)
     disp.info.hands[0].is_valid = is_tracking;
     copy_pd_box(&disp.info.hands[0].pd_hands, &pd_info.pd_out.pOutData[0]);
     disp.info.hands[0].roi = rois[0];
-
-    #define GESTURE_HISTORY_SIZE 5  // Track last 5 frames
-
-	char gesture_history[GESTURE_HISTORY_SIZE][32]; // Buffer for past gestures
-	int gesture_index = 0; // Circular buffer index
-
     for (j = 0; j < LD_LANDMARK_NB; j++)
-        disp.info.hands[0].ld_landmarks[j] = ld_landmarks[0][j];
-
-    // Apply Gesture Smoothing Here
-    if (is_tracking) {
-        char current_gesture[32] = "Unknown";
-
-        if ((iot_index_tip_y < iot_wrist_y) &&
-            (iot_middle_tip_y < iot_wrist_y) &&
-            (iot_ring_tip_y < iot_wrist_y) &&
-            (iot_pinky_tip_y < iot_wrist_y)) {
-            strcpy(current_gesture, "Open Hand");
-        }
-        else if ((fabs(iot_index_tip_y - iot_wrist_y) < 0.05) &&
-                 (fabs(iot_middle_tip_y - iot_wrist_y) < 0.05) &&
-                 (fabs(iot_ring_tip_y - iot_wrist_y) < 0.05) &&
-                 (fabs(iot_pinky_tip_y - iot_wrist_y) < 0.05)) {
-            strcpy(current_gesture, "Fist");
-        }
-        else if (iot_thumb_tip_y < iot_wrist_y) {
-            strcpy(current_gesture, "Thumbs Up");
-        }
-        else if (iot_thumb_tip_y > iot_wrist_y) {
-            strcpy(current_gesture, "Thumbs Down");
-        }
-
-        // Store current gesture in circular buffer
-        strcpy(gesture_history[gesture_index], current_gesture);
-        gesture_index = (gesture_index + 1) % GESTURE_HISTORY_SIZE;
-
-        // Compute the most frequent gesture in history
-        int max_count = 0;
-        char final_gesture[32] = "Unknown";
-        for (int i = 0; i < GESTURE_HISTORY_SIZE; i++) {
-            int count = 0;
-            for (int j = 0; j < GESTURE_HISTORY_SIZE; j++) {
-                if (strcmp(gesture_history[i], gesture_history[j]) == 0) {
-                    count++;
-                }
-            }
-            if (count > max_count) {
-                max_count = count;
-                strcpy(final_gesture, gesture_history[i]);
-            }
-        }
-
-        // Assign the smoothed gesture
-        strcpy(iot_classification, final_gesture);
-    }
-
+      disp.info.hands[0].ld_landmarks[j] = ld_landmarks[0][j];
     tx_mutex_put(&disp.lock);
+
     tx_semaphore_ceiling_put(&disp.update, 1);
   }
 }
@@ -1398,6 +1216,10 @@ static void dp_thread_fct(ULONG arg)
   button_init(&hd_toggle_button, BUTTON_TAMP, on_pd_toggle_button_click, &disp);
   while (1)
   {
+	//IOTCONNECT
+	iotc_cpuload = 0;
+	iotc_fps = 0;
+
     ret = tx_semaphore_get(&disp.update, TX_WAIT_FOREVER);
     assert(ret == 0);
 
@@ -1415,6 +1237,27 @@ static void dp_thread_fct(ULONG arg)
     SCB_CleanDCache_by_Addr(lcd_fg_buffer[lcd_fg_buffer_rd_idx], LCD_FG_WIDTH * LCD_FG_HEIGHT* 2);
     dp_commit_drawing_area();
     disp_ms = HAL_GetTick() - ts;
+
+    //IOTCONNECT
+    /* box area around palm */
+    int x_center = 0;
+    int y_center = 0;
+    int w_data = 0;
+    int h_data = 0;
+
+    if (info.pd_hand_nb > 0) {
+      x_center = (int)info.hands[0].pd_hands.x_center;
+      y_center = (int)info.hands[0].pd_hands.y_center;
+      w_data = (int)info.hands[0].pd_hands.width;
+      h_data = (int)info.hands[0].pd_hands.height;
+      clamp_point(&x_center, &y_center);
+    } else {
+      iotc_cpuload = 0;
+      iotc_fps = 0;
+    }
+    printf("Sending the message to IOTCONNECT...\r\n");
+	da16k_at_send_formatted_raw_no_crlf("AT+NWICMSG x_center,%d,y_center,%d,width,%d,height,%d,cpu_load,%f,fps,%f\r\n",x_center, y_center, w_data, h_data, iotc_cpuload, iotc_fps);
+	HAL_Delay(1000);
   }
 }
 

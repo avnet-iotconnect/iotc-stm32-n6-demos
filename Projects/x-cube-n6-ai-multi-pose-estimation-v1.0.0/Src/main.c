@@ -33,23 +33,11 @@
 #include "tx_initialize.h"
 
 
-//iotc start
-#include "da16k_comm.h"
-//iotc stop
 
 UART_HandleTypeDef huart1;
 
-//iotc start
-UART_HandleTypeDef huart2;
-//iotc stop
-
 static TX_THREAD main_thread;
 static uint8_t main_tread_stack[4096];
-
-//iotc start
-static TX_THREAD iotc_thread;
-static uint8_t iotc_tread_stack[4096];
-//iotc stop
 
 static void SystemClock_Config(void);
 static void NPURam_enable();
@@ -60,22 +48,8 @@ static void CONSOLE_Config(void);
 static int main_threadx(void);
 static void main_thread_fct(ULONG arg);
 
-extern int32_t iot_num_detections;
-extern uint32_t iot_bbox_x_center;
-extern uint32_t iot_bbox_y_center;
-extern uint32_t iot_bbox_width;
-extern uint32_t iot_bbox_height;
-extern int32_t iot_class_index;
-extern uint32_t  iot_inference_time;
-extern uint32_t  iot_postprocess_time;
 
-//iotc start
-#define TX_BUFFER_SIZE  512
-#define RX_BUFFER_SIZE  256
-static char command[TX_BUFFER_SIZE] = { 0 };
-static char response[RX_BUFFER_SIZE] = { 0 };
-extern da16k_err_t da16k_at_send_formatted_raw_no_crlf(const char *format, ...);
-extern float iot_cpu_percentage;
+UART_HandleTypeDef huart2;
 
 static void MX_USART2_UART_Init(void)
 {
@@ -122,68 +96,6 @@ static void MX_USART2_UART_Init(void)
 	  while (1);
   }
 }
-
-static char* send_at_command(char *command, unsigned long timeout_ms)
-{
-  int i = 0;
-  int command_size = strlen(command);
-  if (command_size > 255) {
-	  printf("AT COMMAND is over size!\r\n");
-	  return response;
-  }
-
-  HAL_StatusTypeDef USART_STATUS = HAL_OK;
-
-  //flush UART
-  while (HAL_TIMEOUT != HAL_UART_Receive(&huart2, (uint8_t* )&response[0], TX_BUFFER_SIZE, 50)) {
-	  //do nothing
-  }
-  memset(response, 0, RX_BUFFER_SIZE);
-
-#if 1
-  printf("command sent: %s\n", command);
-#endif
-
-  HAL_UART_Transmit(&huart2, (uint8_t* )command, command_size, timeout_ms);
-
-  do {
-	USART_STATUS = HAL_UART_Receive(&huart2, (uint8_t* )&response[i], 1, timeout_ms);
-	i++;
-  } while ((response[i - 1] != '\n') && (USART_STATUS != HAL_TIMEOUT));
-
-  if(USART_STATUS == HAL_TIMEOUT)
-  {
-    memset  (response, 0, RX_BUFFER_SIZE);
-    snprintf(response, TX_BUFFER_SIZE, "ERROR\r\n");
-  }
-
-#if 0
-  //printf("response received is %s\n", response);
-  // printf("len is %d\n", i);
-
-  printf("response is: \n");
-  for (int j = 0; j < i ; j++) {
-	  printf("%d\n", response[j]);
-  }
-#endif
-  return response;
-}
-
-//extern int32_t nb_detect;
-//extern float32_t x_center;
-//extern float32_t y_center;
-
-void iotc_thread_fct(ULONG arg)
-{
-    for (int i = 0; i < 1000; i++)
-    {
-    	da16k_at_send_formatted_raw_no_crlf("AT+NWICMSG nb_detect,%d,class_index,%d,cpu,%.2f,inf_time,%.2f,pp_time,%.2f\r\n",iot_num_detections,iot_class_index,(double)iot_cpu_percentage,(double)iot_inference_time,(double)iot_postprocess_time);
-    	HAL_Delay(1000);
-    	da16k_at_send_formatted_raw_no_crlf("AT+NWICMSG x_center,%.2f,y_center,%.2f,width,%.2f,height,%.2f\r\n",(double)iot_bbox_x_center,(double)iot_bbox_y_center,(double)iot_bbox_width,(double)iot_bbox_height);
-        HAL_Delay(3000);
-    }
-}
-//iotc stop
 
 /**
   * @brief  Main program
@@ -434,15 +346,12 @@ static int main_threadx()
 
 static void main_thread_fct(ULONG arg)
 {
-  int ret;
-
   SystemClock_Config();
 
   CONSOLE_Config();
 
-//iotc start
+  //IOTCONNECT
   MX_USART2_UART_Init();
-//iotc stop
 
   NPURam_enable();
   Fuse_Programming();
@@ -483,19 +392,6 @@ static void main_thread_fct(ULONG arg)
   LL_MISC_EnableClockLowPower(~0);
 
   app_run();
-
-//iotc start
-  const UINT iotc_priority = TX_MAX_PRIORITIES - 2;
-  const ULONG time_slice = 10;
-  ret = tx_thread_create(&iotc_thread, "iotc", iotc_thread_fct, 0, iotc_tread_stack,
-                         sizeof(iotc_tread_stack), iotc_priority, iotc_priority, time_slice, TX_AUTO_START);
-  assert(ret == 0);
-
-  /* keep main thread as idle thread */
-  //while (1)
-   // ;
-//iotc stop
-
 }
 
 HAL_StatusTypeDef MX_DCMIPP_ClockConfig(DCMIPP_HandleTypeDef *hdcmipp)

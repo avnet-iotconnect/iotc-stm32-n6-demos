@@ -33,6 +33,8 @@
 #include "tx_api.h"
 #include "utils.h"
 
+#include "da16k_comm.h"
+
 #define CACHE_OP(__op__) do { \
   if (is_cache_enable()) { \
     __op__; \
@@ -210,6 +212,11 @@ static uint8_t dp_tread_stack[4096];
 static TX_THREAD isp_thread;
 static uint8_t isp_tread_stack[4096];
 static TX_SEMAPHORE isp_sem;
+
+
+//IOTCONNECT
+extern da16k_err_t da16k_at_send_formatted_raw_no_crlf(const char *format, ...);
+static char object_name[30];
 
 static int is_cache_enable()
 {
@@ -532,9 +539,6 @@ static void Display_Detection(mpe_pp_outBuffer_t *detect)
   for (i = 0; i < AI_POSE_PP_POSE_KEYPOINTS_NB; i++)
     Display_keypoint(&detect->pKeyPoints[i], kp_color[i]);
 }
-//IOTC start
-float iot_cpu_percentage = 0.0f;  // This will be updated with the CPU load
-//IOTC end
 
 static void Display_NetworkOutput(display_info_t *info)
 {
@@ -551,11 +555,6 @@ static void Display_NetworkOutput(display_info_t *info)
   /* cpu load */
   cpuload_update(&cpu_load);
   cpuload_get_info(&cpu_load, NULL, &cpu_load_one_second, NULL);
-
-  // Store it globally for main:
-  iot_cpu_percentage = cpu_load_one_second;
-  //printf("%.1f%%", cpu_load_one_second);
-
 
   /* draw metrics */
   nn_fps = 1000.0 / info->nn_period_ms;
@@ -600,9 +599,24 @@ static void Display_NetworkOutput(display_info_t *info)
   line_nb += 1;
 #endif
 
+  strcpy(object_name, "");
   /* Draw bounding boxes */
-  for (i = 0; i < nb_rois; i++)
+  for (i = 0; i < nb_rois; i++) {
     Display_Detection(&rois[i]);
+
+    //IOTCONNECT
+    if (i == 0) {
+      mpe_pp_outBuffer_t *detect_obj = &rois[i];
+      if (sizeof(classes_table[detect_obj->class_index]) < 30) {
+        strcpy(object_name, classes_table[detect_obj->class_index]);
+      } else {
+  	    strcpy(object_name, "");
+      }
+    }
+  }
+
+  da16k_at_send_formatted_raw_no_crlf("AT+NWICMSG object,%d,object_name,%s,FPS,%.1f,cpu_load,%.1f\r\n", nb_rois, object_name, nn_fps, cpu_load_one_second);
+  HAL_Delay(1000);
 }
 
 static void nn_thread_fct(ULONG arg)
@@ -667,23 +681,7 @@ static void nn_thread_fct(ULONG arg)
     tx_mutex_put(&disp.lock);
   }
 }
-//IOTC start
-int32_t iot_num_detections = 0;         // # of detected objects
-float32_t iot_bbox_x_center = 0.0f;     // x_center of the first detection
-float32_t iot_bbox_y_center = 0.0f;     // y_center of the first detection
-float32_t iot_bbox_width = 0.0f;        // bounding-box width of the first detection
-float32_t iot_bbox_height = 0.0f;       // bounding-box height of the first detection
-int32_t iot_class_index = 0;            // class index of the first detection
-uint32_t iot_inference_time = 0;        // inference time (ms)
-uint32_t iot_postprocess_time = 0;      // post-processing time (ms)
-//IOTC end
 
-/*Number of people detected: info.nb_detect
-Bounding boxes: info.detects[i].x_center / y_center / width / height
-Per-person keypoints: info.detects[i].pKeyPoints[] (each keypoint’s x, y, conf)
-Inference and post-process times: info.inf_ms, info.pp_ms
-CPU load: from cpu_load via cpuload_get_info()
-*/
 static void pp_thread_fct(ULONG arg)
 {
 #if POSTPROCESS_TYPE == POSTPROCESS_OD_YOLO_V2_UF
@@ -729,46 +727,9 @@ static void pp_thread_fct(ULONG arg)
     tx_mutex_get(&disp.lock, TX_WAIT_FOREVER);
     disp.info.nb_detect = pp_output.nb_detect;
     for (i = 0; i < pp_output.nb_detect; i++)
-    {
-	/*printf("Detect[%d]: x=%.2f y=%.2f w=%.2f h=%.2f class=%d\n",
-    	       i,
-    	       (double)pp_output.pOutBuff[i].x_center,
-    	       (double)pp_output.pOutBuff[i].y_center,
-    	       (double)pp_output.pOutBuff[i].width,
-    	       (double)pp_output.pOutBuff[i].height
-    	);
-*/
       disp.info.detects[i] = pp_output.pOutBuff[i];
-    }
     disp.info.pp_ms = nn_pp[1] - nn_pp[0];
     tx_mutex_put(&disp.lock);
-//IOTC start
-iot_num_detections = pp_output.nb_detect;
-
-// If at least one detection exists, pull bounding-box info from the first detection
-if (pp_output.nb_detect > 0)
-{
-    iot_bbox_x_center = pp_output.pOutBuff[0].x_center;
-    iot_bbox_y_center = pp_output.pOutBuff[0].y_center;
-    iot_bbox_width    = pp_output.pOutBuff[0].width;
-    iot_bbox_height   = pp_output.pOutBuff[0].height;
-    iot_class_index   = pp_output.pOutBuff[0].class_index;
-}
-else
-{
-    // If nothing detected, just reset them to zero or an invalid index
-    iot_bbox_x_center = 0.0f;
-    iot_bbox_y_center = 0.0f;
-    iot_bbox_width    = 0.0f;
-    iot_bbox_height   = 0.0f;
-    iot_class_index   = -1;
-}
-
-// We can also pull the latest inference time & postprocess time from 'disp.info'
-iot_inference_time   = disp.info.inf_ms;
-iot_postprocess_time = disp.info.pp_ms;
-
-//IOTC end
 
     bqueue_put_free(&nn_output_queue);
     tx_semaphore_ceiling_put(&disp.update, 1);

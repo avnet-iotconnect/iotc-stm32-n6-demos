@@ -1,4 +1,4 @@
-/**
+ /**
  ******************************************************************************
  * @file    main.c
  * @author  GPM Application Team
@@ -15,11 +15,6 @@
  *
  ******************************************************************************
  */
-
-/* ================= IoTConnect Includes ================= */
-#include "iotconnect_app.h"  /* IoTConnect SDK header – adjust name as needed */
-
-/* ============== Original Includes ===================== */
 #include "cmw_camera.h"
 #include "stm32n6570_discovery_bus.h"
 #include "stm32n6570_discovery_lcd.h"
@@ -37,6 +32,8 @@
 #include "app_config.h"
 #include "crop_img.h"
 #include "stlogo.h"
+
+#include "da16k_comm.h"
 
 CLASSES_TABLE;
 
@@ -128,6 +125,62 @@ static void set_clk_sleep_mode(void);
 static void IAC_Config(void);
 static void Display_WelcomeScreen(void);
 
+
+extern da16k_err_t da16k_at_send_formatted_raw_no_crlf(const char *format, ...);
+UART_HandleTypeDef huart2;
+uint32_t object_number = 0;
+char object_name[30];
+uint8_t count = 0;
+
+char object_compare[30];
+char object_compare_again[30];
+
+static void MX_USART2_UART_Init(void)
+{
+  GPIO_InitTypeDef GPIO_InitStruct = {0};
+
+  __HAL_RCC_USART2_CLK_ENABLE();
+  __HAL_RCC_GPIOD_CLK_ENABLE();
+  __HAL_RCC_GPIOF_CLK_ENABLE();
+    /**USART2 GPIO Configuration
+    PD5     ------> USART2_TX  D1
+    PF6     ------> USART2_RX  D0
+    */
+  GPIO_InitStruct.Pin = GPIO_PIN_5;
+  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  GPIO_InitStruct.Alternate = GPIO_AF7_USART2;
+  HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
+
+  GPIO_InitStruct.Pin = GPIO_PIN_6;
+  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  GPIO_InitStruct.Alternate = GPIO_AF7_USART2;
+  HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
+
+  /* USART2 interrupt Init */
+  //HAL_NVIC_SetPriority(USART2_IRQn, 0, 0);
+  //HAL_NVIC_EnableIRQ(USART2_IRQn);
+
+  huart2.Instance = USART2;
+  huart2.Init.BaudRate = 115200;
+  huart2.Init.WordLength = UART_WORDLENGTH_8B;
+  huart2.Init.StopBits = UART_STOPBITS_1;
+  huart2.Init.Parity = UART_PARITY_NONE;
+  huart2.Init.Mode = UART_MODE_TX_RX;
+  huart2.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+  huart2.Init.OverSampling = UART_OVERSAMPLING_16;
+  huart2.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
+  //huart2.Init.ClockPrescaler = UART_PRESCALER_DIV1;
+  //huart2.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
+  if (HAL_UART_Init(&huart2) != HAL_OK)
+  {
+	  while (1);
+  }
+}
+
 /**
   * @brief  Main program
   * @param  None
@@ -170,6 +223,9 @@ int main(void)
   BSP_XSPI_NOR_Init(0, &NOR_Init);
   BSP_XSPI_NOR_EnableMemoryMappedMode(0);
 
+  //IOTCONNECT
+  MX_USART2_UART_Init();
+
   /* Set all required IPs as secure privileged */
   Security_Config();
 
@@ -209,15 +265,10 @@ int main(void)
   app_postprocess_init(&pp_params);
 
   /*** Camera Init ************************************************************/
+
   CAM_Init(&lcd_bg_area.XSize, &lcd_bg_area.YSize, &pitch_nn);
 
   LCD_init();
-
-  /* ========== IoTC Integration: Initialize network and IoTConnect ========== */
-  IOTConnect_NetworkInit();  /* (if needed) initialize your network interface */
-  IOTConnect_Init();         /* initialize the IoTConnect stack and credentials */
-
-  /* ========================================================================== */
 
   /* Start LCD Display camera pipe stream */
   CAM_DisplayPipe_Start(lcd_bg_buffer, CMW_MODE_CONTINUOUS);
@@ -259,15 +310,6 @@ int main(void)
     assert(ret == 0);
 
     Display_NetworkOutput(&pp_output, ts[1] - ts[0]);
-
-    /* ========== IoTC Integration: Process IoTConnect and send telemetry ========= */
-    IOTConnect_Process();  /* maintain the connection (e.g. handle MQTT keep-alive) */
-
-    /* Send telemetry – for example, send the number of detected objects and the inference time.
-       (Adjust the function parameters and/or data structure to match your SDK requirements.) */
-    IOTConnect_SendTelemetry(pp_output.nb_detect, ts[1] - ts[0]);
-    /* ========================================================================== */
-
     /* Discard nn_out region (used by pp_input and pp_outputs variables) to avoid Dcache evictions during nn inference */
     for (int i = 0; i < number_output; i++)
     {
@@ -415,12 +457,47 @@ static void Display_NetworkOutput(iseg_postprocess_out_t *p_postprocess, uint32_
     height = ((y0 + height) < lcd_bg_area.Y0 + lcd_bg_area.YSize) ? height : (lcd_bg_area.Y0 + lcd_bg_area.YSize - y0 - 1);
     UTIL_LCD_DrawRect(x0, y0, width, height, colors[i % NUMBER_COLORS]);
     UTIL_LCDEx_PrintfAt(x0, y0, LEFT_MODE, classes_table[rois[i].class_index]);
+
+    //IOTCONNECT
+    if (sizeof(classes_table[rois[i].class_index]) < 30) {
+      if (count == 0) {
+    	strcpy(object_name, classes_table[rois[i].class_index]);
+      }
+      if (count == 1) {
+        strcpy(object_compare, classes_table[rois[i].class_index]);
+      }
+      if (count == 2) {
+        strcpy(object_compare_again, classes_table[rois[i].class_index]);
+      }
+      count++;
+      } else {
+        strcpy(object_name, "");
+        strcpy(object_compare, "");
+        strcpy(object_compare_again, "");
+        count = 0;
+      }
   }
 
   UTIL_LCD_SetBackColor(0x40000000);
   UTIL_LCDEx_PrintfAt(0, LINE(2), CENTER_MODE, "Objects %u", nb_rois);
   UTIL_LCDEx_PrintfAt(0, LINE(20), CENTER_MODE, "Inference: %ums", inference_ms);
   UTIL_LCD_SetBackColor(0);
+
+  //IOTCONNECT
+  object_number  =  nb_rois;
+  if (count >= 2) {
+    if (strcmp(object_name, object_compare) == 0 || strcmp(object_name, object_compare_again) == 0) {
+      printf("Sending the message to IOTCONNECT...\r\n");
+	  da16k_at_send_formatted_raw_no_crlf("AT+NWICMSG object,%d,inference,%d,class,%s\r\n",object_number, inference_ms, object_name);
+	  HAL_Delay(1000);
+    }
+
+    //clear and compare again
+    strcpy(object_name, "");
+    strcpy(object_compare, "");
+    strcpy(object_compare_again, "");
+	count = 0;
+  }
 
   Display_WelcomeScreen();
 

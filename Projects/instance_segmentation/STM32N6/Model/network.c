@@ -19,19 +19,19 @@
 
 /*
  * GIT_SHA         "0307e413493a9893cb1f0a1266b856e2af3bba2b"
- * GIT_BRANCH      "my_STAI-2.0"
+ * GIT_BRANCH      "STAI-2.0"
  * GIT_DESCRIPTION "STAI-2.0-RC1-1-1-g0307e413"
  *
  * Command Line options:
- * --onnx-input = "/home/mlamp/STM-N6/en.n6-ai-getstarted-v1.0.0/application_code/instance_segmentation/STM32N6/Model/st_ai_output/yolov8n_256_quant_pc_uf_seg_coco-st_OE_3_1_0.onnx"
- * --out-dir-prefix = "/home/mlamp/STM-N6/en.n6-ai-getstarted-v1.0.0/application_code/instance_segmentation/STM32N6/Model/st_ai_ws/neural_art__network/"
+ * --onnx-input = "C:/temp/testspace/aipack/en.n6-ai-getstarted-v1.0.0/application_code/instance_segmentation/STM32N6/Model/st_ai_output/yolov8n_256_quant_pc_uf_seg_coco-st_OE_3_1_0.onnx"
+ * --out-dir-prefix = "C:/temp/testspace/aipack/en.n6-ai-getstarted-v1.0.0/application_code/instance_segmentation/STM32N6/Model/st_ai_ws/neural_art__network/"
  * --all-buffers-info = true
- * --load-mdesc-file = "/opt/ST/STEdgeAI/2.0/Utilities/configs/stm32n6"
- * --load-mpool-file = "/home/mlamp/STM-N6/en.n6-ai-getstarted-v1.0.0/application_code/instance_segmentation/STM32N6/Model/my_mpools/stm32n6-app2"
+ * --load-mdesc-file = "C:/ST/STEdgeAI/2.0/Utilities/configs/stm32n6"
+ * --load-mpool-file = "C:/temp/testspace/aipack/en.n6-ai-getstarted-v1.0.0/application_code/instance_segmentation/STM32N6/Model/my_mpools/stm32n6-app2"
  * --cache-maintenance = true
  * --enable-virtual-mem-pools = true
  * --native-float = true
- * --json-quant-file = "/home/mlamp/STM-N6/en.n6-ai-getstarted-v1.0.0/application_code/instance_segmentation/STM32N6/Model/st_ai_output/yolov8n_256_quant_pc_uf_seg_coco-st_OE_3_1_0_Q.json"
+ * --json-quant-file = "C:/temp/testspace/aipack/en.n6-ai-getstarted-v1.0.0/application_code/instance_segmentation/STM32N6/Model/st_ai_output/yolov8n_256_quant_pc_uf_seg_coco-st_OE_3_1_0_Q.json"
  * --optimization = 3
  * --Os = true
  * --Omax-ca-pipe = 4

@@ -23,15 +23,15 @@
  * GIT_DESCRIPTION "STAI-2.0-RC1-1-1-g0307e413"
  *
  * Command Line options:
- * --onnx-input = "C:/temp/testspace/en.n6-ai-multi-pose-estimation-v1.0.0/x-cube-n6-ai-multi-pose-estimation-v1.0.0/Model/st_ai_output/yolov8n_256_quant_pc_uf_pose_coco-st_OE_3_1_0.onnx"
- * --out-dir-prefix = "C:/temp/testspace/en.n6-ai-multi-pose-estimation-v1.0.0/x-cube-n6-ai-multi-pose-estimation-v1.0.0/Model/st_ai_ws/neural_art__network/"
+ * --onnx-input = "en.n6-ai-multi-pose-estimation-v1.0.0/x-cube-n6-ai-multi-pose-estimation-v1.0.0/Model/st_ai_output/yolov8n_256_quant_pc_uf_pose_coco-st_OE_3_1_0.onnx"
+ * --out-dir-prefix = "en.n6-ai-multi-pose-estimation-v1.0.0/x-cube-n6-ai-multi-pose-estimation-v1.0.0/Model/st_ai_ws/neural_art__network/"
  * --all-buffers-info = true
- * --load-mdesc-file = "C:/ST/STEdgeAI/2.0/Utilities/configs/stm32n6"
- * --load-mpool-file = "C:/temp/testspace/en.n6-ai-multi-pose-estimation-v1.0.0/x-cube-n6-ai-multi-pose-estimation-v1.0.0/Model/my_mpools/stm32n6-app2"
+ * --load-mdesc-file = "STEdgeAI/2.0/Utilities/configs/stm32n6"
+ * --load-mpool-file = "en.n6-ai-multi-pose-estimation-v1.0.0/x-cube-n6-ai-multi-pose-estimation-v1.0.0/Model/my_mpools/stm32n6-app2"
  * --cache-maintenance = true
  * --enable-virtual-mem-pools = true
  * --native-float = true
- * --json-quant-file = "C:/temp/testspace/en.n6-ai-multi-pose-estimation-v1.0.0/x-cube-n6-ai-multi-pose-estimation-v1.0.0/Model/st_ai_output/yolov8n_256_quant_pc_uf_pose_coco-st_OE_3_1_0_Q.json"
+ * --json-quant-file = "en.n6-ai-multi-pose-estimation-v1.0.0/x-cube-n6-ai-multi-pose-estimation-v1.0.0/Model/st_ai_output/yolov8n_256_quant_pc_uf_pose_coco-st_OE_3_1_0_Q.json"
  * --optimization = 3
  * --Os = true
  * --Omax-ca-pipe = 4

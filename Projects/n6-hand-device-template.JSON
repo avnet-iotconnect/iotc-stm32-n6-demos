@@ -1,0 +1,210 @@
+{
+    "code": "n6hand",
+    "name": "n6hand",
+    "authType": 2,
+    "attributes": [
+        {
+            "name": "cpu",
+            "type": "DECIMAL",
+            "description": "CPU load percentage",
+            "unit": "",
+            "aggregateTypes": []
+        },
+        {
+            "name": "nn_fps",
+            "type": "DECIMAL",
+            "description": "Neural network frames per second",
+            "unit": "",
+            "aggregateTypes": []
+        },
+        {
+            "name": "nn_period",
+            "type": "DECIMAL",
+            "description": "Neural network processing time",
+            "unit": "ms",
+            "aggregateTypes": []
+        },
+        {
+            "name": "inf_time",
+            "type": "DECIMAL",
+            "description": "Palm detector inference time",
+            "unit": "ms",
+            "aggregateTypes": []
+        },
+        {
+            "name": "hl_time",
+            "type": "DECIMAL",
+            "description": "Hand landmark inference time",
+            "unit": "ms",
+            "aggregateTypes": []
+        },
+        {
+            "name": "disp_time",
+            "type": "DECIMAL",
+            "description": "Display refresh time",
+            "unit": "ms",
+            "aggregateTypes": []
+        },
+        {
+            "name": "nb_detect",
+            "type": "INTEGER",
+            "description": "Number of hands detected",
+            "unit": "",
+            "aggregateTypes": []
+        },
+        {
+            "name": "conf",
+            "type": "DECIMAL",
+            "description": "Max confidence score for detected hand",
+            "unit": "%",
+            "aggregateTypes": []
+        },
+        {
+            "name": "hand_valid",
+            "type": "INTEGER",
+            "description": "1 if hand is detected, 0 otherwise",
+            "unit": "",
+            "aggregateTypes": []
+        },
+        {
+            "name": "hand_x",
+            "type": "DECIMAL",
+            "description": "X-coordinate of detected hand center",
+            "unit": "pixels",
+            "aggregateTypes": []
+        },
+        {
+            "name": "hand_y",
+            "type": "DECIMAL",
+            "description": "Y-coordinate of detected hand center",
+            "unit": "pixels",
+            "aggregateTypes": []
+        },
+        {
+            "name": "hand_width",
+            "type": "DECIMAL",
+            "description": "Width of the detected hand",
+            "unit": "pixels",
+            "aggregateTypes": []
+        },
+        {
+            "name": "hand_height",
+            "type": "DECIMAL",
+            "description": "Height of the detected hand",
+            "unit": "pixels",
+            "aggregateTypes": []
+        },
+        {
+            "name": "hand_rotation",
+            "type": "DECIMAL",
+            "description": "Rotation of the detected hand",
+            "unit": "degrees",
+            "aggregateTypes": []
+        },
+        {
+            "name": "wrist_x",
+            "type": "DECIMAL",
+            "description": "X-coordinate of wrist",
+            "unit": "pixels",
+            "aggregateTypes": []
+        },
+        {
+            "name": "wrist_y",
+            "type": "DECIMAL",
+            "description": "Y-coordinate of wrist",
+            "unit": "pixels",
+            "aggregateTypes": []
+        },
+        {
+            "name": "thumb_mcp_x",
+            "type": "DECIMAL",
+            "description": "X-coordinate of thumb MCP joint",
+            "unit": "pixels",
+            "aggregateTypes": []
+        },
+        {
+            "name": "thumb_mcp_y",
+            "type": "DECIMAL",
+            "description": "Y-coordinate of thumb MCP joint",
+            "unit": "pixels",
+            "aggregateTypes": []
+        },
+        {
+            "name": "index_tip_x",
+            "type": "DECIMAL",
+            "description": "X-coordinate of index tip",
+            "unit": "pixels",
+            "aggregateTypes": []
+        },
+        {
+            "name": "index_tip_y",
+            "type": "DECIMAL",
+            "description": "Y-coordinate of index tip",
+            "unit": "pixels",
+            "aggregateTypes": []
+        },
+        {
+            "name": "middle_tip_x",
+            "type": "DECIMAL",
+            "description": "X-coordinate of middle tip",
+            "unit": "pixels",
+            "aggregateTypes": []
+        },
+        {
+            "name": "middle_tip_y",
+            "type": "DECIMAL",
+            "description": "Y-coordinate of middle tip",
+            "unit": "pixels",
+            "aggregateTypes": []
+        },
+        {
+            "name": "ring_tip_x",
+            "type": "DECIMAL",
+            "description": "X-coordinate of ring tip",
+            "unit": "pixels",
+            "aggregateTypes": []
+        },
+        {
+            "name": "ring_tip_y",
+            "type": "DECIMAL",
+            "description": "Y-coordinate of ring tip",
+            "unit": "pixels",
+            "aggregateTypes": []
+        },
+        {
+            "name": "pinky_tip_x",
+            "type": "DECIMAL",
+            "description": "X-coordinate of pinky tip",
+            "unit": "pixels",
+            "aggregateTypes": []
+        },
+        {
+            "name": "pinky_tip_y",
+            "type": "DECIMAL",
+            "description": "Y-coordinate of pinky tip",
+            "unit": "pixels",
+            "aggregateTypes": []
+        }
+    ],
+    "commands": [
+        {
+            "name": "SET_CONFIDENCE_THRESHOLD",
+            "command": "SET_CONFIDENCE_THRESHOLD",
+            "requiredParam": true,
+            "requiredAck": false,
+            "isOTACommand": false
+        }
+    ],
+    "messageVersion": "2.1",
+    "msgCode": "XG4EJXN",
+    "greenGrass": "0",
+    "wireless": "0",
+    "properties": {
+        "description": null,
+        "dataFrequency": "5",
+        "fileSupport": false
+    },
+    "_meta": {
+        "version": "2.0"
+    }
+}

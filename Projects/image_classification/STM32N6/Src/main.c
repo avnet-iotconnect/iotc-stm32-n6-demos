@@ -32,14 +32,8 @@
 #include "crop_img.h"
 #include "stlogo.h"
 #include "arm_math.h"
-#include "da16k_comm.h"
-#include "da16k_uart.h" // For UART
-#include "stm32n6xx_hal_uart.h" // STM32 HAL UART header
 
-#define TX_BUFFER_SIZE 512
-UART_HandleTypeDef huart2;
-extern da16k_err_t da16k_at_send_formatted_raw_no_crlf(const char *format, ...);
-int confidence_threshold = 55; // Default confidence threshold (70%)
+#include "da16k_comm.h"
 
 CLASSES_TABLE;
 
@@ -129,12 +123,11 @@ static void set_clk_sleep_mode(void);
 static void IAC_Config(void);
 static void Display_WelcomeScreen(void);
 
-/***IoTC-start1***/
+static int iotc_percent = 0;
+static char detect_obj[30];
+
 UART_HandleTypeDef huart2;
-#define TX_BUFFER_SIZE  512
-#define RX_BUFFER_SIZE  512
-static char command[TX_BUFFER_SIZE] = { 0 };
-static char response[RX_BUFFER_SIZE] = { 0 };
+extern da16k_err_t da16k_at_send_formatted_raw_no_crlf(const char *format, ...);
 
 static void MX_USART2_UART_Init(void)
 {
@@ -181,54 +174,6 @@ static void MX_USART2_UART_Init(void)
 	  while (1);
   }
 }
-
-static char* send_at_command(char *command, unsigned long timeout_ms)
-{
-  int i = 0;
-  int command_size = strlen(command);
-  if (command_size > 255) {
-	  printf("AT COMMAND is over size!\r\n");
-	  return response;
-  }
-
-  HAL_StatusTypeDef USART_STATUS = HAL_OK;
-
-  //flush UART
-  while (HAL_TIMEOUT != HAL_UART_Receive(&huart2, (uint8_t* )&response[0], TX_BUFFER_SIZE, 50)) {
-	  //do nothing
-  }
-  memset(response, 0, RX_BUFFER_SIZE);
-
-#if 1
-  printf("command sent: %s\n", command);
-#endif
-
-  HAL_UART_Transmit(&huart2, (uint8_t* )command, command_size, timeout_ms);
-
-  do {
-	USART_STATUS = HAL_UART_Receive(&huart2, (uint8_t* )&response[i], 1, timeout_ms);
-	i++;
-  } while ((response[i - 1] != '\n') && (USART_STATUS != HAL_TIMEOUT));
-
-  if(USART_STATUS == HAL_TIMEOUT)
-  {
-    memset  (response, 0, RX_BUFFER_SIZE);
-    snprintf(response, TX_BUFFER_SIZE, "ERROR\r\n");
-  }
-
-#if 0
-  //printf("response received is %s\n", response);
-  // printf("len is %d\n", i);
-
-  printf("response is: \n");
-  for (int j = 0; j < i ; j++) {
-	  printf("%d\n", response[j]);
-  }
-#endif
-  return response;
-}
-/***IoTC-stop1***/
-
 /**
   * @brief  Main program
   * @param  None
@@ -261,8 +206,6 @@ int main(void)
 
   NPUCache_config();
 
-  MX_USART2_UART_Init(); // Initialize UART
-
   /*** External RAM and NOR Flash *********************************************/
   BSP_XSPI_RAM_Init(0);
   BSP_XSPI_RAM_EnableMemoryMappedMode(0);
@@ -272,6 +215,8 @@ int main(void)
   NOR_Init.TransferRate = BSP_XSPI_NOR_DTR_TRANSFER;
   BSP_XSPI_NOR_Init(0, &NOR_Init);
   BSP_XSPI_NOR_EnableMemoryMappedMode(0);
+
+  MX_USART2_UART_Init();
 
   /* Set all required IPs as secure privileged */
   Security_Config();
@@ -323,62 +268,6 @@ int main(void)
   /*** App Loop ***************************************************************/
   while (1)
   {
-      da16k_cmd_t current_cmd = {0};
-
-      // Attempt to receive a command
-      HAL_Delay(50); // small 50ms pause
-
-      da16k_err_t get_ret = da16k_get_cmd(&current_cmd);
-      if (get_ret == DA16K_SUCCESS)
-      {
-          printf("Got command: '%s'\n",
-                 current_cmd.command ? current_cmd.command : "(null)");
-          printf("Params: '%s'\n",
-                 current_cmd.parameters ? current_cmd.parameters : "(null)");
-
-          // Check if it is SET_CONFIDENCE_THRESHOLD
-          #define CMD_STR "SET_CONFIDENCE_THRESHOLD"
-          if (current_cmd.command &&
-              strcmp(current_cmd.command, CMD_STR) == 0)
-          {
-              // We got the right command
-              if (current_cmd.parameters)
-              {
-                  int new_threshold = atoi(current_cmd.parameters);
-                  if (new_threshold >= 0 && new_threshold <= 100) {
-                      confidence_threshold = new_threshold;
-                      printf("Updated threshold to %d%%\n", confidence_threshold);
-
-                      // Acknowledge
-                      da16k_at_send_formatted_raw_no_crlf(
-                        "AT+NWICMSG threshold_updated,%d\r\n", confidence_threshold
-                      );
-                  } else {
-                      printf("Invalid threshold: %d\n", new_threshold);
-                  }
-              }
-          }
-          else
-          {
-              printf("Unrecognized command: '%s'\n",
-                     current_cmd.command ? current_cmd.command : "(null)");
-          }
-
-          // Clean up
-          da16k_destroy_cmd(current_cmd);
-      }
-      else if (get_ret == DA16K_NO_CMDS)
-      {
-          // No new commands from the module
-          // ...
-      }
-      else
-      {
-          // Some error occurred
-          printf("Error retrieving command: %d\n", get_ret);
-      }
-
-
     CAM_IspUpdate();
 
     if (pitch_nn != (NN_WIDTH * NN_BPP))
@@ -411,19 +300,6 @@ int main(void)
     Network_Postprocess();
 
     Display_NetworkOutput(ts[1] - ts[0]);
-
-    // Send classification results to IoTConnect
-    if ((nn_top1_output_class_proba * 100) >= confidence_threshold) {
-        da16k_at_send_formatted_raw_no_crlf("AT+NWICMSG classification,%s,conf,%.0f,threshold,%d\r\n", nn_top1_output_class_name, nn_top1_output_class_proba * 100, confidence_threshold);
-    }
-
-    // Check for commands over UART
-//    char uart_buffer[100];
-//    if (HAL_UART_Receive(&huart2, (uint8_t *)uart_buffer, sizeof(uart_buffer), HAL_MAX_DELAY) == HAL_OK) {
-//        process_command(uart_buffer);
-//    }
-
-	HAL_Delay(2000);
     /* Discard nn_out region (used by pp_input and pp_outputs variables) to avoid Dcache evictions during nn inference */
     for (int i = 0; i < number_output; i++)
     {
@@ -431,21 +307,14 @@ int main(void)
       SCB_InvalidateDCache_by_Addr(tmp, nn_out_len[i]);
     }
 
+    //IOTCONNECT
+    if (iotc_percent > 90) {
+      printf("Sending the message to IOTCONNECT...\r\n");
+	  da16k_at_send_formatted_raw_no_crlf("AT+NWICMSG object,%s,percentage,%d\r\n", detect_obj, iotc_percent);
+	  HAL_Delay(3000);
+    }
   }
 }
-
-void process_threshold_command(const char *parameters) {
-    int new_threshold = atoi(parameters); // Convert parameter to an integer
-
-    // Validate the threshold range (0 to 100)
-    if (new_threshold >= 0 && new_threshold <= 100) {
-        confidence_threshold = new_threshold; // Update global confidence threshold
-        printf("Confidence threshold updated to: %d%%\n", confidence_threshold);
-    } else {
-        printf("Invalid confidence threshold received: %s\n", parameters);
-    }
-}
-
 
 static void NPURam_enable(void)
 {
@@ -554,6 +423,10 @@ static void Display_NetworkOutput(uint32_t inference_ms)
   UTIL_LCDEx_PrintfAt(0, LINE(2), CENTER_MODE, "%s %.0f%%", nn_top1_output_class_name, nn_top1_output_class_proba * 100);
   UTIL_LCDEx_PrintfAt(0, LINE(20), CENTER_MODE, "Inference: %ums", inference_ms);
 
+  //IOTCONNECT
+  iotc_percent = nn_top1_output_class_proba * 100;
+  strcpy(detect_obj, nn_top1_output_class_name);
+
   Display_WelcomeScreen();
 
   SCB_CleanDCache_by_Addr(lcd_fg_buffer[lcd_fg_buffer_rd_idx], LCD_FG_FRAMEBUFFER_SIZE);
@@ -576,12 +449,10 @@ void Network_Postprocess(void)
   }
 
   Bubblesort((float *) (pp_input), ranking, NB_CLASSES);
-//  printf("Class Name: %s, Probability: %.2f\n", nn_top1_output_class_name, nn_top1_output_class_proba);
 
   nn_top1_output_class_name = classes_table[ranking[0]];
   nn_top1_output_class_proba = *((float *) (pp_input));
 }
-
 
 /**
  * @brief Bubble sorting algorithm on probabilities

@@ -76,8 +76,8 @@ static void MX_USART2_UART_Init(void)
   HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
 
   /* USART2 interrupt Init */
-  //HAL_NVIC_SetPriority(USART2_IRQn, 0, 0);
-  //HAL_NVIC_EnableIRQ(USART2_IRQn);
+  HAL_NVIC_SetPriority(USART2_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(USART2_IRQn);
 
   huart2.Instance = USART2;
   huart2.Init.BaudRate = 115200;
@@ -88,9 +88,21 @@ static void MX_USART2_UART_Init(void)
   huart2.Init.HwFlowCtl = UART_HWCONTROL_NONE;
   huart2.Init.OverSampling = UART_OVERSAMPLING_16;
   huart2.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
-  //huart2.Init.ClockPrescaler = UART_PRESCALER_DIV1;
-  //huart2.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
+  huart2.Init.ClockPrescaler = UART_PRESCALER_DIV1;
+  huart2.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
   if (HAL_UART_Init(&huart2) != HAL_OK)
+  {
+	  while (1);
+  }
+  if (HAL_UARTEx_SetTxFifoThreshold(&huart2, UART_TXFIFO_THRESHOLD_1_8) != HAL_OK)
+  {
+	  while (1);
+  }
+  if (HAL_UARTEx_SetRxFifoThreshold(&huart2, UART_RXFIFO_THRESHOLD_1_8) != HAL_OK)
+  {
+	  while (1);
+  }
+  if (HAL_UARTEx_DisableFifoMode(&huart2) != HAL_OK)
   {
 	  while (1);
   }

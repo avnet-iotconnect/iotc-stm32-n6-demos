@@ -1258,6 +1258,17 @@ static void dp_thread_fct(ULONG arg)
     printf("Sending the message to IOTCONNECT...\r\n");
 	da16k_at_send_formatted_raw_no_crlf("AT+NWICMSG x_center,%d,y_center,%d,width,%d,height,%d,cpu_load,%f,fps,%f\r\n",x_center, y_center, w_data, h_data, iotc_cpuload, iotc_fps);
 	HAL_Delay(1000);
+
+    //IOTCONNECT to receive C2D message
+	da16k_cmd_t current_cmd = {0};
+	if ((da16k_get_cmd(&current_cmd) == DA16K_SUCCESS) && current_cmd.command) {
+		//USE current_cmd.command & current_cmd.parameters here
+		printf("/IOTCONNECT command is %s\r\n",current_cmd.command);
+		if (current_cmd.parameters) {
+			printf("/IOTCONNECT command->parameter is %s\r\n",current_cmd.parameters);
+		}
+        da16k_destroy_cmd(current_cmd);
+    }
   }
 }
 
@@ -1300,6 +1311,10 @@ void app_run()
 
   /*** Camera Init ************************************************************/  
   CAM_Init();
+
+  /* da16k module init */
+  da16k_cfg_t cfg = {0};
+  da16k_init(&cfg);
 
   /* sems + mutex init */
   ret = tx_semaphore_create(&isp_sem, NULL, 0);

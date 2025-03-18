@@ -170,8 +170,8 @@ static void MX_USART2_UART_Init(void)
   HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
 
   /* USART2 interrupt Init */
-  //HAL_NVIC_SetPriority(USART2_IRQn, 0, 0);
-  //HAL_NVIC_EnableIRQ(USART2_IRQn);
+  HAL_NVIC_SetPriority(USART2_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(USART2_IRQn);
 
   huart2.Instance = USART2;
   huart2.Init.BaudRate = 115200;
@@ -182,9 +182,21 @@ static void MX_USART2_UART_Init(void)
   huart2.Init.HwFlowCtl = UART_HWCONTROL_NONE;
   huart2.Init.OverSampling = UART_OVERSAMPLING_16;
   huart2.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
-  //huart2.Init.ClockPrescaler = UART_PRESCALER_DIV1;
-  //huart2.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
+  huart2.Init.ClockPrescaler = UART_PRESCALER_DIV1;
+  huart2.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
   if (HAL_UART_Init(&huart2) != HAL_OK)
+  {
+	  while (1);
+  }
+  if (HAL_UARTEx_SetTxFifoThreshold(&huart2, UART_TXFIFO_THRESHOLD_1_8) != HAL_OK)
+  {
+	  while (1);
+  }
+  if (HAL_UARTEx_SetRxFifoThreshold(&huart2, UART_RXFIFO_THRESHOLD_1_8) != HAL_OK)
+  {
+	  while (1);
+  }
+  if (HAL_UARTEx_DisableFifoMode(&huart2) != HAL_OK)
   {
 	  while (1);
   }
@@ -281,6 +293,10 @@ int main(void)
 
   LCD_init();
 
+  /* da16k module init */
+  da16k_cfg_t cfg = {0};
+  da16k_init(&cfg);
+
   /* Start LCD Display camera pipe stream */
   CAM_DisplayPipe_Start(lcd_bg_buffer, CMW_MODE_CONTINUOUS);
 
@@ -321,11 +337,23 @@ int main(void)
     assert(ret == 0);
 
     Display_NetworkOutput(&pp_output, ts[1] - ts[0]);
+
     /* Discard nn_out region (used by pp_input and pp_outputs variables) to avoid Dcache evictions during nn inference */
     for (int i = 0; i < number_output; i++)
     {
       float32_t *tmp = nn_out[i];
       SCB_InvalidateDCache_by_Addr(tmp, nn_out_len[i]);
+    }
+
+    //IOTCONNECT to receive C2D message
+	da16k_cmd_t current_cmd = {0};
+	if ((da16k_get_cmd(&current_cmd) == DA16K_SUCCESS) && current_cmd.command) {
+		//USE current_cmd.command & current_cmd.parameters here
+		printf("/IOTCONNECT command is %s\r\n",current_cmd.command);
+		if (current_cmd.parameters) {
+			printf("/IOTCONNECT command->parameter is %s\r\n",current_cmd.parameters);
+		}
+        da16k_destroy_cmd(current_cmd);
     }
   }
 }

@@ -37,8 +37,8 @@
 extern int __uncached_bss_start__;
 extern int __uncached_bss_end__;
 
-UART_HandleTypeDef huart1;
-UART_HandleTypeDef huart2;
+UART_HandleTypeDef huart1 = {0};
+UART_HandleTypeDef huart2 = {0};
 
 static TX_THREAD main_thread;
 static uint8_t main_tread_stack[4096];
@@ -82,8 +82,8 @@ static void MX_USART2_UART_Init(void)
   HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
 
   /* USART2 interrupt Init */
-  //HAL_NVIC_SetPriority(USART2_IRQn, 0, 0);
-  //HAL_NVIC_EnableIRQ(USART2_IRQn);
+  HAL_NVIC_SetPriority(USART2_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(USART2_IRQn);
 
   huart2.Instance = USART2;
   huart2.Init.BaudRate = 115200;
@@ -94,9 +94,21 @@ static void MX_USART2_UART_Init(void)
   huart2.Init.HwFlowCtl = UART_HWCONTROL_NONE;
   huart2.Init.OverSampling = UART_OVERSAMPLING_16;
   huart2.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
-  //huart2.Init.ClockPrescaler = UART_PRESCALER_DIV1;
-  //huart2.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
+  huart2.Init.ClockPrescaler = UART_PRESCALER_DIV1;
+  huart2.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
   if (HAL_UART_Init(&huart2) != HAL_OK)
+  {
+	  while (1);
+  }
+  if (HAL_UARTEx_SetTxFifoThreshold(&huart2, UART_TXFIFO_THRESHOLD_1_8) != HAL_OK)
+  {
+	  while (1);
+  }
+  if (HAL_UARTEx_SetRxFifoThreshold(&huart2, UART_RXFIFO_THRESHOLD_1_8) != HAL_OK)
+  {
+	  while (1);
+  }
+  if (HAL_UARTEx_DisableFifoMode(&huart2) != HAL_OK)
   {
 	  while (1);
   }
@@ -118,7 +130,7 @@ extern da16k_err_t da16k_at_send_formatted_raw_no_crlf(const char *format, ...);
 void iotc_thread_fct(ULONG arg) {
 
 	int32_t box_area = 0;
-	printf("SENDING IOTC MESSAGES\n");
+	printf("SENDING /IOTCONNECT MESSAGES\n");
 	for (int i = 0; i < 1000; i++) {
 		if (nb_detect == 0) {
 			box_x = 0;
@@ -129,7 +141,19 @@ void iotc_thread_fct(ULONG arg) {
 		}
 		box_area = box_w * box_h;
 		da16k_at_send_formatted_raw_no_crlf("AT+NWICMSG nb_detect,%ld,box_x,%d,box_y,%d,box_w,%d,box_h,%d,box_area,%d,conf,%d\r\n", nb_detect, box_x, box_y, box_w, box_h, box_area, box_conf);
-		HAL_Delay(5000);
+
+		HAL_Delay(2000);
+
+	    //IOTCONNECT to receive C2D message
+		da16k_cmd_t current_cmd = {0};
+		if ((da16k_get_cmd(&current_cmd) == DA16K_SUCCESS) && current_cmd.command) {
+			//USE current_cmd.command & current_cmd.parameters here
+			printf("/IOTCONNECT command is %s\r\n",current_cmd.command);
+			if (current_cmd.parameters) {
+				printf("/IOTCONNECT command->parameter is %s\r\n",current_cmd.parameters);
+			}
+	        da16k_destroy_cmd(current_cmd);
+	    }
 	}
 }
 
@@ -463,6 +487,10 @@ static void main_thread_fct(ULONG arg)
   LL_MISC_EnableClockLowPower(~0);
 
   app_run();
+
+  /* da16k module init */
+  da16k_cfg_t cfg = {0};
+  da16k_init(&cfg);
 
   const UINT iotc_priority = TX_MAX_PRIORITIES - 2;
   const ULONG time_slice = 10;

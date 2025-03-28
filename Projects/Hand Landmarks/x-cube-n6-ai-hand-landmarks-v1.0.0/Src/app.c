@@ -64,6 +64,8 @@
 /* palm detector */
 #define PD_MAX_HAND_NB 1
 
+#define IOTC_INTERVAL 3000
+
 typedef struct {
   float cx;
   float cy;
@@ -212,6 +214,7 @@ static TX_SEMAPHORE isp_sem;
 extern da16k_err_t da16k_at_send_formatted_raw_no_crlf(const char *format, ...);
 static float iotc_cpuload = 0.0;
 static float iotc_fps = 0.0;
+static uint32_t last_send_time = 0;
 
 static int is_cache_enable()
 {
@@ -1216,7 +1219,6 @@ static void dp_thread_fct(ULONG arg)
   button_init(&hd_toggle_button, BUTTON_TAMP, on_pd_toggle_button_click, &disp);
   while (1)
   {
-	//IOTCONNECT
 	iotc_cpuload = 0;
 	iotc_fps = 0;
 
@@ -1239,6 +1241,12 @@ static void dp_thread_fct(ULONG arg)
     disp_ms = HAL_GetTick() - ts;
 
     //IOTCONNECT
+    uint32_t current_time = HAL_GetTick();
+    if ((current_time - last_send_time) < IOTC_INTERVAL) {
+      continue; //send messages to iotconnect every IOTC_INTERVAL
+    }
+    last_send_time = current_time;
+
     /* box area around palm */
     int x_center = 0;
     int y_center = 0;
@@ -1257,7 +1265,6 @@ static void dp_thread_fct(ULONG arg)
     }
     printf("Sending the message to IOTCONNECT...\r\n");
 	da16k_at_send_formatted_raw_no_crlf("AT+NWICMSG x_center,%d,y_center,%d,width,%d,height,%d,cpu_load,%f,fps,%f\r\n",x_center, y_center, w_data, h_data, iotc_cpuload, iotc_fps);
-	HAL_Delay(1000);
 
     //IOTCONNECT to receive C2D message
 	da16k_cmd_t current_cmd = {0};
@@ -1266,6 +1273,7 @@ static void dp_thread_fct(ULONG arg)
 		printf("/IOTCONNECT command is %s\r\n",current_cmd.command);
 		if (current_cmd.parameters) {
 			printf("/IOTCONNECT command->parameter is %s\r\n",current_cmd.parameters);
+			da16k_at_send_formatted_raw_no_crlf("AT+NWICMSG iotc_cmd,%s,iotc_cmd_parameter,%s\r\n", current_cmd.command, current_cmd.parameters);
 		}
         da16k_destroy_cmd(current_cmd);
     }

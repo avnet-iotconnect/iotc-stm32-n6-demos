@@ -39,6 +39,7 @@
 CLASSES_TABLE;
 
 #define MAX_NUMBER_OUTPUT 5
+#define IOTC_INTERVAL (3000)
 
 typedef struct
 {
@@ -143,6 +144,7 @@ static void Display_WelcomeScreen(void);
 
 extern da16k_err_t da16k_at_send_formatted_raw_no_crlf(const char *format, ...);
 UART_HandleTypeDef huart2;
+static uint32_t last_send_time = 0;
 
 static void MX_USART2_UART_Init(void)
 {
@@ -344,17 +346,6 @@ int main(void)
       float32_t *tmp = nn_out[i];
       SCB_InvalidateDCache_by_Addr(tmp, nn_out_len[i]);
     }
-
-    //IOTCONNECT to receive C2D message
-	da16k_cmd_t current_cmd = {0};
-	if ((da16k_get_cmd(&current_cmd) == DA16K_SUCCESS) && current_cmd.command) {
-		//USE current_cmd.command & current_cmd.parameters here
-		printf("/IOTCONNECT command is %s\r\n",current_cmd.command);
-		if (current_cmd.parameters) {
-			printf("/IOTCONNECT command->parameter is %s\r\n",current_cmd.parameters);
-		}
-        da16k_destroy_cmd(current_cmd);
-    }
   }
 }
 
@@ -533,16 +524,34 @@ static void Display_NetworkOutput(sseg_pp_out_t *p_postprocess, uint32_t inferen
   UTIL_LCDEx_PrintfAt(0, LINE(20), CENTER_MODE, "Inference: %ums", inference_ms);
   UTIL_LCD_SetBackColor(0);
 
-  //IOTCONNECT
-  printf("Sending the message to IOTCONNECT...\r\n");
-  da16k_at_send_formatted_raw_no_crlf("AT+NWICMSG highlight_area,%d,inference,%d\r\n", highlight_area, inference_ms);
-  HAL_Delay(1000);
-
   Display_WelcomeScreen();
 
   ret = HAL_LTDC_ReloadLayer(&hlcd_ltdc, LTDC_RELOAD_VERTICAL_BLANKING, LTDC_LAYER_2);
   assert(ret == HAL_OK);
   lcd_fg_buffer_rd_idx = 1 - lcd_fg_buffer_rd_idx;
+
+  //IOTCONNECT
+  uint32_t current_time = HAL_GetTick();
+  if ((current_time - last_send_time) < IOTC_INTERVAL) {
+    return;
+  }
+  last_send_time = current_time;
+
+  if (highlight_area > 10000) {
+    printf("Sending the message to IOTCONNECT...\r\n");
+    da16k_at_send_formatted_raw_no_crlf("AT+NWICMSG highlight_area,%d,inference,%d\r\n", highlight_area, inference_ms);
+  }
+  //IOTCONNECT to receive C2D message
+	da16k_cmd_t current_cmd = {0};
+	if ((da16k_get_cmd(&current_cmd) == DA16K_SUCCESS) && current_cmd.command) {
+	  //USE current_cmd.command & current_cmd.parameters here
+	  printf("/IOTCONNECT command is %s\r\n",current_cmd.command);
+	  if (current_cmd.parameters) {
+		printf("/IOTCONNECT command->parameter is %s\r\n",current_cmd.parameters);
+		da16k_at_send_formatted_raw_no_crlf("AT+NWICMSG iotc_cmd,%s,iotc_cmd_parameter,%s\r\n", current_cmd.command, current_cmd.parameters);
+	  }
+      da16k_destroy_cmd(current_cmd);
+  }
 }
 
 static void LCD_init()

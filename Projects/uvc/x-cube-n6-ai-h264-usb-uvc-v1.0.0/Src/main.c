@@ -37,8 +37,8 @@
 extern int __uncached_bss_start__;
 extern int __uncached_bss_end__;
 
-UART_HandleTypeDef huart1 = {0};
-UART_HandleTypeDef huart2 = {0};
+UART_HandleTypeDef huart1;
+UART_HandleTypeDef huart2;
 
 static TX_THREAD main_thread;
 static uint8_t main_tread_stack[4096];
@@ -115,11 +115,6 @@ static void MX_USART2_UART_Init(void)
 }
 
 extern int32_t nb_detect;
-//extern float32_t x_center;
-//extern float32_t y_center;
-//extern float32_t width;
-//extern float32_t height;
-
 extern int16_t box_x;
 extern int16_t box_y;
 extern int16_t box_w;
@@ -130,7 +125,7 @@ extern da16k_err_t da16k_at_send_formatted_raw_no_crlf(const char *format, ...);
 void iotc_thread_fct(ULONG arg) {
 
 	int32_t box_area = 0;
-	printf("SENDING /IOTCONNECT MESSAGES\n");
+	printf("SENDING IOTC MESSAGES\n");
 	for (int i = 0; i < 1000; i++) {
 		if (nb_detect == 0) {
 			box_x = 0;
@@ -141,18 +136,18 @@ void iotc_thread_fct(ULONG arg) {
 		}
 		box_area = box_w * box_h;
 		da16k_at_send_formatted_raw_no_crlf("AT+NWICMSG nb_detect,%ld,box_x,%d,box_y,%d,box_w,%d,box_h,%d,box_area,%d,conf,%d\r\n", nb_detect, box_x, box_y, box_w, box_h, box_area, box_conf);
-
-		HAL_Delay(2000);
+		tx_thread_sleep(3000);
 
 	    //IOTCONNECT to receive C2D message
 		da16k_cmd_t current_cmd = {0};
 		if ((da16k_get_cmd(&current_cmd) == DA16K_SUCCESS) && current_cmd.command) {
-			//USE current_cmd.command & current_cmd.parameters here
-			printf("/IOTCONNECT command is %s\r\n",current_cmd.command);
-			if (current_cmd.parameters) {
-				printf("/IOTCONNECT command->parameter is %s\r\n",current_cmd.parameters);
-			}
-	        da16k_destroy_cmd(current_cmd);
+		  //USE current_cmd.command & current_cmd.parameters here
+		  printf("/IOTCONNECT command is %s\r\n",current_cmd.command);
+		  if (current_cmd.parameters) {
+			printf("/IOTCONNECT command->parameter is %s\r\n",current_cmd.parameters);
+			da16k_at_send_formatted_raw_no_crlf("AT+NWICMSG iotc_cmd,%s,iotc_cmd_parameter,%s\r\n", current_cmd.command, current_cmd.parameters);
+		  }
+	      da16k_destroy_cmd(current_cmd);
 	    }
 	}
 }

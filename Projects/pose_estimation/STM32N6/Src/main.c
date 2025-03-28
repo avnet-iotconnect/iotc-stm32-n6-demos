@@ -45,6 +45,7 @@
 #endif
 
 #define MAX_NUMBER_OUTPUT 5
+#define IOTC_INTERVAL 3000
 
 typedef struct
 {
@@ -130,7 +131,8 @@ extern da16k_err_t da16k_at_send_formatted_raw_no_crlf(const char *format, ...);
 int x[3] = {0};
 int y[3] = {0};
 int color[3] = {0};
-uint32_t conf = 0;
+static uint32_t iotc_inference = 0;
+static uint32_t last_send_time = 0;
 
 static void MX_USART2_UART_Init(void)
 {
@@ -293,7 +295,7 @@ int main(void)
 	memset(x, 0, sizeof(x));
 	memset(y, 0, sizeof(y));
 	memset(color, 0, sizeof(color));
-	conf = 0;
+	iotc_inference = 0;
 
     CAM_IspUpdate();
 
@@ -337,19 +339,27 @@ int main(void)
     }
 
     //IOTCONNECT
-    printf("Sending the message to IOTCONNECT...\r\n");
-	da16k_at_send_formatted_raw_no_crlf("AT+NWICMSG point1_x,%d,point1_y,%d,point1_color,%d,point2_x,%d,point2_y,%d,point2_color,%d,conf,%d\r\n",x[0], y[0], color[0], x[1], y[1], color[1], conf);
-	HAL_Delay(2000);
+    uint32_t current_time = HAL_GetTick();
+    if ((current_time - last_send_time) < IOTC_INTERVAL) {
+      continue;
+    }
+    last_send_time = current_time;
 
+    //only send data to iotconnect when at least two points showing up in order to avoid floating point data
+    if ( !((x[0] == 0 && y[0] == 0) || (x[1] == 0 && y[1] == 0)) ) {
+      printf("Sending the message to IOTCONNECT...\r\n");
+	  da16k_at_send_formatted_raw_no_crlf("AT+NWICMSG point1_x,%d,point1_y,%d,point1_color,%d,point2_x,%d,point2_y,%d,point2_color,%d,inference,%d\r\n",x[0], y[0], color[0], x[1], y[1], color[1], iotc_inference);
+    }
     //IOTCONNECT to receive C2D message
 	da16k_cmd_t current_cmd = {0};
 	if ((da16k_get_cmd(&current_cmd) == DA16K_SUCCESS) && current_cmd.command) {
-		//USE current_cmd.command & current_cmd.parameters here
-		printf("/IOTCONNECT command is %s\r\n",current_cmd.command);
-		if (current_cmd.parameters) {
-			printf("/IOTCONNECT command->parameter is %s\r\n",current_cmd.parameters);
-		}
-        da16k_destroy_cmd(current_cmd);
+	  //USE current_cmd.command & current_cmd.parameters here
+	  printf("/IOTCONNECT command is %s\r\n",current_cmd.command);
+	  if (current_cmd.parameters) {
+	    printf("/IOTCONNECT command->parameter is %s\r\n",current_cmd.parameters);
+		da16k_at_send_formatted_raw_no_crlf("AT+NWICMSG iotc_cmd,%s,iotc_cmd_parameter,%s\r\n", current_cmd.command, current_cmd.parameters);
+	  }
+      da16k_destroy_cmd(current_cmd);
     }
   }
 }
@@ -517,7 +527,7 @@ static void Display_NetworkOutput(void *p_postprocess, uint32_t inference_ms)
   UTIL_LCDEx_PrintfAt(0, LINE(20), CENTER_MODE, "Inference: %ums", inference_ms);
   UTIL_LCD_SetBackColor(0);
   //FOR IOTCONNECT MSG
-  conf = inference_ms;
+  iotc_inference = inference_ms;
 #endif
 
   Display_WelcomeScreen();

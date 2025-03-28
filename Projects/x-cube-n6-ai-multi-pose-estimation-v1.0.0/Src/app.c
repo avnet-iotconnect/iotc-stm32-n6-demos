@@ -64,6 +64,8 @@
 /* Align so we are sure nn_output_buffers[0] and nn_output_buffers[1] are aligned on 32 bytes */
 #define NN_BUFFER_OUT_SIZE_ALIGN ALIGN_VALUE(NN_BUFFER_OUT_SIZE, 32)
 
+#define IOTC_INTERVAL 3000
+
 typedef struct
 {
   uint32_t X0;
@@ -216,7 +218,8 @@ static TX_SEMAPHORE isp_sem;
 
 //IOTCONNECT
 extern da16k_err_t da16k_at_send_formatted_raw_no_crlf(const char *format, ...);
-static char object_name[30];
+static char object_name[30] = "";
+static uint32_t last_send_time = 0;
 
 static int is_cache_enable()
 {
@@ -599,7 +602,9 @@ static void Display_NetworkOutput(display_info_t *info)
   line_nb += 1;
 #endif
 
+  //initialize the object_name
   strcpy(object_name, "");
+
   /* Draw bounding boxes */
   for (i = 0; i < nb_rois; i++) {
     Display_Detection(&rois[i]);
@@ -614,9 +619,28 @@ static void Display_NetworkOutput(display_info_t *info)
       }
     }
   }
+  uint32_t current_time = HAL_GetTick();
+  if ((current_time - last_send_time) < IOTC_INTERVAL) {
+    return;
+  }
+  last_send_time = current_time;
 
-  da16k_at_send_formatted_raw_no_crlf("AT+NWICMSG object,%d,object_name,%s,FPS,%.1f,cpu_load,%.1f\r\n", nb_rois, object_name, nn_fps, cpu_load_one_second);
-  HAL_Delay(1000);
+  if (strlen(object_name) != 0) {
+    da16k_at_send_formatted_raw_no_crlf("AT+NWICMSG object,%d,object_name,%s,FPS,%.1f,cpu_load,%.1f\r\n", nb_rois, object_name, nn_fps, cpu_load_one_second);
+    tx_thread_sleep(100);
+  }
+
+  //IOTCONNECT to receive C2D message
+  da16k_cmd_t current_cmd = {0};
+  if ((da16k_get_cmd(&current_cmd) == DA16K_SUCCESS) && current_cmd.command) {
+    //USE current_cmd.command & current_cmd.parameters here
+	printf("/IOTCONNECT command is %s\r\n",current_cmd.command);
+	if (current_cmd.parameters) {
+	  printf("/IOTCONNECT command->parameter is %s\r\n",current_cmd.parameters);
+	  da16k_at_send_formatted_raw_no_crlf("AT+NWICMSG iotc_cmd,%s,iotc_cmd_parameter,%s\r\n", current_cmd.command, current_cmd.parameters);
+	}
+    da16k_destroy_cmd(current_cmd);
+  }
 }
 
 static void nn_thread_fct(ULONG arg)
@@ -780,17 +804,6 @@ static void dp_thread_fct(ULONG arg)
     SCB_CleanDCache_by_Addr(lcd_fg_buffer[lcd_fg_buffer_rd_idx], LCD_FG_WIDTH * LCD_FG_HEIGHT* 2);
     dp_commit_drawing_area();
     disp_ms = HAL_GetTick() - ts;
-
-    //IOTCONNECT to receive C2D message
-	da16k_cmd_t current_cmd = {0};
-	if ((da16k_get_cmd(&current_cmd) == DA16K_SUCCESS) && current_cmd.command) {
-		//USE current_cmd.command & current_cmd.parameters here
-		printf("/IOTCONNECT command is %s\r\n",current_cmd.command);
-		if (current_cmd.parameters) {
-			printf("/IOTCONNECT command->parameter is %s\r\n",current_cmd.parameters);
-		}
-        da16k_destroy_cmd(current_cmd);
-    }
   }
 }
 

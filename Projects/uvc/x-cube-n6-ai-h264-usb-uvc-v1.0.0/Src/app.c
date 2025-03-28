@@ -164,10 +164,6 @@ static TX_SEMAPHORE isp_sem;
 //variables used for iotconnect
 static bool tempflag = false;
 int32_t nb_detect = 0;
-//float32_t x_center = 0;
-//float32_t y_center = 0;
-//float32_t width = 0;
-//float32_t height = 0;
 int16_t box_x = 0;
 int16_t box_y = 0;
 int16_t box_w = 0;

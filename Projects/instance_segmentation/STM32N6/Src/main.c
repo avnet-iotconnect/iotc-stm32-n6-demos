@@ -38,6 +38,7 @@
 CLASSES_TABLE;
 
 #define MAX_NUMBER_OUTPUT 5
+#define IOTC_INTERVAL 3000
 
 typedef struct
 {
@@ -128,12 +129,11 @@ static void Display_WelcomeScreen(void);
 
 extern da16k_err_t da16k_at_send_formatted_raw_no_crlf(const char *format, ...);
 UART_HandleTypeDef huart2;
-uint32_t object_number = 0;
-char object_name[30];
+char object_name[30] = "";
+char object_compare[30] = "";
+char object_compare_again[30] = "";
 uint8_t count = 0;
-
-char object_compare[30];
-char object_compare_again[30];
+static uint32_t last_send_time = 0;
 
 static void MX_USART2_UART_Init(void)
 {
@@ -332,17 +332,6 @@ int main(void)
       float32_t *tmp = nn_out[i];
       SCB_InvalidateDCache_by_Addr(tmp, nn_out_len[i]);
     }
-
-    //IOTCONNECT to receive C2D message
-	da16k_cmd_t current_cmd = {0};
-	if ((da16k_get_cmd(&current_cmd) == DA16K_SUCCESS) && current_cmd.command) {
-		//USE current_cmd.command & current_cmd.parameters here
-		printf("/IOTCONNECT command is %s\r\n",current_cmd.command);
-		if (current_cmd.parameters) {
-			printf("/IOTCONNECT command->parameter is %s\r\n",current_cmd.parameters);
-		}
-        da16k_destroy_cmd(current_cmd);
-    }
   }
 }
 
@@ -485,7 +474,7 @@ static void Display_NetworkOutput(iseg_postprocess_out_t *p_postprocess, uint32_
     UTIL_LCD_DrawRect(x0, y0, width, height, colors[i % NUMBER_COLORS]);
     UTIL_LCDEx_PrintfAt(x0, y0, LEFT_MODE, classes_table[rois[i].class_index]);
 
-    //IOTCONNECT
+    //IOTCONNECT record the object three times
     if (sizeof(classes_table[rois[i].class_index]) < 30) {
       if (count == 0) {
     	strcpy(object_name, classes_table[rois[i].class_index]);
@@ -496,7 +485,7 @@ static void Display_NetworkOutput(iseg_postprocess_out_t *p_postprocess, uint32_
       if (count == 2) {
         strcpy(object_compare_again, classes_table[rois[i].class_index]);
       }
-      count++;
+      	count++;
       } else {
         strcpy(object_name, "");
         strcpy(object_compare, "");
@@ -510,13 +499,26 @@ static void Display_NetworkOutput(iseg_postprocess_out_t *p_postprocess, uint32_
   UTIL_LCDEx_PrintfAt(0, LINE(20), CENTER_MODE, "Inference: %ums", inference_ms);
   UTIL_LCD_SetBackColor(0);
 
-  //IOTCONNECT
-  object_number  =  nb_rois;
+  Display_WelcomeScreen();
+
+  SCB_CleanDCache_by_Addr(lcd_fg_buffer[lcd_fg_buffer_rd_idx], LCD_FG_FRAMEBUFFER_SIZE);
+  ret = HAL_LTDC_ReloadLayer(&hlcd_ltdc, LTDC_RELOAD_VERTICAL_BLANKING, LTDC_LAYER_2);
+  assert(ret == HAL_OK);
+  lcd_fg_buffer_rd_idx = 1 - lcd_fg_buffer_rd_idx;
+
+  //IOTCONNECT send data to cloud
+  uint32_t current_time = HAL_GetTick();
+  if ((current_time - last_send_time) < IOTC_INTERVAL) {
+    return;
+  }
+  //send messages to iotconnect every IOTC_INTERVAL
+  last_send_time = current_time;
+
+  //If the object are the same in the previous three records, we send data to iotconnect.
   if (count >= 2) {
-    if (strcmp(object_name, object_compare) == 0 || strcmp(object_name, object_compare_again) == 0) {
+    if (strcmp(object_name, object_compare) == 0 && strcmp(object_name, object_compare_again) == 0) {
       printf("Sending the message to IOTCONNECT...\r\n");
-	  da16k_at_send_formatted_raw_no_crlf("AT+NWICMSG object,%d,inference,%d,class,%s\r\n",object_number, inference_ms, object_name);
-	  HAL_Delay(1000);
+	  da16k_at_send_formatted_raw_no_crlf("AT+NWICMSG object,%d,inference,%d,class,%s\r\n",nb_rois, inference_ms, object_name);
     }
 
     //clear and compare again
@@ -526,12 +528,17 @@ static void Display_NetworkOutput(iseg_postprocess_out_t *p_postprocess, uint32_
 	count = 0;
   }
 
-  Display_WelcomeScreen();
-
-  SCB_CleanDCache_by_Addr(lcd_fg_buffer[lcd_fg_buffer_rd_idx], LCD_FG_FRAMEBUFFER_SIZE);
-  ret = HAL_LTDC_ReloadLayer(&hlcd_ltdc, LTDC_RELOAD_VERTICAL_BLANKING, LTDC_LAYER_2);
-  assert(ret == HAL_OK);
-  lcd_fg_buffer_rd_idx = 1 - lcd_fg_buffer_rd_idx;
+  //IOTCONNECT to receive C2D message
+  da16k_cmd_t current_cmd = {0};
+  if ((da16k_get_cmd(&current_cmd) == DA16K_SUCCESS) && current_cmd.command) {
+	  //USE current_cmd.command & current_cmd.parameters here
+	  printf("/IOTCONNECT command is %s\r\n",current_cmd.command);
+	  if (current_cmd.parameters) {
+		printf("/IOTCONNECT command->parameter is %s\r\n",current_cmd.parameters);
+		da16k_at_send_formatted_raw_no_crlf("AT+NWICMSG iotc_cmd,%s,iotc_cmd_parameter,%s\r\n", current_cmd.command, current_cmd.parameters);
+	  }
+      da16k_destroy_cmd(current_cmd);
+  }
 }
 
 static void LCD_init()

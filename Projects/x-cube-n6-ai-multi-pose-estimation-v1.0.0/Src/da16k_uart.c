@@ -24,15 +24,16 @@
 #include "da16k_uart.h"
 #include "da16k_comm.h"
 
+#ifdef RTOS_THREADX
+#include "tx_api.h"
+#endif
+
 extern UART_HandleTypeDef huart2;
 UART_HandleTypeDef *da_uart_p = &huart2;
 
 #define BUF_SIZE (256)
-static uint32_t timout;
-#define SET_TIMEOUT() (timout= HAL_GetTick() + DA16K_UART_TIMEOUT_MS) //set 500ms timeout
-#define GET_TIMEOUT() (timout < HAL_GetTick()) //check if timeout has expired
 
-bool uart_busy = false;
+static bool uart_busy = false;
 static volatile char rx_buf[BUF_SIZE];
 static int head = 0;
 static int tail = 0;
@@ -43,7 +44,7 @@ static char rx_byte;
  * Callback that occurs at the end of a transmission.
  */
 void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart) {
-    if(huart == da_uart_p) {
+    if (huart == da_uart_p) {
         uart_busy = false;
     }
 }
@@ -51,10 +52,14 @@ void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart) {
  * Callback that happens when characters are received via interrupt one at a time.
  */
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
-    if(huart == da_uart_p) {
-        HAL_UART_Receive_IT(da_uart_p, (uint8_t *) &rx_byte, 1);
-        rx_buf[head] = rx_byte;
-        if(++head >= BUF_SIZE) {
+    if (huart == da_uart_p) {
+    	HAL_StatusTypeDef uart_status = HAL_OK;
+    	do {
+    	  uart_status = HAL_UART_Receive_IT(da_uart_p, (uint8_t *) &rx_byte, 1);
+    	} while (uart_status != HAL_OK);
+
+    	rx_buf[head] = rx_byte;
+        if (++head >= BUF_SIZE) {
             head = 0;
         }
     }
@@ -81,13 +86,7 @@ void HAL_UART_ErrorCallback(UART_HandleTypeDef *UartHandle) {
   */
 void USART2_IRQHandler(void)
 {
-  /* USER CODE BEGIN USART1_IRQn 0 */
-
-  /* USER CODE END USART1_IRQn 0 */
   HAL_UART_IRQHandler(&huart2);
-  /* USER CODE BEGIN USART1_IRQn 1 */
-
-  /* USER CODE END USART1_IRQn 1 */
 }
 
 
@@ -103,15 +102,15 @@ void da16k_uart_close(void) {
 bool da16k_uart_send(const char *src, size_t length) {
     static char tx_buf[2][BUF_SIZE];
     static int buf_select = 0;
-    HAL_StatusTypeDef uart_status;
+    HAL_StatusTypeDef uart_status = HAL_OK;
 
-    if(!src || length==0) {
+    if (!src || length==0) {
         return false;
     }
 
-    SET_TIMEOUT();
-    while(uart_busy){
-        if(GET_TIMEOUT()) {
+    uint32_t timout= HAL_GetTick() + DA16K_UART_TIMEOUT_MS;
+    while (uart_busy) {
+        if (timout < HAL_GetTick()) {
             return false;
         }
     }
@@ -120,7 +119,7 @@ bool da16k_uart_send(const char *src, size_t length) {
     memcpy(tx_buf[buf_select], src, length);
     do {
     	uart_status = HAL_UART_Transmit_IT(da_uart_p, (uint8_t*)tx_buf[buf_select], length);
-    }while(uart_status != HAL_OK);
+    } while (uart_status != HAL_OK);
 
     buf_select = buf_select ? 0:1;
 
@@ -132,21 +131,26 @@ bool da16k_uart_send(const char *src, size_t length) {
  * there are no characters to be read the code will block here for the specified timeout length.
  */
 da16k_err_t da16k_uart_get_char(char *dst, uint32_t timeout_ms) {
-    if(!dst) {
+    if (!dst) {
         return DA16K_INVALID_PARAMETER;
     }
 
+    //set timeout to 100ms; DA16K_UART_TIMEOUT_MS is too long for receiving.
+    timeout_ms = 100;
     uint32_t expiry = HAL_GetTick() + timeout_ms;
 
     do {
-        if(tail != head) {
+        if (tail != head) {
             *dst = rx_buf[tail];
-            if(++tail >= BUF_SIZE) {
+            if (++tail >= BUF_SIZE) {
                 tail = 0;
             }
             return DA16K_SUCCESS;
         }
-    }while(HAL_GetTick() < expiry);
+#ifdef RTOS_THREADX
+        tx_thread_sleep(5); //optional, sleep the current task for a short time to give out time for other tasks
+#endif
+    } while (HAL_GetTick() < expiry);
 
     return DA16K_TIMEOUT;
 }

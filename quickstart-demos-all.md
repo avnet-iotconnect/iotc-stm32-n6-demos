@@ -203,14 +203,12 @@ To:
 
 ```bash
 ${ProjDirPath}/STM32CubeIDE/Middlewares/iotc-freertos-da16k-atcmd-lib
-${ProjDirPath}/STM32CubeIDE/Drivers/STM32N6xx_HAL_Driver/Inc
-${ProjDirPath}/STM32CubeIDE/Application/Inc
 ```
 
 - Replace/Add IoTConnect-specific files:
   - Replace `main.c` with:
 ```bash
-iotc-freertos-da16k-atcmd-lib/Projects/<project_name>/STM32N6/Src/main.c
+iotc-stm32-n6-demos/Projects/<project_name>/STM32N6/Src/main.c
 ```
 
   - Add `da16k_uart.c` (and optionally `app.c` for advanced demos) to:
@@ -228,10 +226,10 @@ iotc-freertos-da16k-atcmd-lib/Projects/<project_name>/STM32N6/Src/main.c
 - Click **Debug** to start.
 
 ### Option 2: Signed Binary for Flash Execution
-- Download [STM32 Trusted Package Creator](https://www.st.com).
+- Download [STM32CubeProgrammer](https://www.st.com/en/development-tools/stm32cubeprog.html).
 - Sign binary:
 ```bash
-STM32_SigningTool_CLI -bin firmware.bin -nk -t ssbl -hv 2.3 -o signed_firmware.bin
+STM32CubeProgrammer\bin\STM32_SigningTool_CLI.exe" -bin firmware.bin -nk -of 0x80000000 -t fsbl -o firmware.bin -hv 2.3 -dump signed_firmware.bin
 ```
 - Flash with STM32CubeProgrammer to address `0x70100000`.
 

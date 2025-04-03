@@ -124,12 +124,12 @@ Move the `iotc-freertos-da16k-atcmd-lib` folder into:
 ### 2. Exclude `da16k_platform_ra6mx.c` from the Build
 In **STM32CubeIDE**:
 - Open the **Project Explorer**.
-- Navigate to `iotc-freertos-da16k-atcmd-lib/src`.
+- Navigate to `iotc-freertos-da16k-atcmd-lib/`.
 - Right-click `da16k_platform_ra6mx.c` > **Resource Configurations** > **Exclude from Build**.
 - Select all configurations and click **OK**.
 
 ### 3. Modify `da16k_comm.h`
-Open `iotc_da16k_pmod/da16k_comm.h` and comment out line 19:
+Open `iotc-freertos-da16k-atcmd-lib/da16k_comm.h` and comment out line 19:
 ```c
 // #error "Please define DA16K_CONFIG_FILE!"
 ```
@@ -146,81 +146,48 @@ From:
 ```
 To:
 ```
-<project_root>/STM32CubeIDE/Drivers/STM32N6xx_HAL_Driver/Src/
+<project_root>/STM32CubeIDE/Drivers/STM32N6xx_HAL_Driver/
 ```
 
 ### 5. Add Include Paths in STM32CubeIDE
 - Right-click your project in **Project Explorer** > **Properties**.
 - Navigate to **C/C++ Build** > **Settings** > **MCU GCC Compiler** > **Include Paths**.
-- Click **Add**, then add:
+- Click **Add**, then navigate to the folder below and add:
   - `${ProjDirPath}/STM32CubeIDE/Middlewares/iotc-freertos-da16k-atcmd-lib`
-  - `${ProjDirPath}/STM32CubeIDE/Drivers/STM32N6xx_HAL_Driver/Inc`
-  - `${ProjDirPath}/STM32CubeIDE/Application/Inc`
 - Click **Apply and Close**.
 
 ### 6. Replace Project-Specific Files
-For each project, replace the necessary files from the cloned IoTConnect repo:
+For each project, replace the files below from the cloned iotc-stm32-n6-demos repo:
 
-**For AI Projects (`image_classification`, `object_detection`, etc.):**
-- Replace `main.c` with:
+**For **AI Projects** (`image_classification`, `object_detection`, etc.) and **UVC** project:**
+- Replace `main.c` in the AI or UVC projects with this repo's corresponding project's `main.c`
+- Add this repo's `da16k_uart.c` to the corresponding AI/UVC project's path below:
   ```
-  ???
+  <project_root>/STM32CubeIDE/Application/
   ```
-- Add `da16k_uart.c` to:
-  ```
-  ??? c/
-  ```
-
-**For UVC Object Detection:**
-- Replace `main.c` with:
-  ```
-    ???
-  ```
-- Add `da16k_uart.c` and `app.c` to:
-  ```
-  <project_root>/STM32CubeIDE/Application/Src/
-  ```
-
 This completes the IoTConnect integration setup. Proceed to **Step 5** for flashing and testing the application!
 
 
 ---
 
-## Step 5: Build and Flash the Firmware
 
-1. Click **Project > Build Project** or press **Ctrl+B**.
-2. Wait for the build to complete.
-3. Connect the STM32 board via **USB**.
-4. Open **STM32CubeProgrammer**.
-5. Click **Connect** to detect the board.
-6. Select the `.bin` or `.hex` file from the `Debug/` or `Release/` folder.
-7. Click **Start Programming**.
-8. Reset the board to start execution.
-
----
-
-## Step 6: Setting Up IoTConnect
+## Step 5: Setting Up IoTConnect
 
 1. Create an **IoTConnect Device Template**:
 
-   - Download the [Device Template](n6uvc_template.JSON).
-   - Import the template in IoTConnect under **Device > Templates**.
+   - Follow the [QuickStart Guide 6](https://github.com/avnet-iotconnect/iotc-stm32-n6-demos/blob/main/doc/QUICKSTART.md#6-create-a-device-template-in-iotconnect).
 
 2. Create an **IoTConnect Device**:
 
-   - Navigate to **Devices > Create Device**.
-   - Use the **DUID** saved from earlier.
-   - Select the correct template from the dropdown.
-   - Download the device credentials.
-   - Obtain **CPID** and **ENV** values from IoTConnect settings.
+   - Follow the [QuickStart Guide 7,8](https://github.com/avnet-iotconnect/iotc-stm32-n6-demos/blob/main/doc/QUICKSTART.md#7-create-a-device-iotconnect).
 
 3. Flash and Configure the DA16K PMOD:
 
-   - Follow the [QuickStart Guide](https://github.com/avnet-iotconnect/iotc-dialog-da16k-sdk/blob/main/doc/QUICKSTART.md).
+   - Follow the [QuickStart Guide 9](https://github.com/avnet-iotconnect/iotc-stm32-n6-demos/blob/main/doc/QUICKSTART.md#9-flashconfigure-the-da16k-pmod-module).
 
 ---
 
-## Step 7: Debugging and Running the Application
+## Step 6: Debugging and Running the Application
 
 1. In **STM32CubeIDE**, click **Run > Debug Configurations**.
 2. Select **STM32 Cortex-M C/C++ Application**.

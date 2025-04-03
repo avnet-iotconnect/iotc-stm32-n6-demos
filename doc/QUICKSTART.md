@@ -55,6 +55,7 @@ This guide has been written and tested with the hardware and software listed bel
 ## 4. Programming the board
 
 ### 4.1 Setup the Programmer
+* Ensure that boot pins are in DEV_BOOT mode. (BOOT1 switch to the RIGHT position and BOOT0 switch to the LEFT)
 * Launch the **STM32CubeProgrammer**.
 * In the left menu, click the `External loaders` ("EL" icon).
 * Use the search box to find `STM32N6570-DK` and select the check box to the left.
@@ -84,6 +85,10 @@ The **Application** implements the core functionalities of the demo such as the 
 * **Disconnect** and **Close** the programmer.
 * Press the **RESET** button.
 
+#### 4.2.4 Optional: Erase the Board before Programming
+* On STM32CubeProgrammer, after connecting the board, go to tab “Erasing and Programming”, then “Erase external memory” section. Select sectors 0 to 10 from start address 0x70000000 and click on "Erase selected sectors".
+* Then programming 4.2.1, 4.2.2 and 4.2.3.
+
 ## 5. Cloud Account Setup
 An /IOTCONNECT account with AWS backend is required.  If you need to create an account, a free trial subscription is available and no credit card is required.
 
@@ -95,10 +100,10 @@ An /IOTCONNECT account with AWS backend is required.  If you need to create an a
 See the /IOTCONNECT [Subscription Information](https://github.com/avnet-iotconnect/avnet-iotconnect.github.io/blob/main/documentation/iotconnect/subscription/subscription.md) for more details on the trial including message limits.
 
 ## 6. Create a Device Template in /IOTCONNECT
-A Device Template defines the characteristics of a piece of hardware include the telemetry the platform should expect to receive and any support commands.
+A Device Template defines the characteristics of a piece of hardware including the telemetry the platform should expect to receive and any support commands.
 * Download the premade device template [n6uvc_template.JSON](n6uvc_template.JSON?raw=1) (**MUST** Right-Click and "Save-As" to get the raw json file)
 * Log-in the [console.iotconnect.io](https://console.iotconnect.io/login) using the credentials received when registering. 
-* Import the template into your /IOTCONNECT instance. (A guide on [Importing a Device Template](https://github.com/avnet-iotconnect/avnet-iotconnect.github.io/blob/main/documentation/iotconnect/import_device_template.md) is available or for more information, please see the [/IOTCONNECT Documentation](https://docs.iotconnect.io/iotconnect/) website.)
+* Import a template into your /IOTCONNECT instance. `Devices -> Overview -> Import Template` or (Refer to [Importing a Device Template Guide](https://github.com/avnet-iotconnect/avnet-iotconnect.github.io/blob/main/documentation/iotconnect/import_device_template.md) and [/IOTCONNECT Documentation](https://docs.iotconnect.io/iotconnect/).)
 
 ## 7. Create a Device /IOTCONNECT
 1. Click the `Device` icon and the "Device" sub-menu
@@ -108,7 +113,7 @@ A Device Template defines the characteristics of a piece of hardware include the
 5. Select the template `n6uvc` from the template dropdown box
 6. Leave the Device Certificate as "Auto-generated"
 7. Click `Save & View`
-9. Click the link for `Connection Info` and then the icon in the top-right and save the file "MySTN6-certificates.zip" into your working directory. These certificates will be written to the PMOD in a subsequent section.
+8. `Downloading device certificate/key`: Click the link for `Connection Info` and then the icon in the top-right and save the file "MySTN6-certificates.zip" into your working directory. These certificates will be written to the PMOD in a subsequent section.
 
 ## 8. Obtain /IOTCONNECT Connection Info
 * The Company ID (`CPID`) and Environment (`ENV`) variables identifying your unique /IOTCONNECT account will be used to instruct the PMOD how to connect to the platform. This information is located in the `Settings` -> `Key Vault` section of the platform.

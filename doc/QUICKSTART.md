@@ -95,7 +95,7 @@ An /IOTCONNECT account with AWS backend is required.  If you need to create an a
 See the /IOTCONNECT [Subscription Information](https://github.com/avnet-iotconnect/avnet-iotconnect.github.io/blob/main/documentation/iotconnect/subscription/subscription.md) for more details on the trial including message limits.
 
 ## 6. Create a Device Template in /IOTCONNECT
-A Device Template defines the characteristics of a piece of hardware include the telemetry the platform should expect to receive and any support commands.
+A Device Template defines the characteristics of a piece of hardware including the telemetry the platform should expect to receive and any support commands.
 * Download the premade device template [n6uvc_template.JSON](n6uvc_template.JSON?raw=1) (**MUST** Right-Click and "Save-As" to get the raw json file)
 * Log-in the [console.iotconnect.io](https://console.iotconnect.io/login) using the credentials received when registering. 
 * Import the template into your /IOTCONNECT instance. (A guide on [Importing a Device Template](https://github.com/avnet-iotconnect/avnet-iotconnect.github.io/blob/main/documentation/iotconnect/import_device_template.md) is available or for more information, please see the [/IOTCONNECT Documentation](https://docs.iotconnect.io/iotconnect/) website.)

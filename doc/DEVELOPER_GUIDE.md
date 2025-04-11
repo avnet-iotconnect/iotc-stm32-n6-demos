@@ -19,7 +19,7 @@ Each project follows a similar setup process with slight variations for specific
 ---
 
 ## Prerequisites
-
+It's recommended to review the [QuickStart](QUICKSTART.md) guide before proceeding with this document.
 Before starting, ensure you have the following installed on your system:
 
 - **STM32CubeIDE** (latest version) - [Download here](https://www.st.com/en/development-tools/stm32cubeide.html)

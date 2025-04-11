@@ -1,4 +1,4 @@
-# Getting Started with STM32N6 AI Projects and IOTCONNECT
+# Getting Started with STM32N6 AI Projects and /IOTCONNECT
 
 ## Overview
 
@@ -14,7 +14,7 @@ This guide will help you set up, build, and run AI-based demos on the STM32N6 mi
 - **Person Detection** - Identifies and tracks people in a given scene.
 - **Pose Estimation with Advanced Tracking** - Expands upon basic pose estimation for improved movement tracking.
 
-Each project follows a similar setup process with slight variations for specific requirements. This guide will help you choose the right project and configure it with IOTCONNECT.
+Each project follows a similar setup process with slight variations for specific requirements. This guide will help you choose the right project and configure it with /IOTCONNECT.
 
 ---
 
@@ -108,9 +108,9 @@ Once these steps complete successfully, you’ll have the optimized model files 
 
 ---
 
-## Step 2: Clone the IOTCONNECT Repository
+## Step 2: Clone the /IOTCONNECT Repository
 
-Clone the Avnet IOTCONNECT repository to integrate IoT functionality:
+Clone the Avnet /IOTCONNECT repository to integrate IoT functionality:
 
 ```sh
 git clone https://github.com/avnet-iotconnect/iotc-stm32-n6-demos.git
@@ -174,7 +174,7 @@ Replace `<your_path>` with the actual extraction path.
 
 ---
 
-## Step 4: Configure IOTCONNECT Integration
+## Step 4: Configure /IOTCONNECT Integration
 
 In STM32CubeIDE:
 
@@ -205,7 +205,7 @@ To:
 ${ProjDirPath}/STM32CubeIDE/Middlewares/iotc-freertos-da16k-atcmd-lib
 ```
 
-- Replace/Add IOTCONNECT-specific files:
+- Replace/Add /IOTCONNECT-specific files:
   - Replace `main.c` with:
 ```bash
 iotc-stm32-n6-demos/Projects/<project_name>/STM32N6/Src/main.c

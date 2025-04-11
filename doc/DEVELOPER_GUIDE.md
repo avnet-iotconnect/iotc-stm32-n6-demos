@@ -1,4 +1,4 @@
-# Developer Guide for STM32N6 AI Projects and IoTConnect
+# Developer Guide for STM32N6 AI Projects and /IOTCONNECT
 
 ## Overview
 Using the Applications Examples from the [STM32N6 AI Ecosystem website](https://www.st.com/en/development-tools/stm32n6-ai.html), Getting started example codes
@@ -14,7 +14,7 @@ This guide will help you set up, build, and run AI-based demos on the STM32N6 mi
    - **UVC Object Detection**
 - n6-ai-pose-estim (1.0.0): RTOS-based application example for multi pose estimation with AI.
 
-Each project follows a similar setup process with slight variations for specific requirements. This guide will help you choose the right project and configure it with IoTConnect.
+Each project follows a similar setup process with slight variations for specific requirements. This guide will help you choose the right project and configure it with /IOTCONNECT.
 
 ---
 
@@ -57,9 +57,9 @@ This project builds upon the **Object Detection** model but instead of displayin
 
 ---
 
-## Step 2: Clone the IoTConnect Repository
+## Step 2: Clone the /IOTCONNECT Repository
 
-Clone the Avnet IoTConnect repository to integrate IoT functionality:
+Clone the Avnet /IOTCONNECT repository to integrate IoT functionality:
 
 ```sh
 git clone https://github.com/avnet-iotconnect/iotc-stm32-n6-demos.git
@@ -109,10 +109,10 @@ Proceed to the next step to open and configure the selected project in **STM32Cu
 
 ---
 
-## Step 4: Configure IoTConnect Integration
+## Step 4: Configure /IOTCONNECT Integration
 
-### 1. Clone and Add IoTConnect FreeRTOS Library
-Clone the IoTConnect FreeRTOS library and copy it into your project directory:
+### 1. Clone and Add /IOTCONNECT FreeRTOS Library
+Clone the /IOTCONNECT FreeRTOS library and copy it into your project directory:
 ```sh
 git clone https://github.com/avnet-iotconnect/iotc-freertos-da16k-atcmd-lib.git
 ```
@@ -165,19 +165,19 @@ For each project, replace the files below from the cloned iotc-stm32-n6-demos re
   ```
   <project_root>/STM32CubeIDE/Application/
   ```
-This completes the IoTConnect integration setup. Proceed to **Step 5** for flashing and testing the application!
+This completes the /IOTCONNECT integration setup. Proceed to **Step 5** for flashing and testing the application!
 
 
 ---
 
 
-## Step 5: Setting Up IoTConnect
+## Step 5: Setting Up /IOTCONNECT
 
-1. Create an **IoTConnect Device Template**:
+1. Create an **/IOTCONNECT Device Template**:
 
    - Follow the [QuickStart Guide 6](https://github.com/avnet-iotconnect/iotc-stm32-n6-demos/blob/main/doc/QUICKSTART.md#6-create-a-device-template-in-iotconnect).
 
-2. Create an **IoTConnect Device**:
+2. Create an **/IOTCONNECT Device**:
 
    - Follow the [QuickStart Guide 7,8](https://github.com/avnet-iotconnect/iotc-stm32-n6-demos/blob/main/doc/QUICKSTART.md#7-create-a-device-iotconnect).
 
@@ -210,7 +210,7 @@ To monitor logs, use a serial terminal (e.g., PuTTY, Tera Term) at **115200 baud
 
 - [STM32CubeIDE User Guide](https://www.st.com/resource/en/user_manual/um2609-getting-started-with-stm32cubeide-stmicroelectronics.pdf)
 - [STM32N6 Series Overview](https://www.st.com/en/microcontrollers-microprocessors/stm32n6-series.html)
-- [IoTConnect Documentation](https://developer.iotconnect.io/)
+- [/IOTCONNECT Documentation](https://developer.iotconnect.io/)
 
 ---
 
@@ -223,7 +223,7 @@ This project is licensed under the **STMicroelectronics License Agreement**. See
 ## Contributors
 
 - STMicroelectronics
-- Avnet IoTConnect Team
+- Avnet /IOTCONNECT Team
 
 For support, open an issue on [GitHub](https://github.com/avnet-iotconnect/iotc-stm32-n6-demos/issues).
 

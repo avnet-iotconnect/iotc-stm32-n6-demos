@@ -109,13 +109,14 @@ Once these steps complete successfully, you’ll have the optimized model files 
 ---
 
 ## Step 2: Clone the /IOTCONNECT Repository
-
-Clone the Avnet /IOTCONNECT repository to integrate IoT functionality:
-
+Clone the /IOTCONNECT FreeRTOS library and copy it into your project directory:
 ```sh
-git clone https://github.com/avnet-iotconnect/iotc-stm32-n6-demos.git
+git clone https://github.com/avnet-iotconnect/iotc-freertos-da16k-atcmd-lib.git
 ```
----
+Move the `iotc-freertos-da16k-atcmd-lib` folder into:
+```
+<project_root>/STM32CubeIDE/Middlewares/
+```
 
 ## Step 3: Open Project in STM32CubeIDE
 

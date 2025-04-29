@@ -74,8 +74,17 @@ The **AI Model** contains optimized model data for Neural-ART accelerator.
 * Click `Browse` and navigate to and select `network_data.hex` previously extracted.
 * Click `Start Programming` and wait until complete.
 #### 4.2.3 Program the Application
-The **Application** implements the core functionalities of the demo such as the AI inference and camera processing.  This is a custom signed image of the UVC application.
-* Click `Browse` and navigate to and select `uvc_signed.bin` previously extracted.
+The **Application** implements the core functionalities of the demo such as the AI inference and camera processing.  Below are the custom signed images of the N6 AI applications.
+
+[uvc](https://downloads.iotconnect.io/partners/st/demos/n6/x-cube-n6-ai-h264-usb-uvc_sign.bin)  
+[object-detection](https://downloads.iotconnect.io/partners/st/demos/n6/STM32N6_GettingStarted_ObjectDetection_sign.bin)  
+[image-classification](https://downloads.iotconnect.io/partners/st/demos/n6/STM32N6_GettingStarted_ImageClassification_sign.bin)  
+[hand-landmarks](https://downloads.iotconnect.io/partners/st/demos/n6/x-cube-n6-ai-hand-landmarks_sign.bin)  
+[pose-estimation](https://downloads.iotconnect.io/partners/st/demos/n6/STM32N6_GettingStarted_PoseEstimation_sign.bin)  
+[multi-pose-estimation](https://downloads.iotconnect.io/partners/st/demos/n6/x-cube-n6-ai-multi-pose-estimation_sign.bin)  
+[instance-segmentation](https://downloads.iotconnect.io/partners/st/demos/n6/STM32N6_GettingStarted_InstanceSegmentation_sign.bin)  
+[semantic-segmentation](https://downloads.iotconnect.io/partners/st/demos/n6/STM32N6_GettingStarted_SemanticSegmentation_sign.bin)
+* Click `Browse` and navigate to and select `application_signed.bin` previously extracted.
 * In the `Start Address` field, enter the following address:
 ```
 0x70100000

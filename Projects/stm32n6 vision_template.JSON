@@ -1,0 +1,340 @@
+{
+    "code": "n6vision",
+    "name": "stm32n6 vision",
+    "authType": 2,
+    "attributes": [
+        {
+            "name": "nb_detect",
+            "type": "INTEGER",
+            "description": "Number of detected objects",
+            "unit": "",
+            "aggregateTypes": []
+        },
+        {
+            "name": "class",
+            "type": "STRING",
+            "description": "Detected object class label",
+            "unit": "",
+            "aggregateTypes": []
+        },
+        {
+            "name": "classification",
+            "type": "STRING",
+            "description": "Detected object class label",
+            "unit": "",
+            "aggregateTypes": []
+        },
+        {
+            "name": "object_name",
+            "type": "STRING",
+            "description": "Detected object class label",
+            "unit": "",
+            "aggregateTypes": []
+        },
+        {
+            "name": "percentage",
+            "type": "DECIMAL",
+            "description": "Confidence of classification",
+            "unit": "%",
+            "aggregateTypes": []
+        },
+        {
+            "name": "conf",
+            "type": "DECIMAL",
+            "description": "Confidence of classification",
+            "unit": "%",
+            "aggregateTypes": []
+        },
+        {
+            "name": "inference",
+            "type": "INTEGER",
+            "description": "Inference time in ms",
+            "unit": "ms",
+            "aggregateTypes": []
+        },
+        {
+            "name": "FPS",
+            "type": "DECIMAL",
+            "description": "Frames per second",
+            "unit": "fps",
+            "aggregateTypes": []
+        },
+        {
+            "name": "cpu_load",
+            "type": "DECIMAL",
+            "description": "CPU load during inference",
+            "unit": "",
+            "aggregateTypes": []
+        },
+        {
+            "name": "box_x",
+            "type": "INTEGER",
+            "description": "Bounding box x-coordinate",
+            "unit": "",
+            "aggregateTypes": []
+        },
+        {
+            "name": "box_y",
+            "type": "INTEGER",
+            "description": "Bounding box y-coordinate",
+            "unit": "",
+            "aggregateTypes": []
+        },
+        {
+            "name": "box_w",
+            "type": "INTEGER",
+            "description": "Bounding box width",
+            "unit": "",
+            "aggregateTypes": []
+        },
+        {
+            "name": "box_h",
+            "type": "INTEGER",
+            "description": "Bounding box height",
+            "unit": "",
+            "aggregateTypes": []
+        },
+        {
+            "name": "highlight_area",
+            "type": "INTEGER",
+            "description": "Number of pixels in detected area",
+            "unit": "pixels",
+            "aggregateTypes": []
+        },
+        {
+            "name": "point1_x",
+            "type": "INTEGER",
+            "description": "X coordinate of point 1",
+            "unit": "",
+            "aggregateTypes": []
+        },
+        {
+            "name": "point1_y",
+            "type": "INTEGER",
+            "description": "Y coordinate of point 1",
+            "unit": "",
+            "aggregateTypes": []
+        },
+        {
+            "name": "point1_color",
+            "type": "STRING",
+            "description": "Color label of point 1",
+            "unit": "",
+            "aggregateTypes": []
+        },
+        {
+            "name": "point2_x",
+            "type": "INTEGER",
+            "description": "X coordinate of point 2",
+            "unit": "",
+            "aggregateTypes": []
+        },
+        {
+            "name": "point2_y",
+            "type": "INTEGER",
+            "description": "Y coordinate of point 2",
+            "unit": "",
+            "aggregateTypes": []
+        },
+        {
+            "name": "point2_color",
+            "type": "STRING",
+            "description": "Color label of point 2",
+            "unit": "",
+            "aggregateTypes": []
+        },
+        {
+            "name": "object1_name",
+            "type": "STRING",
+            "description": "",
+            "unit": "",
+            "aggregateTypes": []
+        },
+        {
+            "name": "object0_name",
+            "type": "STRING",
+            "description": "",
+            "unit": "",
+            "aggregateTypes": []
+        },
+        {
+            "name": "obj0_color1",
+            "type": "STRING",
+            "description": "",
+            "unit": "",
+            "aggregateTypes": []
+        },
+        {
+            "name": "obj0_color2",
+            "type": "STRING",
+            "description": "",
+            "unit": "",
+            "aggregateTypes": []
+        },
+        {
+            "name": "obj0_color3",
+            "type": "STRING",
+            "description": "",
+            "unit": "",
+            "aggregateTypes": []
+        },
+        {
+            "name": "obj0_color4",
+            "type": "STRING",
+            "description": "",
+            "unit": "",
+            "aggregateTypes": []
+        },
+        {
+            "name": "obj0_x1",
+            "type": "INTEGER",
+            "description": "",
+            "unit": "",
+            "aggregateTypes": []
+        },
+        {
+            "name": "obj0_y1",
+            "type": "INTEGER",
+            "description": "",
+            "unit": "",
+            "aggregateTypes": []
+        },
+        {
+            "name": "obj0_x2",
+            "type": "INTEGER",
+            "description": "",
+            "unit": "",
+            "aggregateTypes": []
+        },
+        {
+            "name": "obj0_y2",
+            "type": "INTEGER",
+            "description": "",
+            "unit": "",
+            "aggregateTypes": []
+        },
+        {
+            "name": "obj0_x3",
+            "type": "INTEGER",
+            "description": "",
+            "unit": "",
+            "aggregateTypes": []
+        },
+        {
+            "name": "obj0_y3",
+            "type": "INTEGER",
+            "description": "",
+            "unit": "",
+            "aggregateTypes": []
+        },
+        {
+            "name": "obj0_x4",
+            "type": "INTEGER",
+            "description": "",
+            "unit": "",
+            "aggregateTypes": []
+        },
+        {
+            "name": "obj0_y4",
+            "type": "INTEGER",
+            "description": "",
+            "unit": "",
+            "aggregateTypes": []
+        },
+        {
+            "name": "obj1_color1",
+            "type": "STRING",
+            "description": "",
+            "unit": "",
+            "aggregateTypes": []
+        },
+        {
+            "name": "obj1_color2",
+            "type": "STRING",
+            "description": "",
+            "unit": "",
+            "aggregateTypes": []
+        },
+        {
+            "name": "obj1_color3",
+            "type": "STRING",
+            "description": "",
+            "unit": "",
+            "aggregateTypes": []
+        },
+        {
+            "name": "obj1_color4",
+            "type": "STRING",
+            "description": "",
+            "unit": "",
+            "aggregateTypes": []
+        },
+        {
+            "name": "obj1_x1",
+            "type": "INTEGER",
+            "description": "",
+            "unit": "",
+            "aggregateTypes": []
+        },
+        {
+            "name": "obj1_y1",
+            "type": "INTEGER",
+            "description": "",
+            "unit": "",
+            "aggregateTypes": []
+        },
+        {
+            "name": "obj1_x2",
+            "type": "INTEGER",
+            "description": "",
+            "unit": "",
+            "aggregateTypes": []
+        },
+        {
+            "name": "obj1_y2",
+            "type": "INTEGER",
+            "description": "",
+            "unit": "",
+            "aggregateTypes": []
+        },
+        {
+            "name": "obj1_x3",
+            "type": "INTEGER",
+            "description": "",
+            "unit": "",
+            "aggregateTypes": []
+        },
+        {
+            "name": "obj1_y3",
+            "type": "INTEGER",
+            "description": "",
+            "unit": "",
+            "aggregateTypes": []
+        },
+        {
+            "name": "obj1_x4",
+            "type": "INTEGER",
+            "description": "",
+            "unit": "",
+            "aggregateTypes": []
+        },
+        {
+            "name": "obj1_y4",
+            "type": "INTEGER",
+            "description": "",
+            "unit": "",
+            "aggregateTypes": []
+        }
+    ],
+    "messageVersion": "2.1",
+    "msgCode": "XG4EIPD",
+    "capability": "0",
+    "properties": {
+        "description": null,
+        "dataFrequency": "5",
+        "fileSupport": false
+    },
+    "_meta": {
+        "version": "2.0"
+    }
+}

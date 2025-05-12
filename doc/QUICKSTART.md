@@ -76,14 +76,14 @@ The **AI Model** contains optimized model data for Neural-ART accelerator.
 #### 4.2.3 Program the Application
 The **Application** implements the core functionalities of the demo such as the AI inference and camera processing.  Below are the custom signed images of the N6 AI applications.
 
-[uvc](https://downloads.iotconnect.io/partners/st/demos/n6/x-cube-n6-ai-h264-usb-uvc_sign.bin)  
-[object-detection](https://downloads.iotconnect.io/partners/st/demos/n6/STM32N6_GettingStarted_ObjectDetection_sign.bin)  
-[image-classification](https://downloads.iotconnect.io/partners/st/demos/n6/STM32N6_GettingStarted_ImageClassification_sign.bin)  
-[hand-landmarks](https://downloads.iotconnect.io/partners/st/demos/n6/x-cube-n6-ai-hand-landmarks_sign.bin)  
-[pose-estimation](https://downloads.iotconnect.io/partners/st/demos/n6/STM32N6_GettingStarted_PoseEstimation_sign.bin)  
-[multi-pose-estimation](https://downloads.iotconnect.io/partners/st/demos/n6/x-cube-n6-ai-multi-pose-estimation_sign.bin)  
-[instance-segmentation](https://downloads.iotconnect.io/partners/st/demos/n6/STM32N6_GettingStarted_InstanceSegmentation_sign.bin)  
-[semantic-segmentation](https://downloads.iotconnect.io/partners/st/demos/n6/STM32N6_GettingStarted_SemanticSegmentation_sign.bin)
+[uvc](https://downloads.iotconnect.io/partners/st/demos/n6/uvc.zip)  
+[object-detection](https://downloads.iotconnect.io/partners/st/demos/n6/object-detection.zip)  
+[image-classification](https://downloads.iotconnect.io/partners/st/demos/n6/image-classification.zip)  
+[pose-estimation](https://downloads.iotconnect.io/partners/st/demos/n6/pose-estimation.zip)    
+[multi-pose-estimation](https://downloads.iotconnect.io/partners/st/demos/n6/multi-pose-estimation.zip)  
+[hand-landmarks](https://downloads.iotconnect.io/partners/st/demos/n6/hand-landmarks.zip)  
+[instance-segmentation](https://downloads.iotconnect.io/partners/st/demos/n6/instance-segmentation.zip)  
+[semantic-segmentation](https://downloads.iotconnect.io/partners/st/demos/n6/semantic-segmentation.zip)
 * Click `Browse` and navigate to and select `application_signed.bin` previously extracted.
 * In the `Start Address` field, enter the following address:
 ```

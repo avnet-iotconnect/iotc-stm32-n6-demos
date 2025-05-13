@@ -37,8 +37,16 @@ This guide has been written and tested with the hardware and software listed bel
 ### Software
 * A serial terminal application such as [Tera Term](https://sourceforge.net/projects/tera-term/) (Recommended) or a browser-based version such as [Google Chrome Labs Serial Terminal](https://googlechromelabs.github.io/serial-terminal/)
 * Download and Install the latest [STM32CubeProgrammer](https://www.st.com/en/development-tools/stm32cubeprog.html) (A free [MyST](https://my.st.com/cas/login) account is required to download)
-* Download and unzip the pre-compiled firmware [n6uvc-binary.zip](https://downloads.iotconnect.io/partners/st/demos/uvc/n6uvc-binary.zip) to a location near the root of your drive.
 * A multimedia player that supports the video stream from the N6 camera module. A player that has all the necessary codecs, and works out-of-the-box is [POT Player](https://potplayer.daum.net/). Other multimedia players may work as well.
+* Download and unzip the one or more of the following packages that contain the bootloader, AI model and application binaries:
+  * [uvc](https://downloads.iotconnect.io/partners/st/demos/n6/uvc.zip)  
+  * [object-detection](https://downloads.iotconnect.io/partners/st/demos/n6/object-detection.zip)  
+  * [image-classification](https://downloads.iotconnect.io/partners/st/demos/n6/image-classification.zip)  
+  * [pose-estimation](https://downloads.iotconnect.io/partners/st/demos/n6/pose-estimation.zip)    
+  * [multi-pose-estimation](https://downloads.iotconnect.io/partners/st/demos/n6/multi-pose-estimation.zip)  
+  * [hand-landmarks](https://downloads.iotconnect.io/partners/st/demos/n6/hand-landmarks.zip)  
+  * [instance-segmentation](https://downloads.iotconnect.io/partners/st/demos/n6/instance-segmentation.zip)  
+  * [semantic-segmentation](https://downloads.iotconnect.io/partners/st/demos/n6/semantic-segmentation.zip)
 
 ## 3. STM32N6 Hardware Setup
 <details>
@@ -74,17 +82,8 @@ The **AI Model** contains optimized model data for Neural-ART accelerator.
 * Click `Browse` and navigate to and select `network_data.hex` previously extracted.
 * Click `Start Programming` and wait until complete.
 #### 4.2.3 Program the Application
-The **Application** implements the core functionalities of the demo such as the AI inference and camera processing.  Below are the custom signed images of the N6 AI applications.
-
-[uvc](https://downloads.iotconnect.io/partners/st/demos/n6/uvc.zip)  
-[object-detection](https://downloads.iotconnect.io/partners/st/demos/n6/object-detection.zip)  
-[image-classification](https://downloads.iotconnect.io/partners/st/demos/n6/image-classification.zip)  
-[pose-estimation](https://downloads.iotconnect.io/partners/st/demos/n6/pose-estimation.zip)    
-[multi-pose-estimation](https://downloads.iotconnect.io/partners/st/demos/n6/multi-pose-estimation.zip)  
-[hand-landmarks](https://downloads.iotconnect.io/partners/st/demos/n6/hand-landmarks.zip)  
-[instance-segmentation](https://downloads.iotconnect.io/partners/st/demos/n6/instance-segmentation.zip)  
-[semantic-segmentation](https://downloads.iotconnect.io/partners/st/demos/n6/semantic-segmentation.zip)
-* Click `Browse` and navigate to and select `application_signed.bin` previously extracted.
+The **Application** implements the core functionalities of the demo such as the AI inference and camera processing.
+* Click `Browse` and navigate to and select `xxxxxxxx_sign.bin` associated with the model of interest that was previously extracted.
 * In the `Start Address` field, enter the following address:
 ```
 0x70100000

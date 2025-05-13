@@ -1,0 +1,1093 @@
+{
+    "ddType": 2,
+    "items": [
+        {
+            "widgetGuid": "6FEFF6B7-15C4-4095-A156-87A1B38D2FF5",
+            "widgetProperties": {
+                "i": "Transformation",
+                "background": "#ffffff",
+                "fontColor": "#ffffff",
+                "fontFamily": "Proxima Nova",
+                "fontSize": "10",
+                "title": "gesture",
+                "titleAlign": "",
+                "contents": {
+                    "Transformation": {
+                        "device": {
+                            "deviceGuid": "3D3EAD50-5247-4D9A-95D4-5F8EBF5C1478",
+                            "deviceUniqueId": "mclN6click"
+                        },
+                        "attributes": {
+                            "attribute": [
+                                {
+                                    "attributeGuid": "87ACFA7B-22B0-4DA2-B394-7F4A8A074C73",
+                                    "attributeName": "cpu",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "30.01",
+                                    "deviceUpdatedDate": "2025-04-24T23:54:20.060Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "30.01"
+                                },
+                                {
+                                    "attributeGuid": "B7A89AF6-7999-4DD3-8A89-0C55883A60FF",
+                                    "attributeName": "nn_fps",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "29.18",
+                                    "deviceUpdatedDate": "2025-04-24T23:54:20.060Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "29.18"
+                                },
+                                {
+                                    "attributeGuid": "C307BFDA-D9A7-41A3-88B8-81945158E4B3",
+                                    "attributeName": "nn_period",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "34.27",
+                                    "deviceUpdatedDate": "2025-04-24T23:54:20.060Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "34.27"
+                                },
+                                {
+                                    "attributeGuid": "71EAAACF-E56E-438E-B9B2-85899FE4E42A",
+                                    "attributeName": "inf_time",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "25.00",
+                                    "deviceUpdatedDate": "2025-04-24T23:54:20.060Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "25.00"
+                                },
+                                {
+                                    "attributeGuid": "4C5DEFF6-B865-4166-8ECC-64F375699E9B",
+                                    "attributeName": "hl_time",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "0.00",
+                                    "deviceUpdatedDate": "2025-04-24T23:54:20.060Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "0.00"
+                                },
+                                {
+                                    "attributeGuid": "261B199A-A7D3-48DD-A869-FF6CF7FB4736",
+                                    "attributeName": "disp_time",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "3.00",
+                                    "deviceUpdatedDate": "2025-04-24T23:54:20.060Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "3.00"
+                                },
+                                {
+                                    "attributeGuid": "FBBBB751-E924-4AFB-86A4-CF59603600F0",
+                                    "attributeName": "nb_detect",
+                                    "checked": "false",
+                                    "dataType": "INTEGER",
+                                    "attributeLatestValue": "0",
+                                    "deviceUpdatedDate": "2025-04-24T23:54:21.057Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "0"
+                                },
+                                {
+                                    "attributeGuid": "5EB9D317-F087-4DA0-B257-8A9C798F26EA",
+                                    "attributeName": "conf",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "0.00",
+                                    "deviceUpdatedDate": "2025-04-24T23:54:21.057Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "0.00"
+                                },
+                                {
+                                    "attributeGuid": "D1BCBDB9-515D-43EE-826A-C1095B7BD621",
+                                    "attributeName": "hand_valid",
+                                    "checked": "false",
+                                    "dataType": "INTEGER",
+                                    "attributeLatestValue": "0",
+                                    "deviceUpdatedDate": "2025-04-24T23:54:21.057Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "0"
+                                },
+                                {
+                                    "attributeGuid": "EF56B4D3-5061-4B1B-A28E-252F26B868CB",
+                                    "attributeName": "hand_x",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "365.84",
+                                    "deviceUpdatedDate": "2025-04-24T23:54:21.057Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "365.84"
+                                },
+                                {
+                                    "attributeGuid": "474F82AC-60B0-4B93-A92D-5E935F094F75",
+                                    "attributeName": "hand_y",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "348.35",
+                                    "deviceUpdatedDate": "2025-04-24T23:54:21.057Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "348.35"
+                                },
+                                {
+                                    "attributeGuid": "5AFA9E6C-FD6D-4F98-9A6E-4E8BA55BB5CE",
+                                    "attributeName": "hand_width",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "227.37",
+                                    "deviceUpdatedDate": "2025-04-24T23:54:21.057Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "227.37"
+                                },
+                                {
+                                    "attributeGuid": "0F9E6772-14A0-47DD-9743-97F943F16065",
+                                    "attributeName": "hand_height",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "227.37",
+                                    "deviceUpdatedDate": "2025-04-24T23:54:21.057Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "227.37"
+                                },
+                                {
+                                    "attributeGuid": "66133180-DADB-4CBB-B068-CA0BDD3D9A12",
+                                    "attributeName": "hand_rotation",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "0.00",
+                                    "deviceUpdatedDate": "2025-02-08T04:02:54.910Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "0.00"
+                                },
+                                {
+                                    "attributeGuid": "9577AC41-8E33-476C-8D13-01CEAA62CF4F",
+                                    "attributeName": "wrist_x",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "0.32",
+                                    "deviceUpdatedDate": "2025-02-09T23:09:26.490Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "0.32"
+                                },
+                                {
+                                    "attributeGuid": "6BCCD4A7-AE9F-4CC2-88F0-BC33F0C7DF50",
+                                    "attributeName": "wrist_y",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "0.82",
+                                    "deviceUpdatedDate": "2025-02-09T23:09:26.490Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "0.82"
+                                },
+                                {
+                                    "attributeGuid": "0338D0B8-1CC7-41E4-813E-884709090E2A",
+                                    "attributeName": "thumb_mcp_x",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "0.67",
+                                    "deviceUpdatedDate": "2025-02-09T22:50:43.080Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "0.67"
+                                },
+                                {
+                                    "attributeGuid": "034105AD-886E-41AD-A85A-BF32A213F8C2",
+                                    "attributeName": "thumb_mcp_y",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "0.63",
+                                    "deviceUpdatedDate": "2025-02-09T22:50:43.080Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "0.63"
+                                },
+                                {
+                                    "attributeGuid": "6820BC26-3CC6-4275-9F50-AF47B5FD8E45",
+                                    "attributeName": "index_tip_x",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "0.20",
+                                    "deviceUpdatedDate": "2025-02-09T23:07:31.453Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "0.20"
+                                },
+                                {
+                                    "attributeGuid": "BAC4F974-9298-4B19-8104-F7210B009954",
+                                    "attributeName": "index_tip_y",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "0.52",
+                                    "deviceUpdatedDate": "2025-02-09T23:07:31.453Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "0.52"
+                                },
+                                {
+                                    "attributeGuid": "D0F8F7E6-6DA9-43DC-91DE-C4B5F68F26C8",
+                                    "attributeName": "middle_tip_x",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "0.48",
+                                    "deviceUpdatedDate": "2025-02-09T22:57:27.157Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "0.48"
+                                },
+                                {
+                                    "attributeGuid": "7EA5C446-6710-412A-98B0-00DDC9097E6D",
+                                    "attributeName": "middle_tip_y",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "0.31",
+                                    "deviceUpdatedDate": "2025-02-09T22:57:27.157Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "0.31"
+                                },
+                                {
+                                    "attributeGuid": "E244E1A0-BFA3-43F9-A875-996A083A94D6",
+                                    "attributeName": "ring_tip_x",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "0.28",
+                                    "deviceUpdatedDate": "2025-02-09T22:45:46.920Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "0.28"
+                                },
+                                {
+                                    "attributeGuid": "E46E32C1-32EA-4DEC-9C47-A66E66B38C2F",
+                                    "attributeName": "ring_tip_y",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "0.32",
+                                    "deviceUpdatedDate": "2025-02-09T22:45:46.920Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "0.32"
+                                },
+                                {
+                                    "attributeGuid": "191A34D2-EBAD-4E0D-B7F7-B5F4E33CA0A6",
+                                    "attributeName": "pinky_tip_x",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "0.55",
+                                    "deviceUpdatedDate": "2025-02-09T23:06:05.423Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "0.55"
+                                },
+                                {
+                                    "attributeGuid": "27F61747-8B7B-4142-8843-0449DE8F7169",
+                                    "attributeName": "pinky_tip_y",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "0.29",
+                                    "deviceUpdatedDate": "2025-02-09T23:06:05.423Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "0.29"
+                                },
+                                {
+                                    "attributeGuid": "12968DE0-D7FE-487B-A581-69DB33A91BC6",
+                                    "attributeName": "classification",
+                                    "checked": "true",
+                                    "dataType": "STRING",
+                                    "attributeLatestValue": "No_Hand",
+                                    "deviceUpdatedDate": "2025-04-24T23:54:19.100Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "No_Hand"
+                                }
+                            ]
+                        },
+                        "key": "Transformation",
+                        "transformations": [
+                            {
+                                "condition": "eq",
+                                "conditionValue": "No_Hand",
+                                "type": "Url",
+                                "errors": "",
+                                "typeValue": "https://saleshosted.z13.web.core.windows.net/demo/st/gestures/none.png"
+                            },
+                            {
+                                "condition": "eq",
+                                "conditionValue": "Fist",
+                                "type": "Url",
+                                "errors": "",
+                                "typeValue": "https://saleshosted.z13.web.core.windows.net/demo/st/gestures/fist.png"
+                            },
+                            {
+                                "condition": "eq",
+                                "conditionValue": "Open_Hand",
+                                "type": "Url",
+                                "errors": "",
+                                "typeValue": "https://saleshosted.z13.web.core.windows.net/demo/st/gestures/thumbsup.png"
+                            },
+                            {
+                                "condition": "eq",
+                                "conditionValue": "Thumbs_Down",
+                                "type": "Url",
+                                "errors": "",
+                                "typeValue": "https://saleshosted.z13.web.core.windows.net/demo/st/gestures/thumbsdown.png"
+                            },
+                            {
+                                "condition": "eq",
+                                "conditionValue": "Thumbs_Up",
+                                "type": "Url",
+                                "errors": "",
+                                "typeValue": "https://saleshosted.z13.web.core.windows.net/demo/st/gestures/thumbsup.png"
+                            },
+                            {
+                                "condition": "ne",
+                                "conditionValue": "Thumbs_Down",
+                                "type": "Url",
+                                "errors": "",
+                                "typeValue": "https://saleshosted.z13.web.core.windows.net/demo/st/gestures/none.png"
+                            }
+                        ],
+                        "position": "center"
+                    }
+                }
+            },
+            "properties": {
+                "x": "0",
+                "y": "0",
+                "w": "21",
+                "h": "13",
+                "i": "Transformation",
+                "minW": "7",
+                "minH": "4",
+                "isStatic": "false"
+            }
+        },
+        {
+            "widgetGuid": "F7979C1B-8637-4667-90A2-6961052C6E21",
+            "widgetProperties": {
+                "i": "Live",
+                "background": "#ffffff",
+                "fontColor": "#000000",
+                "fontFamily": "Proxima Nova",
+                "fontSize": "18",
+                "title": "Classification",
+                "titleAlign": "",
+                "contents": {
+                    "attributeValue": {
+                        "attributeName": "classification",
+                        "key": "attributeValue"
+                    },
+                    "attributeTime": {
+                        "attributeName": "classification",
+                        "key": "attributeTime"
+                    },
+                    "live": {
+                        "device": {
+                            "deviceGuid": "3D3EAD50-5247-4D9A-95D4-5F8EBF5C1478",
+                            "deviceUniqueId": "mclN6click"
+                        },
+                        "attributes": {
+                            "attribute": [
+                                {
+                                    "attributeGuid": "87ACFA7B-22B0-4DA2-B394-7F4A8A074C73",
+                                    "attributeName": "cpu",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "29.13",
+                                    "deviceUpdatedDate": "2025-02-08T04:02:02.897Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "29.13"
+                                },
+                                {
+                                    "attributeGuid": "B7A89AF6-7999-4DD3-8A89-0C55883A60FF",
+                                    "attributeName": "nn_fps",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "24.21",
+                                    "deviceUpdatedDate": "2025-02-08T04:02:02.897Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "24.21"
+                                },
+                                {
+                                    "attributeGuid": "C307BFDA-D9A7-41A3-88B8-81945158E4B3",
+                                    "attributeName": "nn_period",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "41.31",
+                                    "deviceUpdatedDate": "2025-02-08T04:02:02.897Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "41.31"
+                                },
+                                {
+                                    "attributeGuid": "71EAAACF-E56E-438E-B9B2-85899FE4E42A",
+                                    "attributeName": "inf_time",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "25.00",
+                                    "deviceUpdatedDate": "2025-02-08T04:02:02.897Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "25.00"
+                                },
+                                {
+                                    "attributeGuid": "4C5DEFF6-B865-4166-8ECC-64F375699E9B",
+                                    "attributeName": "hl_time",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "0.00",
+                                    "deviceUpdatedDate": "2025-02-08T04:02:02.897Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "0.00"
+                                },
+                                {
+                                    "attributeGuid": "261B199A-A7D3-48DD-A869-FF6CF7FB4736",
+                                    "attributeName": "disp_time",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "4.00",
+                                    "deviceUpdatedDate": "2025-02-08T04:02:02.897Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "4.00"
+                                },
+                                {
+                                    "attributeGuid": "FBBBB751-E924-4AFB-86A4-CF59603600F0",
+                                    "attributeName": "nb_detect",
+                                    "checked": "false",
+                                    "dataType": "INTEGER",
+                                    "attributeLatestValue": "0",
+                                    "deviceUpdatedDate": "2025-04-23T23:52:21.667Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "0"
+                                },
+                                {
+                                    "attributeGuid": "5EB9D317-F087-4DA0-B257-8A9C798F26EA",
+                                    "attributeName": "conf",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "30",
+                                    "deviceUpdatedDate": "2025-04-23T23:52:21.667Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "30"
+                                },
+                                {
+                                    "attributeGuid": "D1BCBDB9-515D-43EE-826A-C1095B7BD621",
+                                    "attributeName": "hand_valid",
+                                    "checked": "false",
+                                    "dataType": "INTEGER",
+                                    "attributeLatestValue": "0",
+                                    "deviceUpdatedDate": "2025-02-08T03:07:12.260Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "0"
+                                },
+                                {
+                                    "attributeGuid": "EF56B4D3-5061-4B1B-A28E-252F26B868CB",
+                                    "attributeName": "hand_x",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "424.77",
+                                    "deviceUpdatedDate": "2025-02-08T03:07:12.260Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "424.77"
+                                },
+                                {
+                                    "attributeGuid": "474F82AC-60B0-4B93-A92D-5E935F094F75",
+                                    "attributeName": "hand_y",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "324.96",
+                                    "deviceUpdatedDate": "2025-02-08T03:07:12.260Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "324.96"
+                                },
+                                {
+                                    "attributeGuid": "5AFA9E6C-FD6D-4F98-9A6E-4E8BA55BB5CE",
+                                    "attributeName": "hand_width",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "392.23",
+                                    "deviceUpdatedDate": "2025-02-08T03:07:12.260Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "392.23"
+                                },
+                                {
+                                    "attributeGuid": "0F9E6772-14A0-47DD-9743-97F943F16065",
+                                    "attributeName": "hand_height",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "392.23",
+                                    "deviceUpdatedDate": "2025-02-08T03:07:12.260Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "392.23"
+                                },
+                                {
+                                    "attributeGuid": "66133180-DADB-4CBB-B068-CA0BDD3D9A12",
+                                    "attributeName": "hand_rotation",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "0.00",
+                                    "deviceUpdatedDate": "2025-02-08T04:02:54.910Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "0.00"
+                                },
+                                {
+                                    "attributeGuid": "9577AC41-8E33-476C-8D13-01CEAA62CF4F",
+                                    "attributeName": "wrist_x",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "0.32",
+                                    "deviceUpdatedDate": "2025-02-09T23:09:26.490Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "0.32"
+                                },
+                                {
+                                    "attributeGuid": "6BCCD4A7-AE9F-4CC2-88F0-BC33F0C7DF50",
+                                    "attributeName": "wrist_y",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "0.82",
+                                    "deviceUpdatedDate": "2025-02-09T23:09:26.490Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "0.82"
+                                },
+                                {
+                                    "attributeGuid": "0338D0B8-1CC7-41E4-813E-884709090E2A",
+                                    "attributeName": "thumb_mcp_x",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "0.67",
+                                    "deviceUpdatedDate": "2025-02-09T22:50:43.080Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "0.67"
+                                },
+                                {
+                                    "attributeGuid": "034105AD-886E-41AD-A85A-BF32A213F8C2",
+                                    "attributeName": "thumb_mcp_y",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "0.63",
+                                    "deviceUpdatedDate": "2025-02-09T22:50:43.080Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "0.63"
+                                },
+                                {
+                                    "attributeGuid": "6820BC26-3CC6-4275-9F50-AF47B5FD8E45",
+                                    "attributeName": "index_tip_x",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "0.20",
+                                    "deviceUpdatedDate": "2025-02-09T23:07:31.453Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "0.20"
+                                },
+                                {
+                                    "attributeGuid": "BAC4F974-9298-4B19-8104-F7210B009954",
+                                    "attributeName": "index_tip_y",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "0.52",
+                                    "deviceUpdatedDate": "2025-02-09T23:07:31.453Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "0.52"
+                                },
+                                {
+                                    "attributeGuid": "D0F8F7E6-6DA9-43DC-91DE-C4B5F68F26C8",
+                                    "attributeName": "middle_tip_x",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "0.48",
+                                    "deviceUpdatedDate": "2025-02-09T22:57:27.157Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "0.48"
+                                },
+                                {
+                                    "attributeGuid": "7EA5C446-6710-412A-98B0-00DDC9097E6D",
+                                    "attributeName": "middle_tip_y",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "0.31",
+                                    "deviceUpdatedDate": "2025-02-09T22:57:27.157Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "0.31"
+                                },
+                                {
+                                    "attributeGuid": "E244E1A0-BFA3-43F9-A875-996A083A94D6",
+                                    "attributeName": "ring_tip_x",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "0.28",
+                                    "deviceUpdatedDate": "2025-02-09T22:45:46.920Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "0.28"
+                                },
+                                {
+                                    "attributeGuid": "E46E32C1-32EA-4DEC-9C47-A66E66B38C2F",
+                                    "attributeName": "ring_tip_y",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "0.32",
+                                    "deviceUpdatedDate": "2025-02-09T22:45:46.920Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "0.32"
+                                },
+                                {
+                                    "attributeGuid": "191A34D2-EBAD-4E0D-B7F7-B5F4E33CA0A6",
+                                    "attributeName": "pinky_tip_x",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "0.55",
+                                    "deviceUpdatedDate": "2025-02-09T23:06:05.423Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "0.55"
+                                },
+                                {
+                                    "attributeGuid": "27F61747-8B7B-4142-8843-0449DE8F7169",
+                                    "attributeName": "pinky_tip_y",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "0.29",
+                                    "deviceUpdatedDate": "2025-02-09T23:06:05.423Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "0.29"
+                                },
+                                {
+                                    "attributeGuid": "12968DE0-D7FE-487B-A581-69DB33A91BC6",
+                                    "attributeName": "classification",
+                                    "checked": "true",
+                                    "dataType": "STRING",
+                                    "attributeLatestValue": "No Hand",
+                                    "deviceUpdatedDate": "2025-04-24T23:23:15.727Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "No Hand"
+                                }
+                            ]
+                        },
+                        "rules": "",
+                        "key": "live"
+                    }
+                }
+            },
+            "properties": {
+                "x": "21",
+                "y": "0",
+                "w": "7",
+                "h": "4",
+                "i": "Live",
+                "minW": "7",
+                "minH": "4",
+                "maxH": "4",
+                "isStatic": "false"
+            }
+        },
+        {
+            "widgetGuid": "6A7BB4C8-1763-41EB-A490-0764F72A527F",
+            "widgetProperties": {
+                "i": "DeviceLatestValue",
+                "background": "#fff",
+                "fontColor": "#343434",
+                "fontFamily": "Proxima Nova",
+                "fontSize": "18",
+                "title": "Device Latest Value",
+                "titleAlign": "",
+                "contents": {
+                    "devicelatestvalue": {
+                        "device": {
+                            "deviceGuid": "3D3EAD50-5247-4D9A-95D4-5F8EBF5C1478",
+                            "deviceUniqueId": "mclN6click"
+                        },
+                        "boxtypes": "3",
+                        "attributes": {
+                            "attribute": [
+                                {
+                                    "attributeGuid": "nn_fps",
+                                    "attributeName": "nn_fps"
+                                },
+                                {
+                                    "attributeGuid": "conf",
+                                    "attributeName": "conf"
+                                },
+                                {
+                                    "attributeGuid": "cpu",
+                                    "attributeName": "cpu"
+                                },
+                                {
+                                    "attributeGuid": "inf_time",
+                                    "attributeName": "inf_time"
+                                },
+                                {
+                                    "attributeGuid": "disp_time",
+                                    "attributeName": "disp_time"
+                                },
+                                {
+                                    "attributeGuid": "hand_valid",
+                                    "attributeName": "hand_valid"
+                                }
+                            ]
+                        },
+                        "key": "devicelatestvalue"
+                    }
+                }
+            },
+            "properties": {
+                "x": "33",
+                "y": "0",
+                "w": "15",
+                "h": "16",
+                "i": "DeviceLatestValue",
+                "minW": "15",
+                "minH": "16",
+                "maxH": "16",
+                "maxW": "15",
+                "isStatic": "false"
+            }
+        },
+        {
+            "widgetGuid": "54D7CC1A-AB35-499E-85D7-2BC3D17526B0",
+            "widgetProperties": {
+                "i": "pie",
+                "background": "#fff",
+                "fontColor": "#343434",
+                "fontFamily": "Proxima Nova",
+                "fontSize": "18",
+                "title": "Pie Chart",
+                "titleAlign": "",
+                "contents": {
+                    "pie": {
+                        "device": {
+                            "deviceGuid": "3D3EAD50-5247-4D9A-95D4-5F8EBF5C1478",
+                            "deviceUniqueId": "mclN6click"
+                        },
+                        "attributes": {
+                            "attribute": [
+                                {
+                                    "attributeGuid": "87ACFA7B-22B0-4DA2-B394-7F4A8A074C73",
+                                    "attributeName": "cpu",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "30.01",
+                                    "deviceUpdatedDate": "2025-04-24T23:54:20.060Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "30.01"
+                                },
+                                {
+                                    "attributeGuid": "B7A89AF6-7999-4DD3-8A89-0C55883A60FF",
+                                    "attributeName": "nn_fps",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "29.18",
+                                    "deviceUpdatedDate": "2025-04-24T23:54:20.060Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "29.18"
+                                },
+                                {
+                                    "attributeGuid": "C307BFDA-D9A7-41A3-88B8-81945158E4B3",
+                                    "attributeName": "nn_period",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "34.27",
+                                    "deviceUpdatedDate": "2025-04-24T23:54:20.060Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "34.27"
+                                },
+                                {
+                                    "attributeGuid": "71EAAACF-E56E-438E-B9B2-85899FE4E42A",
+                                    "attributeName": "inf_time",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "25.00",
+                                    "deviceUpdatedDate": "2025-04-24T23:54:20.060Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "25.00"
+                                },
+                                {
+                                    "attributeGuid": "4C5DEFF6-B865-4166-8ECC-64F375699E9B",
+                                    "attributeName": "hl_time",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "0.00",
+                                    "deviceUpdatedDate": "2025-04-24T23:54:20.060Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "0.00"
+                                },
+                                {
+                                    "attributeGuid": "261B199A-A7D3-48DD-A869-FF6CF7FB4736",
+                                    "attributeName": "disp_time",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "3.00",
+                                    "deviceUpdatedDate": "2025-04-24T23:54:20.060Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "3.00"
+                                },
+                                {
+                                    "attributeGuid": "FBBBB751-E924-4AFB-86A4-CF59603600F0",
+                                    "attributeName": "nb_detect",
+                                    "checked": "false",
+                                    "dataType": "INTEGER",
+                                    "attributeLatestValue": "0",
+                                    "deviceUpdatedDate": "2025-04-24T23:54:21.057Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "0"
+                                },
+                                {
+                                    "attributeGuid": "5EB9D317-F087-4DA0-B257-8A9C798F26EA",
+                                    "attributeName": "conf",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "0.00",
+                                    "deviceUpdatedDate": "2025-04-24T23:54:21.057Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "0.00"
+                                },
+                                {
+                                    "attributeGuid": "D1BCBDB9-515D-43EE-826A-C1095B7BD621",
+                                    "attributeName": "hand_valid",
+                                    "checked": "false",
+                                    "dataType": "INTEGER",
+                                    "attributeLatestValue": "0",
+                                    "deviceUpdatedDate": "2025-04-24T23:54:21.057Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "0"
+                                },
+                                {
+                                    "attributeGuid": "EF56B4D3-5061-4B1B-A28E-252F26B868CB",
+                                    "attributeName": "hand_x",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "365.84",
+                                    "deviceUpdatedDate": "2025-04-24T23:54:21.057Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "365.84"
+                                },
+                                {
+                                    "attributeGuid": "474F82AC-60B0-4B93-A92D-5E935F094F75",
+                                    "attributeName": "hand_y",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "348.35",
+                                    "deviceUpdatedDate": "2025-04-24T23:54:21.057Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "348.35"
+                                },
+                                {
+                                    "attributeGuid": "5AFA9E6C-FD6D-4F98-9A6E-4E8BA55BB5CE",
+                                    "attributeName": "hand_width",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "227.37",
+                                    "deviceUpdatedDate": "2025-04-24T23:54:21.057Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "227.37"
+                                },
+                                {
+                                    "attributeGuid": "0F9E6772-14A0-47DD-9743-97F943F16065",
+                                    "attributeName": "hand_height",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "227.37",
+                                    "deviceUpdatedDate": "2025-04-24T23:54:21.057Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "227.37"
+                                },
+                                {
+                                    "attributeGuid": "66133180-DADB-4CBB-B068-CA0BDD3D9A12",
+                                    "attributeName": "hand_rotation",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "0.00",
+                                    "deviceUpdatedDate": "2025-02-08T04:02:54.910Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "0.00"
+                                },
+                                {
+                                    "attributeGuid": "9577AC41-8E33-476C-8D13-01CEAA62CF4F",
+                                    "attributeName": "wrist_x",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "0.32",
+                                    "deviceUpdatedDate": "2025-02-09T23:09:26.490Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "0.32"
+                                },
+                                {
+                                    "attributeGuid": "6BCCD4A7-AE9F-4CC2-88F0-BC33F0C7DF50",
+                                    "attributeName": "wrist_y",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "0.82",
+                                    "deviceUpdatedDate": "2025-02-09T23:09:26.490Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "0.82"
+                                },
+                                {
+                                    "attributeGuid": "0338D0B8-1CC7-41E4-813E-884709090E2A",
+                                    "attributeName": "thumb_mcp_x",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "0.67",
+                                    "deviceUpdatedDate": "2025-02-09T22:50:43.080Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "0.67"
+                                },
+                                {
+                                    "attributeGuid": "034105AD-886E-41AD-A85A-BF32A213F8C2",
+                                    "attributeName": "thumb_mcp_y",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "0.63",
+                                    "deviceUpdatedDate": "2025-02-09T22:50:43.080Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "0.63"
+                                },
+                                {
+                                    "attributeGuid": "6820BC26-3CC6-4275-9F50-AF47B5FD8E45",
+                                    "attributeName": "index_tip_x",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "0.20",
+                                    "deviceUpdatedDate": "2025-02-09T23:07:31.453Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "0.20"
+                                },
+                                {
+                                    "attributeGuid": "BAC4F974-9298-4B19-8104-F7210B009954",
+                                    "attributeName": "index_tip_y",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "0.52",
+                                    "deviceUpdatedDate": "2025-02-09T23:07:31.453Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "0.52"
+                                },
+                                {
+                                    "attributeGuid": "D0F8F7E6-6DA9-43DC-91DE-C4B5F68F26C8",
+                                    "attributeName": "middle_tip_x",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "0.48",
+                                    "deviceUpdatedDate": "2025-02-09T22:57:27.157Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "0.48"
+                                },
+                                {
+                                    "attributeGuid": "7EA5C446-6710-412A-98B0-00DDC9097E6D",
+                                    "attributeName": "middle_tip_y",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "0.31",
+                                    "deviceUpdatedDate": "2025-02-09T22:57:27.157Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "0.31"
+                                },
+                                {
+                                    "attributeGuid": "E244E1A0-BFA3-43F9-A875-996A083A94D6",
+                                    "attributeName": "ring_tip_x",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "0.28",
+                                    "deviceUpdatedDate": "2025-02-09T22:45:46.920Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "0.28"
+                                },
+                                {
+                                    "attributeGuid": "E46E32C1-32EA-4DEC-9C47-A66E66B38C2F",
+                                    "attributeName": "ring_tip_y",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "0.32",
+                                    "deviceUpdatedDate": "2025-02-09T22:45:46.920Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "0.32"
+                                },
+                                {
+                                    "attributeGuid": "191A34D2-EBAD-4E0D-B7F7-B5F4E33CA0A6",
+                                    "attributeName": "pinky_tip_x",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "0.55",
+                                    "deviceUpdatedDate": "2025-02-09T23:06:05.423Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "0.55"
+                                },
+                                {
+                                    "attributeGuid": "27F61747-8B7B-4142-8843-0449DE8F7169",
+                                    "attributeName": "pinky_tip_y",
+                                    "checked": "false",
+                                    "dataType": "DECIMAL",
+                                    "attributeLatestValue": "0.29",
+                                    "deviceUpdatedDate": "2025-02-09T23:06:05.423Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "0.29"
+                                },
+                                {
+                                    "attributeGuid": "12968DE0-D7FE-487B-A581-69DB33A91BC6",
+                                    "attributeName": "classification",
+                                    "checked": "true",
+                                    "dataType": "STRING",
+                                    "attributeLatestValue": "No_Hand",
+                                    "deviceUpdatedDate": "2025-04-24T23:54:19.100Z",
+                                    "gatewayUpdatedDate": "NA",
+                                    "attributeValue": "No_Hand"
+                                }
+                            ]
+                        },
+                        "pieTime": "50",
+                        "key": "pie",
+                        "recentEndPoints": "10"
+                    }
+                }
+            },
+            "properties": {
+                "x": "0",
+                "y": "13",
+                "w": "10",
+                "h": "8",
+                "i": "pie",
+                "minW": "8",
+                "minH": "8",
+                "maxH": "12",
+                "maxW": "12",
+                "isStatic": "false"
+            }
+        },
+        {
+            "widgetGuid": "A8CB394D-15B1-42C9-94FC-AD7BDC599E2A",
+            "widgetProperties": {
+                "i": "Image",
+                "background": "#FFFFFF",
+                "fontColor": "#ffffff",
+                "fontFamily": "Proxima Nova",
+                "fontSize": "10",
+                "title": "",
+                "titleAlign": "",
+                "contents": {
+                    "option": {
+                        "imageUpload": "false",
+                        "imageUrl": "true",
+                        "imageDevice": "false",
+                        "imageTelemetry": "false",
+                        "key": "option",
+                        "position": "center"
+                    },
+                    "upload": {
+                        "imageurl": "",
+                        "key": "upload"
+                    },
+                    "url": {
+                        "imageurl": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Avnet_logo.svg/2560px-Avnet_logo.svg.png",
+                        "key": "url"
+                    },
+                    "device": {
+                        "deviceGuid": "",
+                        "deviceName": "",
+                        "imageurl": "",
+                        "key": "device"
+                    },
+                    "telemetry": {
+                        "deviceGuid": "",
+                        "deviceName": "",
+                        "imageurl": "",
+                        "key": "telemetry"
+                    }
+                }
+            },
+            "properties": {
+                "x": "10",
+                "y": "13",
+                "w": "11",
+                "h": "5",
+                "i": "Image",
+                "minW": "5",
+                "minH": "5",
+                "isStatic": "false"
+            }
+        }
+    ]
+}

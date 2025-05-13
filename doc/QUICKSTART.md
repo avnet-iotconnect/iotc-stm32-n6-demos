@@ -159,7 +159,7 @@ The multimedia player should now be displaying bounding boxes around any object 
 ## 11. Verify Data stream and Import a Dashboard
 
 * Switch back to the /IOTCONNECT browser window and verify the device status is displaying as `Connected`
-* Download the associated Dashboard Template from the `Projects` folder here: [Projects](Projects)
+* Download the associated Dashboard Template from the `Projects` folder here: [Projects](../Projects)
 * **Download** the template then select `Create Dashboard` from the top of the page
 * **Select** the `Import Dashboard` option and select `n6uvc` for **template** and `MySTN6` for **device** 
 * **Enter** a name (such as `MyN6 Demo Dashboard`) and complete the import

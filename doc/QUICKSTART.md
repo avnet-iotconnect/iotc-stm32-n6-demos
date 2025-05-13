@@ -109,7 +109,7 @@ See the /IOTCONNECT [Subscription Information](https://github.com/avnet-iotconne
 
 ## 6. Create a Device Template in /IOTCONNECT
 A Device Template defines the characteristics of a piece of hardware including the telemetry the platform should expect to receive and any support commands.
-* Download the premade device template [stm32n6_vision_device_template.json](Projects/stm32n6_vision_device_template.json?raw=1) (**MUST** Right-Click and "Save-As" to get the raw json file)
+* Download the premade device template [stm32n6_vision_device_template.json](../Projects/stm32n6_vision_device_template.json?raw=1) (**MUST** Right-Click and "Save-As" to get the raw json file)
 * Log-in the [console.iotconnect.io](https://console.iotconnect.io/login) using the credentials received when registering. 
 * Import a template into your /IOTCONNECT instance. `Devices -> Overview -> Import Template` or (Refer to [Importing a Device Template Guide](https://github.com/avnet-iotconnect/avnet-iotconnect.github.io/blob/main/documentation/iotconnect/import_device_template.md) and [/IOTCONNECT Documentation](https://docs.iotconnect.io/iotconnect/).)
 

@@ -109,7 +109,7 @@ See the /IOTCONNECT [Subscription Information](https://github.com/avnet-iotconne
 
 ## 6. Create a Device Template in /IOTCONNECT
 A Device Template defines the characteristics of a piece of hardware including the telemetry the platform should expect to receive and any support commands.
-* Download the premade device template [n6uvc_template.JSON](n6uvc_template.JSON?raw=1) (**MUST** Right-Click and "Save-As" to get the raw json file)
+* Download the premade device template [stm32n6_vision_device_template.json](Projects/stm32n6_vision_device_template.json?raw=1) (**MUST** Right-Click and "Save-As" to get the raw json file)
 * Log-in the [console.iotconnect.io](https://console.iotconnect.io/login) using the credentials received when registering. 
 * Import a template into your /IOTCONNECT instance. `Devices -> Overview -> Import Template` or (Refer to [Importing a Device Template Guide](https://github.com/avnet-iotconnect/avnet-iotconnect.github.io/blob/main/documentation/iotconnect/import_device_template.md) and [/IOTCONNECT Documentation](https://docs.iotconnect.io/iotconnect/).)
 
@@ -159,7 +159,7 @@ The multimedia player should now be displaying bounding boxes around any object 
 ## 11. Verify Data stream and Import a Dashboard
 
 * Switch back to the /IOTCONNECT browser window and verify the device status is displaying as `Connected`
-* Download the demo [Dashboard Template](STM32N6_UVC_Demo_dashboard.json?raw=1) (**must** Right-Click, Save As)
+* Download the associated Dashboard Template from the `Projects` folder here: [Projects](Projects)
 * **Download** the template then select `Create Dashboard` from the top of the page
 * **Select** the `Import Dashboard` option and select `n6uvc` for **template** and `MySTN6` for **device** 
 * **Enter** a name (such as `MyN6 Demo Dashboard`) and complete the import

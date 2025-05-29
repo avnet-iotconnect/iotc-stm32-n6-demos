@@ -45,7 +45,7 @@
 #endif
 
 #define MAX_NUMBER_OUTPUT 5
-#define IOTC_INTERVAL 3000
+#define IOTC_INTERVAL 5000
 
 typedef struct
 {
@@ -128,9 +128,10 @@ static void Display_WelcomeScreen(void);
 
 UART_HandleTypeDef huart2;
 extern da16k_err_t da16k_at_send_formatted_raw_no_crlf(const char *format, ...);
-int x[3] = {0};
-int y[3] = {0};
-int color[3] = {0};
+int x[13] = {0};
+int y[13] = {0};
+int color[13] = {0};
+char iotc_color_str[13][20] = {0};
 static uint32_t iotc_inference = 0;
 static uint32_t last_send_time = 0;
 
@@ -192,6 +193,26 @@ static void MX_USART2_UART_Init(void)
   }
 }
 
+static void convert_color_to_str(int input_color, char* color_str) {
+  if (input_color == 0) {
+	  return;
+  }
+  else if (input_color == COLOR_HEAD) {
+	  strcpy(color_str, "COLOR_HEAD_GREEN");
+  }
+  else if (input_color == COLOR_ARMS) {
+	  strcpy(color_str, "COLOR_ARMS_BLUE");
+  }
+  else if (input_color == COLOR_TRUNK) {
+	  strcpy(color_str, "COLOR_TRUNK_MAGENTA");
+  }
+  else if (input_color == COLOR_LEGS) {
+	  strcpy(color_str, "COLOR_LEGS_ORANGE");
+  }
+  else {
+	  strcpy(color_str, "UNKNOWN");
+  }
+}
 
 /**
   * @brief  Main program
@@ -345,10 +366,41 @@ int main(void)
     }
     last_send_time = current_time;
 
-    //only send data to iotconnect when at least two points showing up in order to avoid floating point data
-    if ( !((x[0] == 0 && y[0] == 0) || (x[1] == 0 && y[1] == 0)) ) {
-      printf("Sending the message to IOTCONNECT...\r\n");
-	  da16k_at_send_formatted_raw_no_crlf("AT+NWICMSG point1_x,%d,point1_y,%d,point1_color,%d,point2_x,%d,point2_y,%d,point2_color,%d,inference,%d\r\n",x[0], y[0], color[0], x[1], y[1], color[1], iotc_inference);
+    //only send data to iotconnect when at least three points showing up in order to avoid floating point data
+    if ( !((x[0] == 0 && y[0] == 0) || (x[1] == 0 && y[1] == 0) || (x[2] == 0 && y[2] == 0)) ) {
+      //printf("Sending the message to IOTCONNECT...\r\n");
+      for (int i = 0; i < 13; i++) {
+        convert_color_to_str(color[i], &iotc_color_str[i][0]);
+      }
+	  da16k_at_send_formatted_raw_no_crlf("AT+NWICMSG point1_x,%d,point1_y,%d,point1_color,%s,point2_x,%d,point2_y,%d,point2_color,%s,inference,%d\r\n",
+										   x[0], y[0], &iotc_color_str[0][0], x[1], y[1], &iotc_color_str[1][0], iotc_inference);
+
+	  if (!((x[2] == 0 && y[2] == 0) && (x[3] == 0 && y[3] == 0))) {
+		HAL_Delay(100);
+	    da16k_at_send_formatted_raw_no_crlf("AT+NWICMSG point3_x,%d,point3_y,%d,point3_color,%s,point4_x,%d,point4_y,%d,point4_color,%s\r\n",
+	  										   x[2], y[2], &iotc_color_str[2][0], x[3], y[3], &iotc_color_str[3][0]);
+	  }
+
+	  if (!((x[4] == 0 && y[4] == 0) && (x[5] == 0 && y[5] == 0))) {
+		HAL_Delay(100);
+	    da16k_at_send_formatted_raw_no_crlf("AT+NWICMSG point5_x,%d,point5_y,%d,point5_color,%s,point6_x,%d,point6_y,%d,point6_color,%s\r\n",
+	  										   x[4], y[4], &iotc_color_str[4][0], x[5], y[5], &iotc_color_str[5][0]);
+	  }
+	  if (!((x[6] == 0 && y[6] == 0) && (x[7] == 0 && y[7] == 0))) {
+		HAL_Delay(100);
+	    da16k_at_send_formatted_raw_no_crlf("AT+NWICMSG point7_x,%d,point7_y,%d,point7_color,%s,point8_x,%d,point8_y,%d,point8_color,%s\r\n",
+	  	  										   x[6], y[6], &iotc_color_str[6][0], x[7], y[7], &iotc_color_str[7][0]);
+	  }
+	  if (!((x[8] == 0 && y[8] == 0) && (x[9] == 0 && y[9] == 0))) {
+		HAL_Delay(100);
+	    da16k_at_send_formatted_raw_no_crlf("AT+NWICMSG point9_x,%d,point9_y,%d,point9_color,%s,point10_x,%d,point10_y,%d,point10_color,%s\r\n",
+	  	  	  										   x[8], y[8], &iotc_color_str[8][0], x[9], y[9], &iotc_color_str[9][0]);
+	  }
+	  if (!((x[10] == 0 && y[10] == 0) && (x[11] == 0 && y[11] == 0))) {
+		HAL_Delay(100);
+	    da16k_at_send_formatted_raw_no_crlf("AT+NWICMSG point11_x,%d,point11_y,%d,point11_color,%s,point12_x,%d,point12_y,%d,point12_color,%s\r\n",
+	  	  	  										   x[10], y[10], &iotc_color_str[10][0], x[11], y[11], &iotc_color_str[11][0]);
+	  }
     }
     //IOTCONNECT to receive C2D message
 	da16k_cmd_t current_cmd = {0};

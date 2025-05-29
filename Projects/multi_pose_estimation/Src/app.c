@@ -218,8 +218,41 @@ static TX_SEMAPHORE isp_sem;
 
 //IOTCONNECT
 extern da16k_err_t da16k_at_send_formatted_raw_no_crlf(const char *format, ...);
-static char object_name[30] = "";
+static char object0_name[30] = "";
+static char object1_name[30] = "";
 static uint32_t last_send_time = 0;
+
+int obj0_x[4] = {0};  //keypoints x coordinate
+int obj0_y[4] = {0};  //keypoints y coordinates
+int obj0_color[4] = {0};
+char obj0_color_str[4][20] = {0};
+
+int obj1_x[4] = {0};  //keypoints x coordinate
+int obj1_y[4] = {0};  //keypoints y coordinates
+int obj1_color[4] = {0};
+char obj1_color_str[4][20] = {0};
+
+
+static void convert_color_to_str(int input_color, char* color_str) {
+  if (input_color == 0) {
+	  return;
+  }
+  else if (input_color == COLOR_HEAD) {
+	  strcpy(color_str, "COLOR_HEAD_GREEN");
+  }
+  else if (input_color == COLOR_ARMS) {
+	  strcpy(color_str, "COLOR_ARMS_BLUE");
+  }
+  else if (input_color == COLOR_TRUNK) {
+	  strcpy(color_str, "COLOR_TRUNK_MAGENTA");
+  }
+  else if (input_color == COLOR_LEGS) {
+	  strcpy(color_str, "COLOR_LEGS_ORANGE");
+  }
+  else {
+	  strcpy(color_str, "UNKNOWN");
+  }
+}
 
 static int is_cache_enable()
 {
@@ -450,7 +483,7 @@ static void convert_point(float32_t xi, float32_t yi, int *xo, int *yo)
   *yo = (int) (lcd_bg_area.YSize * yi);
 }
 
-static void Display_keypoint(mpe_pp_keyPoints_t *key, uint32_t color)
+static void Display_keypoint(mpe_pp_keyPoints_t *key, uint32_t color, int* x_value, int* y_value)
 {
   int is_clamp;
   int xc, yc;
@@ -471,6 +504,8 @@ static void Display_keypoint(mpe_pp_keyPoints_t *key, uint32_t color)
     return ;
 
   UTIL_LCD_FillCircle(x, y, CIRCLE_RADIUS, color);
+  *x_value = x;
+  *y_value = y;
 }
 
 static void Display_binding_line(int x0, int y0, int x1, int y1, uint32_t color)
@@ -539,8 +574,73 @@ static void Display_Detection(mpe_pp_outBuffer_t *detect)
 
   for (i = 0; i < ARRAY_NB(bindings); i++)
     Display_binding(&detect->pKeyPoints[bindings[i][0]], &detect->pKeyPoints[bindings[i][1]], bindings[i][2]);
-  for (i = 0; i < AI_POSE_PP_POSE_KEYPOINTS_NB; i++)
-    Display_keypoint(&detect->pKeyPoints[i], kp_color[i]);
+  for (i = 0; i < AI_POSE_PP_POSE_KEYPOINTS_NB; i++) {
+	Display_keypoint(&detect->pKeyPoints[i], kp_color[i], NULL, NULL);
+  }
+}
+
+static void Display_Detection_obj0(mpe_pp_outBuffer_t *detect)
+{
+  int xc, yc;
+  int x0, y0;
+  int x1, y1;
+  int w, h;
+  int i;
+
+  convert_point(detect->x_center, detect->y_center, &xc, &yc);
+  convert_length(detect->width, detect->height, &w, &h);
+  x0 = xc - (w + 1) / 2;
+  y0 = yc - (h + 1) / 2;
+  x1 = xc + (w + 1) / 2;
+  y1 = yc + (h + 1) / 2;
+  clamp_point(&x0, &y0);
+  clamp_point(&x1, &y1);
+
+  UTIL_LCD_DrawRect(x0, y0, x1 - x0, y1 - y0, colors[detect->class_index % NUMBER_COLORS]);
+  UTIL_LCDEx_PrintfAt(x0, y0, LEFT_MODE, classes_table[detect->class_index]);
+
+  for (i = 0; i < ARRAY_NB(bindings); i++)
+    Display_binding(&detect->pKeyPoints[bindings[i][0]], &detect->pKeyPoints[bindings[i][1]], bindings[i][2]);
+  for (i = 0; i < AI_POSE_PP_POSE_KEYPOINTS_NB; i++) {
+    if (i > 3) {
+      Display_keypoint(&detect->pKeyPoints[i], kp_color[i], NULL, NULL);
+	} else {
+	  Display_keypoint(&detect->pKeyPoints[i], kp_color[i], &obj0_x[i], &obj0_y[i]);
+	  obj0_color[i] = kp_color[i];
+	}
+  }
+}
+
+static void Display_Detection_obj1(mpe_pp_outBuffer_t *detect)
+{
+  int xc, yc;
+  int x0, y0;
+  int x1, y1;
+  int w, h;
+  int i;
+
+  convert_point(detect->x_center, detect->y_center, &xc, &yc);
+  convert_length(detect->width, detect->height, &w, &h);
+  x0 = xc - (w + 1) / 2;
+  y0 = yc - (h + 1) / 2;
+  x1 = xc + (w + 1) / 2;
+  y1 = yc + (h + 1) / 2;
+  clamp_point(&x0, &y0);
+  clamp_point(&x1, &y1);
+
+  UTIL_LCD_DrawRect(x0, y0, x1 - x0, y1 - y0, colors[detect->class_index % NUMBER_COLORS]);
+  UTIL_LCDEx_PrintfAt(x0, y0, LEFT_MODE, classes_table[detect->class_index]);
+
+  for (i = 0; i < ARRAY_NB(bindings); i++)
+    Display_binding(&detect->pKeyPoints[bindings[i][0]], &detect->pKeyPoints[bindings[i][1]], bindings[i][2]);
+  for (i = 0; i < AI_POSE_PP_POSE_KEYPOINTS_NB; i++) {
+    if (i > 3) {
+      Display_keypoint(&detect->pKeyPoints[i], kp_color[i], NULL, NULL);
+	} else {
+	  Display_keypoint(&detect->pKeyPoints[i], kp_color[i], &obj1_x[i], &obj1_y[i]);
+	  obj1_color[i] = kp_color[i];
+	}
+  }
 }
 
 static void Display_NetworkOutput(display_info_t *info)
@@ -602,21 +702,34 @@ static void Display_NetworkOutput(display_info_t *info)
   line_nb += 1;
 #endif
 
-  //initialize the object_name
-  strcpy(object_name, "");
+  //initialize the object names
+  strcpy(object0_name, "");
+  strcpy(object1_name, "");
 
   /* Draw bounding boxes */
   for (i = 0; i < nb_rois; i++) {
-    Display_Detection(&rois[i]);
-
-    //IOTCONNECT
+    //IOTCONNECT, report rois[0]
     if (i == 0) {
+      Display_Detection_obj0(&rois[i]);
       mpe_pp_outBuffer_t *detect_obj = &rois[i];
       if (sizeof(classes_table[detect_obj->class_index]) < 30) {
-        strcpy(object_name, classes_table[detect_obj->class_index]);
+        strcpy(object0_name, classes_table[detect_obj->class_index]);
       } else {
-  	    strcpy(object_name, "");
+  	    strcpy(object0_name, "");
       }
+    }
+    //IOTCONNECT, report rois[1]
+    else if (i == 1) {
+      Display_Detection_obj1(&rois[i]);
+      mpe_pp_outBuffer_t *detect_obj1 = &rois[i];
+      if (sizeof(classes_table[detect_obj1->class_index]) < 30) {
+        strcpy(object1_name, classes_table[detect_obj1->class_index]);
+      } else {
+  	    strcpy(object1_name, "");
+      }
+    }
+    else {
+      Display_Detection(&rois[i]);
     }
   }
   uint32_t current_time = HAL_GetTick();
@@ -625,9 +738,53 @@ static void Display_NetworkOutput(display_info_t *info)
   }
   last_send_time = current_time;
 
-  if (strlen(object_name) != 0) {
-    da16k_at_send_formatted_raw_no_crlf("AT+NWICMSG object,%d,object_name,%s,FPS,%.1f,cpu_load,%.1f\r\n", nb_rois, object_name, nn_fps, cpu_load_one_second);
+  //only object0 is present
+  if (strlen(object0_name) != 0 && strlen(object1_name) == 0) {
+    da16k_at_send_formatted_raw_no_crlf("AT+NWICMSG nb_detect,%d,object0_name,%s,FPS,%.1f,cpu_load,%.1f\r\n", nb_rois, object0_name, nn_fps, cpu_load_one_second);
     tx_thread_sleep(100);
+
+    //sending the coordinates of object0
+    if ( !((obj0_x[0] == 0 && obj0_y[0] == 0) || (obj0_x[1] == 0 && obj0_y[1] == 0) || (obj0_x[2] == 0 && obj0_y[2] == 0)) ) {
+      for (int i = 0; i < 4; i++) {
+        convert_color_to_str(obj0_color[i], &obj0_color_str[i][0]);
+      }
+      da16k_at_send_formatted_raw_no_crlf("AT+NWICMSG obj0_x1,%d,obj0_y1,%d,obj0_color1,%s,obj0_x2,%d,obj0_y2,%d,obj0_color2,%s\r\n",
+      	  										   obj0_x[0], obj0_y[0], &obj0_color_str[0][0], obj0_x[1], obj0_y[1], &obj0_color_str[1][0]);
+      tx_thread_sleep(100);
+      da16k_at_send_formatted_raw_no_crlf("AT+NWICMSG obj0_x3,%d,obj0_y3,%d,obj0_color3,%s,obj0_x4,%d,obj0_y4,%d,obj0_color4,%s\r\n",
+            	  										   obj0_x[2], obj0_y[2], &obj0_color_str[2][0], obj0_x[3], obj0_y[3], &obj0_color_str[3][0]);
+    }
+  }
+
+  //object0 and object1 are present
+  else if (strlen(object0_name) != 0 && strlen(object1_name) != 0) {
+	da16k_at_send_formatted_raw_no_crlf("AT+NWICMSG nb_detect,%d,object0_name,%s,object1_name,%s,FPS,%.1f,cpu_load,%.1f\r\n", nb_rois, object0_name, object1_name, nn_fps, cpu_load_one_second);
+	tx_thread_sleep(100);
+
+	//sending the coordinates of object0
+    if ( !((obj0_x[0] == 0 && obj0_y[0] == 0) || (obj0_x[1] == 0 && obj0_y[1] == 0) || (obj0_x[2] == 0 && obj0_y[2] == 0)) ) {
+      for (int i = 0; i < 4; i++) {
+        convert_color_to_str(obj0_color[i], &obj0_color_str[i][0]);
+      }
+      da16k_at_send_formatted_raw_no_crlf("AT+NWICMSG obj0_x1,%d,obj0_y1,%d,obj0_color1,%s,obj0_x2,%d,obj0_y2,%d,obj0_color2,%s\r\n",
+      	  										   obj0_x[0], obj0_y[0], &obj0_color_str[0][0], obj0_x[1], obj0_y[1], &obj0_color_str[1][0]);
+      tx_thread_sleep(100);
+      da16k_at_send_formatted_raw_no_crlf("AT+NWICMSG obj0_x3,%d,obj0_y3,%d,obj0_color3,%s,obj0_x4,%d,obj0_y4,%d,obj0_color4,%s\r\n",
+            	  										   obj0_x[2], obj0_y[2], &obj0_color_str[2][0], obj0_x[3], obj0_y[3], &obj0_color_str[3][0]);
+    }
+
+    //sending the coordinates of object1
+    if ( !((obj1_x[0] == 0 && obj1_y[0] == 0) || (obj1_x[1] == 0 && obj1_y[1] == 0) || (obj1_x[2] == 0 && obj1_y[2] == 0)) ) {
+      for (int i = 0; i < 4; i++) {
+        convert_color_to_str(obj1_color[i], &obj1_color_str[i][0]);
+      }
+      tx_thread_sleep(100);
+      da16k_at_send_formatted_raw_no_crlf("AT+NWICMSG obj1_x1,%d,obj1_y1,%d,obj1_color1,%s,obj1_x2,%d,obj1_y2,%d,obj1_color2,%s\r\n",
+      	  										   obj1_x[0], obj1_y[0], &obj1_color_str[0][0], obj1_x[1], obj1_y[1], &obj1_color_str[1][0]);
+      tx_thread_sleep(100);
+      da16k_at_send_formatted_raw_no_crlf("AT+NWICMSG obj1_x3,%d,obj1_y3,%d,obj1_color3,%s,obj1_x4,%d,obj1_y4,%d,obj1_color4,%s\r\n",
+            	  										   obj1_x[2], obj1_y[2], &obj1_color_str[2][0], obj1_x[3], obj1_y[3], &obj1_color_str[3][0]);
+    }
   }
 
   //IOTCONNECT to receive C2D message

@@ -130,8 +130,8 @@ static void Display_WelcomeScreen(void);
 extern da16k_err_t da16k_at_send_formatted_raw_no_crlf(const char *format, ...);
 UART_HandleTypeDef huart2;
 char object_name[30] = "";
-char object_compare[30] = "";
-char object_compare_again[30] = "";
+char object1_name[30] = "";
+char object2_name[30] = "";
 uint8_t count = 0;
 static uint32_t last_send_time = 0;
 
@@ -459,6 +459,11 @@ static void Display_NetworkOutput(iseg_postprocess_out_t *p_postprocess, uint32_
       }
     }
   }
+  uint32_t nb_detect = nb_rois;
+  strcpy(object_name, "none");
+  strcpy(object1_name, "none");
+  strcpy(object2_name, "none");
+
   for (int32_t i = 0; i < nb_rois; i++)
   {
     /* Display box */
@@ -475,6 +480,16 @@ static void Display_NetworkOutput(iseg_postprocess_out_t *p_postprocess, uint32_
     UTIL_LCDEx_PrintfAt(x0, y0, LEFT_MODE, classes_table[rois[i].class_index]);
 
     //IOTCONNECT record the object three times
+    if (i == 0) {
+      strcpy(object_name, classes_table[rois[i].class_index]);
+    }
+    else if (i == 1) {
+      strcpy(object1_name, classes_table[rois[i].class_index]);
+    }
+    else if (i == 2) {
+      strcpy(object2_name, classes_table[rois[i].class_index]);
+    }
+    /*
     if (sizeof(classes_table[rois[i].class_index]) < 30) {
       if (count == 0) {
     	strcpy(object_name, classes_table[rois[i].class_index]);
@@ -492,6 +507,7 @@ static void Display_NetworkOutput(iseg_postprocess_out_t *p_postprocess, uint32_
         strcpy(object_compare_again, "");
         count = 0;
       }
+      */
   }
 
   UTIL_LCD_SetBackColor(0x40000000);
@@ -515,10 +531,24 @@ static void Display_NetworkOutput(iseg_postprocess_out_t *p_postprocess, uint32_
   last_send_time = current_time;
 
   //If the object are the same in the previous three records, we send data to iotconnect.
+  if (nb_detect == 0) {
+	  strcpy(object_name, "none");
+	  da16k_at_send_formatted_raw_no_crlf("AT+NWICMSG nb_detect,%d,inference,%d,class,%s\r\n", nb_detect, inference_ms, object_name);
+  }
+  else if (nb_detect == 1) {
+	  da16k_at_send_formatted_raw_no_crlf("AT+NWICMSG nb_detect,%d,inference,%d,class,%s\r\n", nb_detect, inference_ms, object_name);
+  }
+  else if (nb_detect == 2) {
+	  da16k_at_send_formatted_raw_no_crlf("AT+NWICMSG nb_detect,%d,inference,%d,class,%s,class2,%s\r\n", nb_detect, inference_ms, object_name, object1_name);
+  }
+  else if (nb_detect == 3) {
+	  da16k_at_send_formatted_raw_no_crlf("AT+NWICMSG nb_detect,%d,inference,%d,class,%s,class2,%s,class3,%s\r\n", nb_detect, inference_ms, object_name, object1_name, object2_name);
+  }
+  /*
   if (count >= 2) {
     if (strcmp(object_name, object_compare) == 0 && strcmp(object_name, object_compare_again) == 0) {
       printf("Sending the message to IOTCONNECT...\r\n");
-	  da16k_at_send_formatted_raw_no_crlf("AT+NWICMSG object,%d,inference,%d,class,%s\r\n",nb_rois, inference_ms, object_name);
+	  da16k_at_send_formatted_raw_no_crlf("AT+NWICMSG nb_detect,%d,inference,%d,class,%s\r\n",nb_rois, inference_ms, object_name);
     }
 
     //clear and compare again
@@ -527,7 +557,7 @@ static void Display_NetworkOutput(iseg_postprocess_out_t *p_postprocess, uint32_
     strcpy(object_compare_again, "");
 	count = 0;
   }
-
+*/
   //IOTCONNECT to receive C2D message
   da16k_cmd_t current_cmd = {0};
   if ((da16k_get_cmd(&current_cmd) == DA16K_SUCCESS) && current_cmd.command) {

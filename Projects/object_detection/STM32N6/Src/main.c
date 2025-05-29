@@ -147,7 +147,7 @@ static uint32_t box_x;
 static uint32_t box_y;
 static uint32_t box_w;
 static uint32_t box_h;
-static uint32_t conf;
+static uint32_t iotc_inference;
 
 static void MX_USART2_UART_Init(void)
 {
@@ -343,7 +343,7 @@ int main(void)
     assert(ret == 0);
 
     Display_NetworkOutput(&pp_output, ts[1] - ts[0]);
-    conf = ts[1] - ts[0];
+    iotc_inference = ts[1] - ts[0];
 
     /* Discard nn_out region (used by pp_input and pp_outputs variables) to avoid Dcache evictions during nn inference */
     for (int i = 0; i < number_output; i++)
@@ -362,7 +362,7 @@ int main(void)
     	box_w = 0;
     	box_h = 0;
       }
-	  da16k_at_send_formatted_raw_no_crlf("AT+NWICMSG nb_detect,%d,box_x,%ld,box_y,%ld,box_w,%ld,box_h,%ld,conf,%ld\r\n", nb_number, box_x, box_y, box_w, box_h, conf);
+	  da16k_at_send_formatted_raw_no_crlf("AT+NWICMSG nb_detect,%d,box_x,%ld,box_y,%ld,box_w,%ld,box_h,%ld,inference,%ld\r\n", nb_number, box_x, box_y, box_w, box_h, iotc_inference);
 	  last_send_time = current_time;
 
       //IOTCONNECT to receive C2D message

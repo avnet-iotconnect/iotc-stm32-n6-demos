@@ -126,6 +126,7 @@ static void Display_WelcomeScreen(void);
 
 static int iotc_percent = 0;
 static char detect_obj[30];
+static uint32_t iotc_inference = 0;
 static uint32_t last_send_time = 0;
 static uint32_t last_getcmd_time = 0;
 
@@ -319,6 +320,7 @@ int main(void)
     Network_Postprocess();
 
     Display_NetworkOutput(ts[1] - ts[0]);
+    iotc_inference = ts[1] - ts[0];
     /* Discard nn_out region (used by pp_input and pp_outputs variables) to avoid Dcache evictions during nn inference */
     for (int i = 0; i < number_output; i++)
     {
@@ -331,7 +333,7 @@ int main(void)
     if ((current_time - last_send_time) > IOTC_INTERVAL) {
       if (iotc_percent > 95) {
         printf("Sending the message to IOTCONNECT...\r\n");
-	    da16k_at_send_formatted_raw_no_crlf("AT+NWICMSG object,%s,percentage,%d\r\n", detect_obj, iotc_percent);
+	    da16k_at_send_formatted_raw_no_crlf("AT+NWICMSG class,%s,percentage,%d,inference,%d\r\n", detect_obj, iotc_percent, iotc_inference);
 	    last_send_time = current_time;
       }
 

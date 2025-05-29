@@ -109,9 +109,9 @@ void Display_spe_InitFunctions(int clamp_point_init(int *x, int *y),
   convert_point = convert_point_init;
   Display_binding_line = Display_binding_line_init;
 }
-extern int x[3];
-extern int y[3];
-extern int color[3];
+extern int x[13];
+extern int y[13];
+extern int color[13];
 void Display_spe_Detection(spe_pp_outBuffer_t *detect)
 {
   int i;
@@ -119,7 +119,7 @@ void Display_spe_Detection(spe_pp_outBuffer_t *detect)
   for (i = 0; i < ARRAY_NB(bindings); i++)
     Display_binding(&detect[bindings[i][0]], &detect[bindings[i][1]], bindings[i][2]);
   for (i = 0; i < AI_POSE_PP_POSE_KEYPOINTS_NB; i++) {
-	if (i > 2) {
+	if (i > 13) {
 		Display_keypoint(&detect[i], kp_color[i], NULL, NULL);
 	} else {
 		Display_keypoint(&detect[i], kp_color[i], &x[i], &y[i]);

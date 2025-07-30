@@ -176,8 +176,8 @@ You will now be in the dashboard edit mode. You can add/remove widgets or just c
 </details>
 
 ## Resources
-* [Vision AI Webinar Slides](https://downloads.iotconnect.io/partners/st/demos/uvc/docs/Avnet%20Webinar%20-%20Vision-based%20Edge%20AI%20PoCs%20leveraging%20the%20STM32N6%20MCU.pdf)
-* [Level 200 Webinar Slides](https://github.com/avnet-iotconnect/iotc-stm32-n6-demos/blob/main/doc/Avnet%20Webinar%20-%20N6%20200.pdf)
+* [Webinar Slides: Vision AI](https://downloads.iotconnect.io/partners/st/demos/uvc/docs/Avnet%20Webinar%20-%20Vision-based%20Edge%20AI%20PoCs%20leveraging%20the%20STM32N6%20MCU.pdf)
+* [Webinar Slides: Level 200](https://github.com/avnet-iotconnect/iotc-stm32-n6-demos/blob/main/doc/Avnet%20Webinar%20-%20N6%20200.pdf)
 * [Purchase the STM32N6570-DK](https://www.avnet.com/shop/us/products/stmicroelectronics/stm32n6570-dk-3074457345660283716)
 * [STM32N6570-DK Product Overview](https://www.st.com/en/evaluation-tools/stm32n6570-dk.html)
 * [Other /IOTCONNECT enabled ST Devices](https://www.avnet.com/iotconnect/st)

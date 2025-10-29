@@ -1,4 +1,5 @@
 ## STMicroelectronics STM32N6 QuickStart
+[Purchase STM32N6570-DK Discovery Kit](https://www.newark.com/stmicroelectronics/stm32n6570-dk/discovery-brd-32bit-arm-cortex/dp/20AM4437)
 1. [Introduction](#1-introduction)
 2. [Prerequisites](#2-prerequisites)
 3. [STM32N6 Hardware Setup](#3-stm32n6-hardware-setup)
@@ -28,7 +29,7 @@ provides object detection information to /IOTCONNECT for visualization.
 This guide has been written and tested with the hardware and software listed below, but may work with other environments with some modifications.
 
 ### Hardware
-* STM32N6570-DK Discovery Kit - [Purchase](https://www.avnet.com/shop/us/products/stmicroelectronics/stm32n6570-dk-3074457345660283716) | [Kit Manual](https://www.st.com/resource/en/user_manual/um3300-discovery-kit-with-stm32n657x0-mcu-stmicroelectronics.pdf) | [Device Specifications](https://www.st.com/resource/en/data_brief/stm32n6570-dk.pdf)
+* STM32N6570-DK Discovery Kit - [Purchase](https://www.newark.com/stmicroelectronics/stm32n6570-dk/discovery-brd-32bit-arm-cortex/dp/20AM4437) | [Kit Manual](https://www.st.com/resource/en/user_manual/um3300-discovery-kit-with-stm32n657x0-mcu-stmicroelectronics.pdf) | [Device Specifications](https://www.st.com/resource/en/data_brief/stm32n6570-dk.pdf)
 * PC with Windows 10/11
 * 2x USB Type-C data cables
 * 4x Male to Female header jumpers [Buy from Newark](https://www.newark.com/multicomp-pro/mp006283/jumper-wire-kit-male-to-female/dp/15AJ6557)
